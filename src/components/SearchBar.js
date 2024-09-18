@@ -10,15 +10,15 @@ export default function SearchBar() {
   };
 
   return (
-    <form>
+    <form className="w-full flex justify-center mb-6">
       <input
         type="text"
         value={query}
         onChange={handleChange}
         placeholder="Search..."
-        className="p-2 border rounded text-black"
+        className="w-full max-w-4xl p-3 border border-gray-300 rounded-l-lg text-black focus:outline-none focus:ring focus:ring-blue-500"
       />
-      <button type="submit" className="ml-2 p-2 bg-blue-500 text-white rounded">
+      <button type="submit" className="p-3 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 transition-colors">
         Search
       </button>
     </form>
