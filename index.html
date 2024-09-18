@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MovieSite</title>
+  <!-- Tailwind CDN with Custom Colors -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lightCyan: '#B9D2D2',
+            sageGreen: '#62A388',
+            tealBlue: '#055E68',
+            charcoal: '#343434',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-charcoal text-white min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <nav class="bg-tealBlue p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-white text-xl font-bold">MovieSite</h1>
+      <ul class="flex space-x-4">
+        <li><a href="#" class="text-white hover:text-lightCyan">Sign up</a></li>
+        <li><a href="#" class="text-white hover:text-lightCyan">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container mx-auto mt-8 flex-grow">
+    <h2 class="text-3xl font-bold mb-4">Enter Your Journey to Unforgettable Cinema</h2>
+    <p class="text-lg mb-6">
+      Explore endless entertainment with a ticket that brings stories to life. Your next adventure is just a click away!
+    </p>
+    <button class="bg-sageGreen text-white px-4 py-2 rounded hover:bg-tealBlue transition-colors duration-300">Get Started</button>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-tealBlue p-4">
+    <div class="container mx-auto text-center text-white">
+      &copy; 2024 MovieSite. All rights reserved.
+    </div>
+  </footer>
+
+</body>
+</html>
