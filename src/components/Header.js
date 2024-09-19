@@ -15,11 +15,20 @@ export default function Header() {
             height={38}
           />
         </Link>
-        <nav>
-          <ul className="flex space-x-4">
+        <nav className="flex items-center">
+          <ul className="flex space-x-4 mr-4">
             <li><Link href="/signup" className="text-white hover:text-lightCyan">Sign Up</Link></li>
             <li><Link href="/login" className="text-white hover:text-lightCyan">Login</Link></li>
           </ul>
+          <Link href="/profile" className="text-white hover:text-lightCyan">
+            <Image
+              src="/user-icon.png"
+              alt="User Profile"
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+          </Link>
         </nav>
       </div>
     </header>
