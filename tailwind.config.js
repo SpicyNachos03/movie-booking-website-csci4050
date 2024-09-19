@@ -10,6 +10,12 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+
+        // Custom colors
+        lightCyan: "#B9D2D2",
+        sageGreen: "#62A388",
+        tealBlue: "#055E68",
+        charcoal: "#343434",
       },
     },
   },
