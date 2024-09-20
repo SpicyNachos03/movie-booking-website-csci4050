@@ -7,6 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -16,6 +20,16 @@ module.exports = {
         sageGreen: "#62A388",
         tealBlue: "#055E68",
         charcoal: "#343434",
+        gray: {
+          300: "#D1D5DB",
+          700: "#374151",
+          800: "#1F2937",
+          900: "#111827",
+        },
+      },
+      boxShadow: {
+        md: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
       },
     },
   },
