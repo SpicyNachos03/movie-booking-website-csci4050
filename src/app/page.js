@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import Image from "next/image";
 import 'react-image-gallery/styles/css/image-gallery.css';
@@ -7,10 +8,30 @@ import './globals.css';
 import MyVideoSlider from "../components/MyVideoSlider";
 import SearchBar from '../components/SearchBar';
 import Header from '../components/Header';
-import { useState } from 'react';
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        console.log('Fetching movies...');
+        const response = await fetch('http://localhost:8000/api/movies');
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+          throw new Error('Failed to fetch movies');
+        }
+        const data = await response.json();
+        console.log('Fetched movies:', data);
+        setMovies(data);
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
+    };
+  
+    fetchMovies();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 text-white">
@@ -38,6 +59,30 @@ export default function Home() {
             Featured Trailers
           </h1>
           <MyVideoSlider />
+        </div>
+
+        {/* Movie Grid */}
+        <div className="w-full max-w-6xl mx-auto mb-12">
+          <h2 className="text-4xl font-semibold font-poppins text-center mb-6 tracking-wider text-lightCyan">
+            Now Showing
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {movies.map((movie) => (
+              <div key={movie._id} className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                <Image
+                  src={movie.posterUrl}
+                  alt={movie.name}
+                  width={300}
+                  height={450}
+                  className="w-full h-auto"
+                />
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold text-white">{movie.name}</h3>
+                  <p className="text-sageGreen mt-2">{movie.status}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Action Button */}
