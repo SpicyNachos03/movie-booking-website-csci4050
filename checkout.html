@@ -10,12 +10,19 @@
     <div class="checkout-container">
         <h1>Checkout</h1>
         
+        <!-- Movie Details Section -->
         <div class="movie-details">
             <h2>Movie: <span id="movie-title">Interstellar</span></h2>
-            <p>Seats: <span id="seats-selected">A1, A2, B3</span></p>
-            <p>Total Price: $<span id="total-price">34.00</span></p>
+            <label for="show-time">Select Show Time</label>
+            <select id="show-time">
+                <option value="12:00 PM" selected>12:00 PM</option> <!-- Show time -->
+            </select>
+
+            <p>Seats: <span id="seats-selected">A1, A2, A3</span></p> <!-- Selected seats -->
+            <p>Total Price: $<span id="total-price">34.00</span></p> <!-- Total for 2 adults and 1 senior -->
         </div>
-        
+
+        <!-- Payment Information Section -->
         <form class="payment-form" id="checkout-form">
             <h3>Payment Information</h3>
             
@@ -32,14 +39,29 @@
             <input type="text" id="cvv" placeholder="123" required>
             
             <button type="submit" id="checkout-button">Confirm Payment</button>
+
+            <!-- Apply Promotion Section -->
+            <h3>Apply Promotion</h3>
+            <label for="promotion-code">Enter Promotion Code</label>
+            <input type="text" id="promotion-code" placeholder="PROMO2024">
+            <button type="button" id="apply-promo-button">Apply Promotion</button>
+
+            <!-- Save Payment Information -->
+            <div class="save-payment">
+                <label for="save-payment-info">
+                    <input type="checkbox" id="save-payment-info">
+                    Save Payment Information
+                </label>
+            </div>
         </form>
-        
+
+        <!-- Success Message -->
         <div id="success-message" class="hidden">
             <h2>Payment Successful!</h2>
             <p>Thank you for your purchase. Enjoy the movie!</p>
         </div>
     </div>
 
-    <script src="scripts.js"></script>
+    <script src="checkout.js"></script>
 </body>
 </html>
