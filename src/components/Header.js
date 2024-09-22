@@ -19,6 +19,9 @@ export default function Header() {
           <ul className="flex space-x-4 mr-4">
             <li><Link href="/signup" className="text-white hover:text-lightCyan">Sign Up</Link></li>
             <li><Link href="/login" className="text-white hover:text-lightCyan">Login</Link></li>
+            <li><Link href="/admin" className="text-white hover:text-lightCyan">Admin</Link></li>
+            <li><Link href="/skeleton" className="text-white hover:text-lightCyan">Skeleton</Link></li>
+
           </ul>
           <Link href="/profile" className="text-white hover:text-lightCyan">
             <Image
