@@ -1,20 +1,43 @@
-document.getElementById('checkout-form').addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevent form submission
+document.addEventListener('DOMContentLoaded', function () {
+    // Placeholder for "View Ticket Stubs" functionality
+    const viewTicketStubsButton = document.getElementById('view-ticket-stubs');
+    viewTicketStubsButton.addEventListener('click', function () {
+        // Logic to view ticket stubs (to print) goes here
+        console.log('View Ticket Stubs clicked');
+    });
 
-    // Get form data
-    const name = document.getElementById('name').value;
-    const cardNumber = document.getElementById('card-number').value;
-    const expiry = document.getElementById('expiry').value;
-    const cvv = document.getElementById('cvv').value;
+    // Placeholder for "Change Movie Bookings" functionality
+    const changeBookingsButton = document.getElementById('change-bookings');
+    changeBookingsButton.addEventListener('click', function () {
+        // Logic to change movie bookings goes here
+        console.log('Change Movie Bookings clicked');
+    });
 
-    // Basic validation (you can enhance it further)
-    if (name && cardNumber && expiry && cvv) {
-        // Show success message
+    // Placeholder for "Apply Promotion" functionality
+    const applyPromoButton = document.getElementById('apply-promo-button');
+    applyPromoButton.addEventListener('click', function () {
+        const promoCode = document.getElementById('promotion-code').value;
+        // Logic to apply promotion goes here
+        console.log(`Promo code applied: ${promoCode}`);
+    });
+
+    // Placeholder for "Save Payment Information" functionality
+    const savePaymentInfoCheckbox = document.getElementById('save-payment-info');
+    savePaymentInfoCheckbox.addEventListener('change', function () {
+        if (savePaymentInfoCheckbox.checked) {
+            // Logic to save payment information goes here
+            console.log('Payment information will be saved.');
+        } else {
+            console.log('Payment information will not be saved.');
+        }
+    });
+
+    // Placeholder for "Validate Payment Information" functionality
+    const checkoutForm = document.getElementById('checkout-form');
+    checkoutForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        // Logic to validate payment information goes here
+        console.log('Payment information validated.');
         document.getElementById('success-message').classList.remove('hidden');
-
-        // Hide the form
-        document.getElementById('checkout-form').classList.add('hidden');
-    } else {
-        alert('Please fill in all fields.');
-    }
+    });
 });
