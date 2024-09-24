@@ -17,10 +17,15 @@ function Admin(){
                 -promotions
             </p>
             <p>Add links to access the manage movies, manage users, and manage promotions screens</p>
-            <Link href="/manageMovies" className="text-white hover:text-lightCyan">Manage Movies</Link>
-            <Link href="/manageUsers" className="text-white hover:text-lightCyan">Manage Movies</Link>
-            <Link href="/managePromotions" className="text-white hover:text-lightCyan">Manage Movies</Link>
-
+            <div>
+                <Link href="/manageMovies" className="text-white hover:text-lightCyan">Manage Movies</Link>
+            </div>
+            <div>
+                <Link href="/manageUsers" className="text-white hover:text-lightCyan">Manage Users</Link>
+            </div>
+            <div>
+                <Link href="/managePromotions" className="text-white hover:text-lightCyan">Manage Promotions</Link>
+            </div>
         </div>
     )
 }
