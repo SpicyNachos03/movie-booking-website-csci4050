@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import Link from 'next/link';
 
 function Admin(){
     return(
@@ -16,6 +16,11 @@ function Admin(){
                 -users
                 -promotions
             </p>
+            <p>Add links to access the manage movies, manage users, and manage promotions screens</p>
+            <Link href="/manageMovies" className="text-white hover:text-lightCyan">Manage Movies</Link>
+            <Link href="/manageUsers" className="text-white hover:text-lightCyan">Manage Movies</Link>
+            <Link href="/managePromotions" className="text-white hover:text-lightCyan">Manage Movies</Link>
+
         </div>
     )
 }
