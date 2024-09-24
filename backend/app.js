@@ -1,11 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config({ path: './.env' });
+require('dotenv').config({ path: '.env' });
 const mongoose = require('mongoose');
-const movieRoutes = require('./routes/movieRoutes.js'); 
+const movieRoutes = require('./routes/movieRoutes'); 
 
 const app = express();
-
 app.use(cors());
 app.use(express.json()); // middleware
 

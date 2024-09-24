@@ -1,6 +1,7 @@
 const express = require('express');
 const { getMovies, getMovieById, createMovie } = require('../controllers/movieController');
 const router = express.Router();
+const bodyParser = require("body-parser");
 
 // Route to get all movies
 router.get('/', getMovies);

@@ -4,9 +4,9 @@ const Movie = require('../models/movieModel');
 const getMovies = async (req, res) => {
   try {
     console.log('Attempting to fetch movies...');
-    const movies = await Movie.find({});
-    console.log('Movies fetched successfully:', movies);
+    const movies = await Movie.find();
     res.json(movies);
+    console.log('Movies fetched successfully:', movies);
   } catch (error) {
     console.error('Error fetching movies:', error);
     res.status(500).json({ message: 'Error fetching movies', error: error.message });
