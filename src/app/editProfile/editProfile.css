@@ -1,70 +1,74 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #343434; /* dark background */
+    background-color: #343434; /* Dark background */
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-  }
-  
-  /* Container Styling */
-  .edit-profile-container {
+}
+
+/* Container Styling */
+.edit-profile-container {
     width: 50%;
     background-color: white;
     padding: 30px;
     margin: 50px auto;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-  }
-  
-  /* Heading */
-  .heading {
+}
+
+/* Heading */
+.heading {
     text-align: center;
     color: #055E68; /* tealBlue */
     margin-bottom: 20px;
     font-size: 24px;
-  }
-  
-  .sub-heading {
+}
+
+.sub-heading {
     color: #055E68; /* tealBlue */
     margin-bottom: 10px;
     font-size: 20px;
-  }
-  
-  /* Form Styling */
-  .edit-profile-form .form-group {
+}
+
+/* Form Styling */
+.edit-profile-form .form-group {
     margin-bottom: 20px;
-  }
-  
-  .edit-profile-form label {
+}
+
+.edit-profile-form label {
     display: block;
     margin-top: 10px;
     margin-bottom: 5px;
     color: #374151; /* gray-700 */
-  }
-  
-  .edit-profile-form input {
+}
+
+.edit-profile-form input {
     width: 100%;
     padding: 12px 15px; /* Padding for input fields */
     margin-bottom: 15px; /* Increased margin for better spacing */
     border: 1px solid #D1D5DB; /* gray-300 */
     border-radius: 5px;
-    background-color: white;
+    background-color: white; /* Ensure background color is white */
     font-size: 16px;
-    color: #374151; /* gray-700 */
+    color: black; /* Set text color to black */
     box-sizing: border-box; /* Ensures padding doesn’t affect width */
-  }
-  
-  .edit-profile-form input:focus {
+}
+
+.edit-profile-form input::placeholder {
+    color: #A0AEC0; /* Light gray for placeholder text */
+}
+
+.edit-profile-form input:focus {
     outline: none;
     border-color: #62A388; /* sageGreen */
     box-shadow: 0 0 5px rgba(98, 163, 136, 0.5); /* Slight glow effect */
-  }
-  
-  /* Save Button */
-  .save-button {
+}
+
+/* Save Button */
+.save-button {
     width: 100%;
     padding: 15px;
     background-color: #62A388; /* sageGreen */
@@ -73,19 +77,18 @@ body {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-  }
-  
-  .save-button:hover {
+}
+
+.save-button:hover {
     background-color: #055E68; /* tealBlue */
-  }
-  
-  /* Success Message (if needed) */
-  #success-message {
+}
+
+/* Success Message (if needed) */
+#success-message {
     text-align: center;
     padding: 20px;
     background-color: #D4EDDA;
     color: #111827; /* gray-900 */
     border-radius: 5px;
     margin-bottom: 20px;
-  }
-  
+}
