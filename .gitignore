@@ -38,5 +38,4 @@ next-env.d.ts
 node_modules/
 *.node
 
-
 node_modules 2
