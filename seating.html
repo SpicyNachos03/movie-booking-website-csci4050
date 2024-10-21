@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Seat Booking</title>
+    <link rel="stylesheet" type="text/css" href="seating.css">
+</head>
+<body>
+    <script src="seating.js" defer></script>
+    <div class="movie-container">
+        <label>Pick a movie: </label>
+        <select id="movie">
+          <option>Interstellar</option>
+          <option>Ratatouille</option>
+          <option>Movie3</option>
+          <option>Movie4</option>
+        </select>
+        
+        <ul class="showcase">
+          <li>
+            <div class="seat"></div>
+            <small>N/A</small>
+          </li>
+          <li>
+            <div class="seat selected"></div>
+            <small>Selected</small>
+          </li>
+          <li>
+            <div class="seat occupied"></div>
+            <small>Occupied</small>
+          </li>    
+        </ul>
+        
+        <div class="container">
+          <div class="screen"></div>
+          
+          <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+            </div>
+            <div class="row">
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat occupied"></div>
+              <div class="seat"></div>
+            </div>
+          
+          <p class="text">
+            You have selected <span id="count">0</span>
+          </p>
+          
+           <button>Next</button>
+          <div class="age-counters">
+        <div class="counter">
+          <label>Children (2-12): $10</label>
+          <button class="minus">-</button>
+          <span class="count" id="childCount">0</span>
+          <button class="plus">+</button>
+        </div>
+        <div class="counter">
+          <label>Adults (13-59): $12</label>
+          <button class="minus">-</button>
+          <span class="count" id="adultCount">0</span>
+          <button class="plus">+</button>
+        </div>
+        <div class="counter">
+          <label>Seniors (60+): $10</label>
+          <button class="minus">-</button>
+          <span class="count" id="seniorCount">0</span>
+          <button class="plus">+</button>
+        </div>
+      </div>
+      <p class="text">
+        Total Price: $<span id="total">0</span>
+      </p>
+        </div>
+      </div>
+</body>
+</html>

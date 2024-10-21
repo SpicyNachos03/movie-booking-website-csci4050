@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Confirmation</title>
+    <link rel="stylesheet" href="confirmation.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.0/JsBarcode.all.min.js"></script>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h1 class="heading">Ticket Confirmation</h1>
+
+        <div class="confirmation-details">
+            <h2>Movie: <span id="movie-title">Interstellar</span></h2>
+            <p>Show Time: <span id="show-time">12:00 PM</span></p>
+            <p>Seats: <span id="seats-selected">A1, A2, A3</span></p>
+            <p>Total Price: $<span id="total-price">34.00</span></p>
+        </div>
+
+        <div class="user-info">
+            <h3 class="sub-heading">Payment Information</h3>
+            <p>Name on Card: <span id="name-on-card">John Doe</span></p>
+            <p>Card Number: <span id="card-number-display">**** **** **** 3456</span></p>
+        </div>
+
+        <div class="barcode-container">
+            <svg id="barcode"></svg>
+        </div>
+
+        <div class="thank-you-message">
+            <h2>Thank You!</h2>
+            <p>Your tickets have been successfully booked. Enjoy the movie!</p>
+        </div>
+
+        <button id="print-button" class="save-button">Print Confirmation</button>
+    </div>
+
+    <script src="confirmation.js"></script>
+    <script>
+        // Generate barcode
+        JsBarcode("#barcode", "123456789012", {
+            format: "CODE128",
+            lineColor: "#000",
+            width: 2,
+            height: 40,
+            displayValue: true
+        });
+    </script>
+</body>
+</html>

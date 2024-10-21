@@ -1,0 +1,43 @@
+
+.signUpWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 75px;
+    gap: 20px;
+    background-color: rgb(107, 112, 116);
+    color: black;
+    padding: 10px;
+    width: 30%;
+}
+
+.signUpWrapper h1 {
+    font-size: x-large;
+    color: black;
+}
+.formBox {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.inputWrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    color: black;
+}
+.inputWrapper input {
+    margin-left: 15px;
+}
+
+.formBox button {
+    background-color: red;
+    width: 30%;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
