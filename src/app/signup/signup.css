@@ -3,60 +3,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 75px auto 75px auto;                   
+    margin: 0 auto;
+    margin-top: 75px;
+    gap: 20px;
     background-color: rgb(107, 112, 116);
     color: black;
-   
-    padding: 30px;
-    width: 80%;
-    max-width: 800px;
-    border-radius: 25px;
+    padding: 10px;
+    width: 30%;
 }
 
-
-
-
-
+.signUpWrapper h1 {
+    font-size: x-large;
+    color: black;
+}
 .formBox {
     display: flex;
     flex-direction: column;
-                     
-    width: 100%;
-    
-
+    margin: 10px;
+    gap: 10px;
+    justify-content: space-between;
 }
-
 
 .inputWrapper {
     display: flex;
-    align-items: center;
-    margin-top: 20px;
-    
+    justify-content: space-between;
+    padding: 5px;
+    color: black;
 }
-
-.formBox label {
-    font-size: 20px;
-    width: 35%;                
-    text-align: left;         
-    color: #f0eaea; 
-    padding-right: 10px;
-    
-}
-
 .inputWrapper input {
-    flex: 1;                   
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 18px;     
-         
+    margin-left: 15px;
 }
 
-
-.formBox button {   
-    width: 40%;                  
-    align-self: center;
+.formBox button {
+    background-color: red;
+    width: 30%;
+    margin: 0 auto;
+    margin-top: 10px;
 }
-
-
 
