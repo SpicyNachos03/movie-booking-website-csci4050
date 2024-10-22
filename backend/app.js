@@ -6,7 +6,9 @@ const movieRoutes = require('./routes/movieRoutes');
 const userRoutes = require('./routes/userRoutes'); // Import user routes
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000' 
+}));
 app.use(express.json()); // middleware
 
 // Connect to MongoDB
