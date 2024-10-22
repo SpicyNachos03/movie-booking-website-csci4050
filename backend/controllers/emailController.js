@@ -1,16 +1,7 @@
-import formData from 'form-data';
-import Mailgun from 'mailgun.js';
+import nodemailer from 'nodemailer';
+import db from '../models/index.js';
 
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({
-  username: 'api', // Keep this as 'api'
-  key: process.env.MAILGUN_API_KEY, // API Key. Stored in environment variables
-  url: 'https://api.mailgun.net',
-  domain: process.env.MAILGUN_DOMAIN, // Sandbox Domain. Stored in environment variables
-});
-
-// Helper function to get last four digits of card number
-function cardNumberToFourDigits(number) {
+function lastFourDigits(number) {
   let lastFour = "";
   for (let i = 0; i < 4; i++) {
     lastFour = (number % 10) + lastFour;
@@ -19,118 +10,103 @@ function cardNumberToFourDigits(number) {
   return lastFour;
 }
 
-// API route handler for sending emails
-export default async function handler(req, res) {
-  const { type, email, data } = req.body;
+let emailTransporter = nodemailer.createTransport({
+  service: 'gmail',
+  port: 423,
+  auth: {
+    user: 'moviebookingcsci4050a7@gmail.com',
+    pass: 'gudetamachuA7',
+  },
+});
 
-  try {
-    let emailInfo;
-    switch (type) {
-      case 'verification':
-        emailInfo = await sendVerificationEmail(email, data.verification_link);
-        break;
-      case 'reset_password':
-        emailInfo = await sendResetPasswordEmail(email, data.reset_link);
-        break;
-      case 'order_confirmation':
-        emailInfo = await sendOrderConfirmEmail(email, data.orderDetails);
-        break;
-      default:
-        return res.status(400).json({ error: 'Invalid email type' });
-    }
+async function sendVerificationEmail(req, res, next) {
 
-    res.status(200).json({ success: true, emailInfo });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Failed to send email' });
-  }
-}
+  const verification_link = 'http://localhost:8000/api/users/verify?id=' + res.locals.verification_id; //will need to update this base on our implementation
 
-// Send verification email
-async function sendVerificationEmail(toEmail, verification_link) {
-  return await mg.messages.create(process.env.MAILGUN_DOMAIN, {
-    from: '"Movie Booking" <noreply@sandbox1234abcd.mailgun.org>',
-    to: toEmail,
-    subject: 'Verify Account',
-    text: `To verify your account go to: ${verification_link}`,
+  let emailInfo = await emailTransporter.sendMail({
+    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com.com>',
+    to: res.locals['email'],
+    subject: 'Verify your account',
+    text: `To verify your account click on the following link: ${verification_link}`,
   });
+
+  next();
 }
 
-// Send reset password email
-async function sendResetPasswordEmail(toEmail, reset_link) {
-  return await mg.messages.create(process.env.MAILGUN_DOMAIN, {
-    from: '"Movie Booking" <noreply@sandbox1234abcd.mailgun.org>',
-    to: toEmail,
+async function sendResetPasswordEmail(req, res, next) {
+  const reset_link = 'http://localhost:8000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
+  
+  let emailInfo = await emailTransporter.sendMail({
+    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com.com>',
+    to: res.locals['email'],
     subject: 'Reset Password',
     text: `To reset your password go to: ${reset_link}`,
   });
 }
 
-// Send order confirmation email
-//ToDo: Booking details. We can have a default implementation for the demo
-async function sendOrderConfirmEmail(toEmail, orderDetails) {
-  let emailText = `
+async function sendPasswordWasResetEmail(req, res, next) {
+  const was_reset_link = 'http://localhost:8000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
+  
+  let emailInfo = await emailTransporter.sendMail({
+    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com.com>',
+    to: res.locals['email'],
+    subject: 'Your Password was reset',
+    text: `If you did not change your password, go to: ${was_reset_link}`,
+  });
+}
+
+async function sendOrderConfirmEmail(req, res, next) {
+
+  const bookingDetails = res.locals.createdBooking.dataValues; //will need to update this base on our implementation
+  console.log(bookingDetails);
+  let emailText =
+`
 Order:
-Status: ${orderDetails.status}
-ID: ${orderDetails.id}
+Status: ${bookingDetails.status}
+ID: ${bookingDetails.id}
 
 Billing:
-${orderDetails.billingStreet}
-${orderDetails.billingCity}, ${orderDetails.billingState} ${orderDetails.billingZip}
+${bookingDetails.billingStreet}
+${bookingDetails.billingCity}, ${bookingDetails.billingState} ${bookingDetails.billingZip}
 
 Shipping:
-${orderDetails.shippingStreet}
-${orderDetails.shippingCity}, ${orderDetails.shippingState} ${orderDetails.shippingZip}
+${bookingDetails.shippingStreet}
+${bookingDetails.shippingCity}, ${bookingDetails.shippingState} ${bookingDetails.shippingZip}
 
 Payment:
-${orderDetails.cardName}
-**** **** **** ${cardNumberToFourDigits(orderDetails.cardNumber)}
-${orderDetails.cardMonth} / 20${orderDetails.cardYear} | ${orderDetails.cardCvv} | ${orderDetails.cardZip}
+${bookingDetails.cardName}
+**** **** **** ${lastFourDigits(bookingDetails.cardNumber)}
+${bookingDetails.cardMonth} / 20${bookingDetails.cardYear} | ${bookingDetails.cardCvv} | ${bookingDetails.cardZip}
 
-Movie:
-`;
+Movies:
+`
 
-  let total = 10;
-  for (const [movie, qty] of Object.entries(JSON.parse(orderDetails.movies))) {
-    total += orderDetails.bookPrices[movie] * qty;
-    emailText += `Booking: ${orderDetails.movieId[movie]}\nQuantity: ${qty}\nTitle: ${movie}\n\n`;
+  let total = 1;
+  for (const [id, qty] of Object.entries(JSON.parse(bookingDetails.tickets))) {
+    try {
+      const movieQuery = await db.movie.findAll({where : {id: id}, raw: true});
+      console.log(movieQuery)
+      total += movieQuery.length === 0 ? 0 : movieQuery[0].price * qty;
+      emailText += `Title: ${movieQuery[0].title}\nQuantity: ${qty}\n\n`;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   emailText += `Total: $${total.toFixed(2)}`;
 
-  return await mg.messages.create(process.env.MAILGUN_DOMAIN, {
-    from: '"Movie Booking" <noreply@sandbox1234abcd.mailgun.org>',
-    to: toEmail,
+  let emailInfo = await emailTransporter.sendMail({
+    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com.com>',
+    to: res.locals.userInfo.email,
     subject: 'Order Confirmation',
     text: emailText,
   });
+  next();
 }
 
-//front end example using fetch:
-/*
-async function sendEmail(emailType, userEmail, data) {
-    const response = await fetch('/api/send-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: emailType,
-        email: userEmail,
-        data: data,
-      }),
-    });
-  
-    const result = await response.json();
-    if (response.ok) {
-      console.log('Email sent:', result);
-    } else {
-      console.error('Error sending email:', result.error);
-    }
-  }
-  
-  // Example usage:
-  // Sending verification email
-  sendEmail('verification', 'user@example.com', { verification_link: 'http://your-site.com/verify?id=123' });
-  */
-  
+export {
+  sendVerificationEmail,
+  sendResetPasswordEmail,
+  sendOrderConfirmEmail,
+  sendPasswordWasResetEmail,
+};
