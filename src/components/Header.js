@@ -12,10 +12,10 @@ export default function Header() {
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
           <Image
-            src="/movie.png"
+            src="/cosmic-studios.png"
             alt="Movie Logo"
-            width={80}
-            height={38}
+            width={200}
+            height={75}
           />
         </Link>
         <nav className="flex items-center">
