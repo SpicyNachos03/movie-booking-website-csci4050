@@ -1,4 +1,6 @@
-const User = require('../models/userModel'); // Import User model
+const User = require('../models/userModel');
+const bcrypt = require('bcryptjs');
+
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -13,7 +15,37 @@ const getUsers = async (req, res) => {
   }
 };
 
-// Get a single user by email
+//login
+const userLogin = async (req, res) => {
+  console.log("Login request received", req.body);
+  try {
+    const { email, password } = req.body;
+    
+     // Validate input
+     if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+    const user = await User.findOne({ email });
+
+
+    if (!user) {
+      return res.status(404).json({ message: "An account is not associated with this email." });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);  
+    if (isPasswordValid) {
+      return res.status(200).json({ message: "Success" });
+    } else {
+      return res.status(400).json({ message: "The password is incorrect" });
+    }
+  } catch (error) {
+    console.error(error); 
+    return res.status(500).json({ message: "An error occurred" });
+  }
+};
+
+
+// Get user by email
 const getUserByEmail = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
@@ -31,23 +63,22 @@ const getUserByEmail = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, promotions, status } = req.body;
-  
-  // Validate input
-  if (!firstName || !lastName || !email || !phoneNumber || status === undefined) {
-    return res.status(400).json({ message: 'All fields are required' });
-  }
-
-  const newUser = new User({
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    promotions,
-    status
-  });
+  const { firstName, lastName, email, phoneNumber, promotions, status, password } = req.body;
 
   try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      promotions,
+      status,
+      password: hashedPassword // Store the hashed password
+    });
+
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
@@ -58,51 +89,23 @@ const createUser = async (req, res) => {
 
 // Update a user by ID
 const updateUser = async (req, res) => {
-  const { firstName, lastName, billingAddress, password, phoneNumber, promotions } = req.body;
-
-  // Check for address limit
-  const existingUser = await User.findById(req.params.id);
-  if (existingUser && existingUser.billingAddress && billingAddress) {
-    return res.status(400).json({ message: 'You cannot store more than one billing address.' });
-  }
-
-  // Check for payment card limit
-  if (req.body.cards && req.body.cards.length > 4) {
-    return res.status(400).json({ message: 'Max 4 cards allowed.' });
-  }
-
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { firstName, lastName, billingAddress, password, phoneNumber, promotions },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
+    const { firstName, lastName, email, phoneNumber, promotions, status, password } = req.body;
+  
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { firstName, lastName, email, phoneNumber, promotions, status },
+        { new: true, runValidators: true }
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      res.status(500).json({ message: 'Error updating user', error });
     }
-
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(400).json({ message: 'Error updating user', error: error.message });
-  }
-};
-
-// Delete a user by ID
-const deleteUser = async (req, res) => {
-  try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-
-    if (!deletedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(200).json({ message: 'User deleted successfully', deletedUser });
-  } catch (error) {
-    console.error('Error deleting user:', error);
-    res.status(500).json({ message: 'Error deleting user', error: error.message });
-  }
-};
-
-module.exports = { getUsers, getUserByEmail, createUser, updateUser, deleteUser };
+  };
+  
+  module.exports = {getUsers, userLogin, getUserByEmail, createUser, updateUser };
