@@ -1,9 +1,7 @@
-
 body, html {
   height: 100%;
   margin: 0;
 }
-
 .container34{
   display: flex;
   flex-direction: column;     
@@ -11,23 +9,18 @@ body, html {
   justify-self: center;
   align-items: center;
 }
-
 .loginBox {
-
   display: flex;
   flex-direction: column;
   justify-self: center;
   align-items: center;
-
   width: 420px;
   background-color: rgb(107, 112, 116);
   color: rgb(3, 3, 3);
   padding: 10px;
   border-radius: 25px;
   margin: 75px auto 75px auto; 
-
 }
-
 h1, h2 {
   margin-top: 25px;
   margin-left: 5%;
@@ -35,8 +28,6 @@ h1, h2 {
   font-size: 30px;
   font-weight: bolder;
 }
-
-
 
 button {
   -webkit-transition-duration: 0.1s; /* Safari */
@@ -85,17 +76,15 @@ button:active {
   font-family: 'Oxygen', sans-serif;
   letter-spacing: 2px;
 }
-
-
+  
 #authorized{
   flex-grow: 1;
   display: flex;
   justify-self: center;
   align-items: center;
-  
 }
 
-
+  
 input {
   display: block;
   margin: 10px auto;
@@ -104,8 +93,7 @@ input {
   border-radius: 5px;
   
 }
-
-
+  
 button, input[type="submit"] {
   margin: 20px;
   padding: 10px auto;
@@ -114,23 +102,19 @@ button, input[type="submit"] {
   cursor: pointer;
   display: inline-block;
 }
-
 .rmmrMe {
   display: flex;
   flex-direction: row;
   align-items: center; 
   gap: 10px; 
 }
-
 #checkBox {
   margin: 0; 
 }
-
 .rmmrMe p {
   margin: 0; 
   padding: 0;
 }
-
 .rmmrMe a {
   margin-left: auto; 
   text-decoration: none; 
@@ -149,21 +133,17 @@ button, input[type="submit"] {
   text-decoration: none; 
  
 }
-
-
+  
 a:hover {
   color: white;
 }
-
 header{
   width: 100%;
 }
-
 footer {
   margin-top: auto;           
   background-color: #f1f1f1; 
   padding: 20px;              
   text-align: center;      
-    
-}
 
+}

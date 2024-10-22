@@ -20,7 +20,7 @@ export default function Signup() {
         <div>
             <Header/>
             <div className="signUpWrapper">
-                
+
                 {registered ? ( 
                     <>
                         <h1>Registration Complete!</h1>
@@ -55,10 +55,10 @@ export default function Signup() {
                     </form>
                 </>
                 )}
-            
+
             </div>
             <Footer/>
         </div>
     )
-   
+
 };

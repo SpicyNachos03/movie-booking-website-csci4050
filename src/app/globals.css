@@ -2,36 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Google Fonts Import */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap');
 
-
+/* Root Variables for Color Scheme */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Default background */
+  --foreground: #171717; /* Default text color */
 }
 
+/* Dark Mode Color Scheme */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0a; /* Dark background */
+    --foreground: #ededed; /* Light text color */
   }
 }
 
+/* Body Styles */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--foreground); /* Use foreground variable for text color */
+  background: var(--background); /* Use background variable */
+  font-family: 'Poppins', Arial, Helvetica, sans-serif; /* Use custom fonts */
+  margin: 0; /* Reset margin */
+  padding: 0; /* Reset padding */
+  line-height: 1.6; /* Set line height */
 }
 
+/* Utility Classes */
 @layer utilities {
   .text-balance {
-    text-wrap: balance;
+    text-wrap: balance; /* Custom utility for balanced text wrapping */
   }
 }
 
+/* Input Styles */
+.edit-profile-form input {
+  color: black; /* Ensure input text color is black */
+}
+
+/* Additional Global Styles */
 html, body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  line-height: 1.6;
+  font-family: sans-serif; /* Fallback font family */
 }

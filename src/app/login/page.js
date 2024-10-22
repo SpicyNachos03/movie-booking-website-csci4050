@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import Image from "next/image";
 import { useState } from 'react';
@@ -24,7 +24,7 @@ function Login() {
     const [authorized, setAuthourized] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false)
 
-  
+
     function handleSubmit(e) {
         e.preventDefault();
         const passwordInput = e.target.querySelector(
@@ -48,19 +48,19 @@ function Login() {
                     <p> Remember Me</p>
                     <Link href="/signup"> Sign-up</Link>
                 </div>
-                
+
                 <div className="bottom">
-                    
+
                     <Button variant="primary" type="submit">Login</Button>
                     <Link href="/forgotpw"> Forgot Password?</Link>
                 </div>
         
-                
+
 
             </form>
         </div>
     );
-    
+
 
     return (
         <div className="container34">

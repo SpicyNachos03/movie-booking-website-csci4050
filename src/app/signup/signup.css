@@ -1,4 +1,3 @@
-
 .signUpWrapper {
     display: flex;
     flex-direction: column;
@@ -6,7 +5,7 @@
     margin: 75px auto 75px auto;                   
     background-color: rgb(107, 112, 116);
     color: black;
-   
+
     padding: 30px;
     width: 80%;
     max-width: 800px;
@@ -20,9 +19,9 @@
 .formBox {
     display: flex;
     flex-direction: column;
-                     
+
     width: 100%;
-    
+
 
 }
 
@@ -31,7 +30,7 @@
     display: flex;
     align-items: center;
     margin-top: 20px;
-    
+
 }
 
 .formBox label {
@@ -40,7 +39,7 @@
     text-align: left;         
     color: #f0eaea; 
     padding-right: 10px;
-    
+
 }
 
 .inputWrapper input {
@@ -49,7 +48,7 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 18px;     
-         
+
 }
 
 
@@ -57,6 +56,3 @@
     width: 40%;                  
     align-self: center;
 }
-
-
-
