@@ -2,17 +2,20 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
+  const router = useRouter();
+
   return (
     <header className="bg-tealBlue p-4 w-full">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
           <Image
-            src="/movie.png"
+            src="/cosmic-studios.png"
             alt="Movie Logo"
-            width={80}
-            height={38}
+            width={200}
+            height={75}
           />
         </Link>
         <nav className="flex items-center">
@@ -21,9 +24,11 @@ export default function Header() {
             <li><Link href="/login" className="text-white hover:text-lightCyan">Login</Link></li>
             <li><Link href="/admin" className="text-white hover:text-lightCyan">Admin</Link></li>
             <li><Link href="/skeleton" className="text-white hover:text-lightCyan">Skeleton</Link></li>
-
           </ul>
-          <Link href="/profile" className="text-white hover:text-lightCyan">
+          <button
+            onClick={() => router.push('/editProfile')} // Using useRouter for navigation
+            className="text-white hover:text-lightCyan"
+          >
             <Image
               src="/user-icon.png"
               alt="User Profile"
@@ -31,7 +36,7 @@ export default function Header() {
               height={32}
               className="rounded-full"
             />
-          </Link>
+          </button>
         </nav>
       </div>
     </header>

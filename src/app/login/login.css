@@ -1,55 +1,33 @@
-html, body {
-  margin: 0;
+body, html {
   height: 100%;
-  padding: 0;
+  margin: 0;
 }
-
-
-body {
+.container34{
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;     
   min-height: 100vh;
+  justify-self: center;
+  align-items: center;
 }
-
 .loginBox {
-  margin: 25px;
   display: flex;
   flex-direction: column;
+  justify-self: center;
+  align-items: center;
   width: 420px;
   background-color: rgb(107, 112, 116);
   color: rgb(3, 3, 3);
-  padding:15px;
-  align-items: center;
-
+  padding: 10px;
+  border-radius: 25px;
+  margin: 75px auto 75px auto; 
 }
-
 h1, h2 {
+  margin-top: 25px;
   margin-left: 5%;
   margin-right: 5%;
+  font-size: 30px;
+  font-weight: bolder;
 }
-
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-
-label {
-  display: block;
-  margin: 20px;
-  font-size: 50px;
-  font-weight: bold;
-}
-
-
-nav a {
-  margin:12px;
-  text-transform: uppercase;
-  font-size: 10px;
-}
-
 
 button {
   -webkit-transition-duration: 0.1s; /* Safari */
@@ -98,37 +76,74 @@ button:active {
   font-family: 'Oxygen', sans-serif;
   letter-spacing: 2px;
 }
-
-
-#authorization {
-  max-width: 600px;
-  width: 70%;
-  margin: 100px auto;
-  border: 1px solid black;
+  
+#authorized{
+  flex-grow: 1;
+  display: flex;
+  justify-self: center;
+  align-items: center;
 }
 
-
+  
 input {
   display: block;
   margin: 10px auto;
-  padding: 5px;
-  font-size: 16px;
+  padding: 5px 5px;
+  font-size: 20px;
   border-radius: 5px;
+  
 }
-
-
+  
 button, input[type="submit"] {
   margin: 20px;
-  padding: 7px 35px;
+  padding: 10px auto;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
   display: inline-block;
 }
-
-.rmmrMe{
+.rmmrMe {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center; 
+  gap: 10px; 
+}
+#checkBox {
+  margin: 0; 
+}
+.rmmrMe p {
+  margin: 0; 
+  padding: 0;
+}
+.rmmrMe a {
+  margin-left: auto; 
+  text-decoration: none; 
+  
 }
 
+.bottom{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+.bottom a{
+  margin: 10px;
+  text-decoration: none; 
+ 
+}
+  
+a:hover {
+  color: white;
+}
+header{
+  width: 100%;
+}
+footer {
+  margin-top: auto;           
+  background-color: #f1f1f1; 
+  padding: 20px;              
+  text-align: center;      
+
+}
