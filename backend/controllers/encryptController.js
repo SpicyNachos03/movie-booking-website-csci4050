@@ -1,7 +1,8 @@
-require('dotenv').config({ path: '../../.env' });
-const crypto = require('crypto');
+import { config } from 'dotenv';
+config({ path: '../.env' });
+import crypto from 'crypto';
 
-// Generate a random 256-bit (32 bytes) key for AES encryption
+//Generate a random 256-bit (32 bytes) key for AES encryption
 //const key = crypto.randomBytes(32);
 //use the key in the .env file
 const key = Buffer.from(process.env.ENCRYPTION_KEY, 'base64');
@@ -59,6 +60,20 @@ async function run() {
         await client.close();
     }
 }
+
+async function testEncrypt() {
+    const testText = "Test Card Number 4242424242424242";
+    const encryptedData = await encrypt(testText, key);
+    console.log("Encrypted Text:", encryptedData);
+    return encryptedData; // Return encrypted data for further testing
+}
+
+async function testDecrypt(encryptedData) {
+    const decryptedData = await decrypt(encryptedData, key);
+    console.log("Decrypted Text:", decryptedData);
+}
+
+testEncrypt().then(encryptedData => testDecrypt(encryptedData)).catch(console.error);
 
 //run().catch(console.dir);
 
