@@ -8,7 +8,7 @@ config({ path: '../.env' });
 const key = Buffer.from(process.env.ENCRYPTION_KEY, 'base64');
 
 async function testEncrypt() {
-    const textToEncrypt = "mySensitiveData"; // Example data
+    const textToEncrypt = "mySensitiveData 46464646"; // Example data
     const encryptedData = await encrypt(textToEncrypt, key);
     console.log("Encrypted Data:", encryptedData);
     return encryptedData; // Return the encrypted data for further testing

@@ -44,7 +44,7 @@ async function sendResetPasswordEmail(req, res, next) {
   });
 }
 
-async function sendPasswordWasResetEmail(req, res, next) {
+async function sendProfileWasChangedEmail(req, res, next) {
   const was_reset_link = 'http://localhost:8000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
   
   let emailInfo = await emailTransporter.sendMail({
@@ -108,5 +108,5 @@ export {
   sendVerificationEmail,
   sendResetPasswordEmail,
   sendOrderConfirmEmail,
-  sendPasswordWasResetEmail,
+  sendProfileWasChangedEmail,
 };
