@@ -25,16 +25,28 @@ export default function Form() {
         setSubmitted(false);
     };
 
+    // Handling the phone number change
+    const handlePhoneNumber = (e) => {
+        setPhoneNumber(e.target.value);
+        setSubmitted(false);
+    };
+
     // Handling the password change
     const handlePassword = (e) => {
         setPassword(e.target.value);
         setSubmitted(false);
     };
 
+    // Handling the confirm password change
+    const handleConfirmPassword = (e) => {
+        setConfirmPassword(e.target.value);
+        setSubmitted(false);
+    };
+
     // Handling the form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (name === "" || email === "" || password === "") {
+        if (name === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "") {
             setError(true);
         } else {
             setSubmitted(true);
@@ -100,11 +112,27 @@ export default function Form() {
                     type="email"
                 />
 
+                <label className="label">Phone Number</label>
+                <input
+                    onChange={handlePhoneNumber}
+                    className="input"
+                    value={phoneNumber}
+                    type="phone"
+                />
+
                 <label className="label">Password</label>
                 <input
                     onChange={handlePassword}
                     className="input"
                     value={password}
+                    type="password"
+                />
+
+                <label className="label">Confirm Password</label>
+                <input
+                    onChange={handleConfirmPassword}
+                    className="input"
+                    value={confirmPassword}
                     type="password"
                 />
 
