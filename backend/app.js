@@ -4,7 +4,6 @@ require('dotenv').config({ path: '.env' });
 const mongoose = require('mongoose');
 const movieRoutes = require('./routes/movieRoutes'); 
 const userRoutes = require('./routes/userRoutes'); // Import user routes
-const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 app.use(cors({
@@ -21,7 +20,7 @@ mongoose
 // Use movie routes
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes); // Add user routes
-app.use('/api/users', userRoutes);
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

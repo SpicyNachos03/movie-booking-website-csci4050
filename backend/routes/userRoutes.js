@@ -29,7 +29,7 @@ router.post('/signup', createUser);
 router.put('/:id', updateUser);
 
 // Route to delete a user by ID
-router.delete('/:id', deleteUser);
+// router.delete('/:id', deleteUser);
 
 module.exports = router;
 
