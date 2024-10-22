@@ -21,7 +21,7 @@ let emailTransporter = nodemailer.createTransport({
 
 async function sendVerificationEmail(req, res, next) {
 
-  const verification_link = 'http://localhost:3000/backend/userModel/User/verify?id=' + res.locals.verification_id; //will need to update this base on our implementation
+  const verification_link = 'http://localhost:8000/api/users/verify?id=' + res.locals.verification_id; //will need to update this base on our implementation
 
   let emailInfo = await emailTransporter.sendMail({
     from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com.com>',
@@ -34,7 +34,7 @@ async function sendVerificationEmail(req, res, next) {
 }
 
 async function sendResetPasswordEmail(req, res, next) {
-  const reset_link = 'http://localhost:3000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
+  const reset_link = 'http://localhost:8000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
   
   let emailInfo = await emailTransporter.sendMail({
     from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com.com>',
@@ -45,13 +45,13 @@ async function sendResetPasswordEmail(req, res, next) {
 }
 
 async function sendPasswordWasResetEmail(req, res, next) {
-  const was_reset_link = 'http://localhost:3000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
+  const was_reset_link = 'http://localhost:8000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
   
   let emailInfo = await emailTransporter.sendMail({
     from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com.com>',
     to: res.locals['email'],
     subject: 'Your Password was reset',
-    text: `If you did not change your password, go to: ${reset_link}`,
+    text: `If you did not change your password, go to: ${was_reset_link}`,
   });
 }
 
