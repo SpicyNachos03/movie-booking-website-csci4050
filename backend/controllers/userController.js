@@ -1,7 +1,9 @@
-import User from '../models/User.js'; // Import User model
+const User = require('../models/userModel');
+const bcrypt = require('bcryptjs');
+
 
 // Get all users
-export const getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -10,8 +12,38 @@ export const getUsers = async (req, res) => {
   }
 };
 
+//login
+const userLogin = async (req, res) => {
+  console.log("Login request received", req.body);
+  try {
+    const { email, password } = req.body;
+    
+     // Validate input
+     if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+    const user = await User.findOne({ email });
+
+
+    if (!user) {
+      return res.status(404).json({ message: "An account is not associated with this email." });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);  
+    if (isPasswordValid) {
+      return res.status(200).json({ message: "Success" });
+    } else {
+      return res.status(400).json({ message: "The password is incorrect" });
+    }
+  } catch (error) {
+    console.error(error); 
+    return res.status(500).json({ message: "An error occurred" });
+  }
+};
+
+
 // Get user by email
-export const getUserByEmail = async (req, res) => {
+const getUserByEmail = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
 
@@ -26,19 +58,23 @@ export const getUserByEmail = async (req, res) => {
 };
 
 // Create a new user
-export const createUser = async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, promotions, status } = req.body;
-
-  const newUser = new User({
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    promotions,
-    status
-  });
+const createUser = async (req, res) => {
+  const { firstName, lastName, email, phoneNumber, promotions, status, password } = req.body;
 
   try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      promotions,
+      status,
+      password: hashedPassword // Store the hashed password
+    });
+
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
@@ -47,8 +83,8 @@ export const createUser = async (req, res) => {
 };
 
 // Update a user by ID
-export const updateUser = async (req, res) => {
-    const { firstName, lastName, email, phoneNumber, promotions, status } = req.body;
+const updateUser = async (req, res) => {
+    const { firstName, lastName, email, phoneNumber, promotions, status, password } = req.body;
   
     try {
       const updatedUser = await User.findByIdAndUpdate(
@@ -67,3 +103,4 @@ export const updateUser = async (req, res) => {
     }
   };
   
+  module.exports = {getUsers, userLogin, getUserByEmail, createUser, updateUser };

@@ -1,5 +1,4 @@
-
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -7,11 +6,12 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, required: true },
   promotions: { type: Boolean, default: false },
-  status: { type: String, enum: ['active', 'inactive'], default: 'active' }
+  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  password: { type: String, required: true }
 });
 
 const User = mongoose.model('User', userSchema);
-export default User;
+module.exports = User;
 
 // const { Int32 } = require('mongodb');
 // const mongoose = require('mongoose');
