@@ -2,8 +2,6 @@ import { config } from 'dotenv';
 config({ path: '../.env' });
 import crypto from 'crypto';
 
-//Generate a random 256-bit (32 bytes) key for AES encryption
-//const key = crypto.randomBytes(32);
 //use the key in the .env file
 const key = Buffer.from(process.env.ENCRYPTION_KEY, 'base64');
 
@@ -34,48 +32,6 @@ async function prepareUserData(userData) {
     userData.cards = encryptedCards;
     userData.password = encryptedPassword;
 }
-
-
-async function run() {
-    try {
-        await client.connect();
-        const database = client.db('mydatabase');
-        const users = database.collection('users');
-
-        // Insert the encrypted user data into MongoDB
-        await users.insertOne(userData);
-        console.log("User data inserted successfully!");
-
-        // Retrieve the encrypted data from MongoDB
-        const encryptedRecord = await users.findOne({ email: "johndoe123@gmail.com" });
-        
-        // Decrypt data for demonstration
-        const decryptedCards = encryptedRecord.cards.map(card => decrypt(card, key));
-        const decryptedPassword = decrypt(encryptedRecord.password, key);
-        
-        console.log("Decrypted Cards:", decryptedCards);
-        console.log("Decrypted Password:", decryptedPassword);
-
-    } finally {
-        await client.close();
-    }
-}
-
-async function testEncrypt() {
-    const testText = "Test Card Number 4242424242424242";
-    const encryptedData = await encrypt(testText, key);
-    console.log("Encrypted Text:", encryptedData);
-    return encryptedData; // Return encrypted data for further testing
-}
-
-async function testDecrypt(encryptedData) {
-    const decryptedData = await decrypt(encryptedData, key);
-    console.log("Decrypted Text:", decryptedData);
-}
-
-testEncrypt().then(encryptedData => testDecrypt(encryptedData)).catch(console.error);
-
-//run().catch(console.dir);
 
 export {
     encrypt,

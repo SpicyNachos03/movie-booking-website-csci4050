@@ -1,8 +1,4 @@
 import { encrypt, decrypt, prepareUserData } from './encryptController.js';
-// import dotenv from 'dotenv';
-
-// dotenv.config({ path: '../../.env' });
-// const key = process.env.ENCRYPTION_KEY;
 import { config } from 'dotenv';
 config({ path: '../.env' });
 
