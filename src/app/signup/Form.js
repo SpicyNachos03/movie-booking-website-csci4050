@@ -48,7 +48,12 @@ export default function Form() {
         e.preventDefault();
         if (name === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "") {
             setError(true);
-        } else {
+        } 
+        else if (password !== confirmPassword){ //check for matching passwords
+            setError(true);
+            //maybe set an erro message sayign passwords do not match
+        }  
+        else {
             setSubmitted(true);
             setError(false);
         }
@@ -135,7 +140,7 @@ export default function Form() {
                     value={confirmPassword}
                     type="password"
                 />
-
+                //add checkbox for registering for promotions through email
                 <button onClick={handleSubmit} className="btn" type="submit">
                     Submit
                 </button>
