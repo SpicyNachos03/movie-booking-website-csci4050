@@ -51,7 +51,7 @@ export default function Form() {
         } 
         else if (password !== confirmPassword){ //check for matching passwords
             setError(true);
-            //maybe set an erro message sayign passwords do not match
+            //maybe set an error message sayign passwords do not match
         }  
         else {
             setSubmitted(true);

@@ -17,18 +17,11 @@
     "form-data": "^4.0.1",
     "mailgun.js": "^10.2.3",
     "mongodb": "^6.9.0",
-<<<<<<< HEAD
-    "mongoose": "^8.6.3",
-    "next": "^14.2.13",
-    "react": "^18",
-    "react-dom": "^18",
-=======
     "mongoose": "^8.7.2",
     "next": "^14.2.15",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
->>>>>>> dbb6219e28fa13f40807433700cbdf0943e62754
     "react-image-gallery": "^1.3.0",
     "react-router-dom": "^6.26.2",
     "react-slick": "^0.30.2",
