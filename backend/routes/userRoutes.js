@@ -1,9 +1,5 @@
 const express = require('express');
-const {
-  getUsers,
-  getUserByEmail,
-  createUser
-} = require('../controllers/userController');
+const { getUsers, getUserByEmail, createUser, updateUser, deleteUser } = require('../controllers/userController');
 
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -23,4 +19,8 @@ router.post('/', createUser);
 // Route to update a user by ID
 router.put('/:id', updateUser);
 
+// Route to delete a user by ID
+router.delete('/:id', deleteUser);
+
 module.exports = router;
+
