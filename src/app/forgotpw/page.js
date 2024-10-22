@@ -29,7 +29,7 @@ function ForgotPassword() {
 
         try {
             const response = await axios.post('http://localhost:3000/forgot-password', { email });
-            console.log(response.data); // Handle response accordingly
+            console.log(response.data); 
             if (response.data.success) {
                 alert('A password reset link has been sent to your email.');
             } else {
