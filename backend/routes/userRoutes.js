@@ -4,7 +4,8 @@ const {
   getUserByEmail,
   createUser,
   userLogin,
-  updateUser
+  updateUser,
+  getUserById
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -12,6 +13,8 @@ const bodyParser = require('body-parser');
 
 // Middleware to parse request bodies
 router.use(bodyParser.json());
+
+router.use(express.json());
 
 //Route to login
 router.post('/login', userLogin);
@@ -22,6 +25,7 @@ router.get('/', getUsers);
 // Route to get a user by email
 router.get('/:email', getUserByEmail);
 
+router.get('/id/:id', getUserById);
 // Route to create a new user
 router.post('/signup', createUser);
 
