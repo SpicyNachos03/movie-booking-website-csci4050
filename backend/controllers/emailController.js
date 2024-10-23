@@ -8,20 +8,21 @@ function lastFourDigits(cardNumber) {
 
 
 let emailTransporter = nodemailer.createTransport({
+  service: 'Gmail',
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
   auth: {
-    user: ': moviebookingcsci4050a7@gmail.com',
-    pass: 'gudetamachuA7',
+    user: 'moviebookingcsci4050a7@gmail.com',
+    pass: 'rppi guzd ofre szov',
   },
 });
 
 async function sendTestEmail() {
   try {
     let emailInfo = await emailTransporter.sendMail({
-      from: '"Movie Booking" <: moviebookingcsci4050a7@gmail.com>',
-      to: 'tmoth@uga.edu',
+      from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
+      to: 'moviebooking03@gmail.com',
       subject: 'Hello',
       text: 'Hello',
     });
@@ -39,7 +40,7 @@ async function sendVerificationEmail(req, res, next) {
   const verification_link = 'http://localhost:8000/api/users/verify?id=' + res.locals.verification_id; //will need to update this base on our implementation
 
   let emailInfo = await emailTransporter.sendMail({
-    from: '"Movie Booking" <: moviebookingcsci4050a7@gmail.com>',
+    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
     to: res.locals['email'],
     subject: 'Verify your account',
     text: `To verify your account click on the following link: ${verification_link}`,
@@ -63,7 +64,7 @@ async function sendProfileWasChangedEmail(req, res, next) {
   const was_reset_link = 'http://localhost:8000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
   
   let emailInfo = await emailTransporter.sendMail({
-    from: '"Movie Booking" <: moviebookingcsci4050a7@gmail.com>',
+    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
     to: res.locals['email'],
     subject: 'Your Password was reset',
     text: `If you did not change your password, go to: ${was_reset_link}`,
@@ -109,7 +110,7 @@ Movies:
   emailText += `Total: $${total.toFixed(2)}`;
 
   let emailInfo = await emailTransporter.sendMail({
-    from: '"Movie Booking" <: moviebookingcsci4050a7@gmail.com>',
+    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
     to: res.locals.userInfo.email,
     subject: 'Order Confirmation',
     text: emailText,
