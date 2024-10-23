@@ -35,6 +35,36 @@ async function sendTestEmail() {
 
 sendTestEmail();
 
+async function sendConfirmationEmail(user) {
+  try {
+    let emailInfo = await emailTransporter.sendMail({
+      from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
+      to: user.locals['email'],
+      subject: 'Confirmation of registration',
+      text: 'Your registration was successful',
+    });
+
+    console.log('Email sent:', emailInfo.messageId);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
+
+async function sendProfileWasChangedEmail(user) {
+  try {
+    let emailInfo = await emailTransporter.sendMail({
+      from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
+      to: user.locals['email'],
+      subject: 'Notification of changes to your profile',
+      text: 'Changes have been made to your user profile',
+    });
+
+    console.log('Email sent:', emailInfo.messageId);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
+
 async function sendVerificationEmail(req, res, next) {
 
   const verification_link = 'http://localhost:8000/api/users/verify?id=' + res.locals.verification_id; //will need to update this base on our implementation
@@ -60,62 +90,19 @@ async function sendResetPasswordEmail(req, res, next) {
   });
 }
 
-async function sendProfileWasChangedEmail(req, res, next) {
-  const was_reset_link = 'http://localhost:8000/forgotpassword.html?id=' + res.locals.reset_password_id; //will need to update this base on our implementation
-  
-  let emailInfo = await emailTransporter.sendMail({
-    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-    to: res.locals['email'],
-    subject: 'Your Password was reset',
-    text: `If you did not change your password, go to: ${was_reset_link}`,
-  });
-}
-
 async function sendOrderConfirmEmail(req, res, next) {
+  try {
+    let emailInfo = await emailTransporter.sendMail({
+      from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
+      to: user.locals['email'],
+      subject: 'Movie Booking Confirmation',
+      text: 'Congrats you booked a movie',
+    });
 
-  const bookingDetails = res.locals.createdBooking.dataValues; //will need to update this base on our implementation
-  console.log(bookingDetails);
-  let emailText =
-`
-Order:
-Status: ${bookingDetails.status}
-ID: ${bookingDetails.id}
-
-Billing:
-${bookingDetails.billingAddress}
-
-Shipping:
-${bookingDetails.shippingAddress}
-
-Payment:
-${bookingDetails.card[0]}
-**** **** **** ${lastFourDigits(bookingDetails.card[0])}
-${bookingDetails.cardMonth} / 20${bookingDetails.cardYear} | ${bookingDetails.cardCvv} | ${bookingDetails.cardZip}
-
-Movies:
-`
-
-  let total = 1;
-  for (const [id, qty] of Object.entries(JSON.parse(bookingDetails.tickets))) {
-    try {
-      const movieQuery = await movieDB.movie.findAll({where : {id: id}, raw: true});
-      console.log(movieQuery)
-      total += movieQuery.length === 0 ? 0 : movieQuery[0].price * qty;
-      emailText += `Title: ${movieQuery[0].title}\nQuantity: ${qty}\n\n`;
-    } catch (err) {
-      console.log(err);
-    }
+    console.log('Email sent:', emailInfo.messageId);
+  } catch (error) {
+    console.error('Error sending email:', error);
   }
-
-  emailText += `Total: $${total.toFixed(2)}`;
-
-  let emailInfo = await emailTransporter.sendMail({
-    from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-    to: res.locals.userInfo.email,
-    subject: 'Order Confirmation',
-    text: emailText,
-  });
-  next();
 }
 
 module.exports = {
@@ -123,4 +110,5 @@ module.exports = {
   sendResetPasswordEmail,
   sendOrderConfirmEmail,
   sendProfileWasChangedEmail,
+  sendConfirmationEmail,
 };
