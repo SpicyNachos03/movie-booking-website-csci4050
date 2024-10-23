@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 
+
 const EditProfile = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -68,7 +69,6 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const updatedData = {
       ...formData,
       promotions: formData.promotions ? 1 : 0,

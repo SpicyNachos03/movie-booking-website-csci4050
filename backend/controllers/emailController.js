@@ -33,13 +33,12 @@ async function sendTestEmail() {
   }
 }
 
-sendTestEmail();
 
-async function sendConfirmationEmail(user) {
+async function sendConfirmationEmail() {
   try {
     let emailInfo = await emailTransporter.sendMail({
       from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-      to: user.locals['email'],
+      to: 'moviebooking03@gmail.com',
       subject: 'Confirmation of registration',
       text: 'Your registration was successful',
     });
@@ -49,12 +48,12 @@ async function sendConfirmationEmail(user) {
     console.error('Error sending email:', error);
   }
 }
-
-async function sendProfileWasChangedEmail(user) {
+sendConfirmationEmail();
+async function sendProfileWasChangedEmail() {
   try {
     let emailInfo = await emailTransporter.sendMail({
       from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-      to: user.locals['email'],
+      to: 'moviebooking03@gmail.com',
       subject: 'Notification of changes to your profile',
       text: 'Changes have been made to your user profile',
     });
@@ -64,7 +63,7 @@ async function sendProfileWasChangedEmail(user) {
     console.error('Error sending email:', error);
   }
 }
-
+sendProfileWasChangedEmail();
 async function sendVerificationEmail(req, res, next) {
 
   const verification_link = 'http://localhost:8000/api/users/verify?id=' + res.locals.verification_id; //will need to update this base on our implementation

@@ -87,7 +87,7 @@ const createUser = async (req, res) => {
   try {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    const hashedCards = await bcrypt.hash(cards, 10);
     const newUser = new User({
       firstName,
       lastName,
@@ -96,7 +96,7 @@ const createUser = async (req, res) => {
       promotions,
       status,
       password: hashedPassword, // Store the hashed password
-      cards, // Include cards here
+      cards: hashedCards, // Include cards here
     });
 
     const savedUser = await newUser.save();
