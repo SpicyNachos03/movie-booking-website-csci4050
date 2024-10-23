@@ -8,6 +8,7 @@ export default function Form() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isChecked, setIsChecked] = useState(false);
+    const [status, setStatus] = useState(false);
 
     // States for checking the errors
     const [submitted, setSubmitted] = useState(false);
@@ -48,6 +49,9 @@ export default function Form() {
     const handlePromotion = () => {
       setIsChecked(!isChecked);
     };
+
+    // Handling the status change
+    
 
     // Handling the form submission
     // ADD email verification into submit handler if successful
