@@ -63,7 +63,7 @@ const getUserByEmail = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, promotions, status, password } = req.body;
+  const { firstName, lastName, email, phoneNumber, promotions, status, password, cards } = req.body;
 
   try {
     // Hash the password
@@ -76,7 +76,8 @@ const createUser = async (req, res) => {
       phoneNumber,
       promotions,
       status,
-      password: hashedPassword // Store the hashed password
+      password: hashedPassword, // Store the hashed password
+      cards, // Include cards here
     });
 
     const savedUser = await newUser.save();
@@ -88,24 +89,34 @@ const createUser = async (req, res) => {
 };
 
 // Update a user by ID
+// Update a user by ID
 const updateUser = async (req, res) => {
-    const { firstName, lastName, email, phoneNumber, promotions, status, password } = req.body;
-  
-    try {
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        { firstName, lastName, email, phoneNumber, promotions, status },
-        { new: true, runValidators: true }
-      );
-  
-      if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      res.status(500).json({ message: 'Error updating user', error });
+  const { firstName, lastName, email, phoneNumber, promotions, status, password, cards } = req.body;
+
+  try {
+    const updateData = { firstName, lastName, email, phoneNumber, promotions, status, cards };
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updateData.password = hashedPassword;
     }
-  };
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Error updating user', error });
+  }
+};
+
   
   module.exports = {getUsers, userLogin, getUserByEmail, createUser, updateUser };

@@ -10,22 +10,23 @@ const EditProfile = () => {
     password: '',
     phoneNumber: '',
     promotions: false,
-    cards: [],
+    cards: [], // Manage cards here
   });
+  const [newCard, setNewCard] = useState(''); // State for adding new cards
   const [loading, setLoading] = useState(true);
-  const userId = 'YOUR_USER_ID'; // Replace with the actual user ID
+  const userId = '67180a4a179c89087faf6286'; // Replace with actual user ID
 
   // Fetch user data from the database
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`/api/users/${userId}`); // Ensure the endpoint is correct
+        const response = await fetch(`/api/users/${userId}`);
         if (!response.ok) throw new Error('Failed to fetch user data');
 
         const user = await response.json();
         setFormData({
           ...user,
-          promotions: user.promotions === 1, // Convert DB value to boolean
+          promotions: user.promotions === 1,
         });
       } catch (error) {
         console.error(error);
@@ -45,12 +46,31 @@ const EditProfile = () => {
     });
   };
 
+  const handleCardChange = (e) => setNewCard(e.target.value);
+
+  const addCard = () => {
+    if (newCard) {
+      setFormData((prev) => ({
+        ...prev,
+        cards: [...prev.cards, newCard],
+      }));
+      setNewCard('');
+    }
+  };
+
+  const removeCard = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      cards: prev.cards.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const updatedData = {
       ...formData,
-      promotions: formData.promotions ? 1 : 0, // Store promotions as 1 or 0
+      promotions: formData.promotions ? 1 : 0,
     };
 
     try {
@@ -64,15 +84,12 @@ const EditProfile = () => {
 
       const updatedUser = await response.json();
       console.log('Profile Updated:', updatedUser);
-      // Optional: Redirect or display success message here
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Optional: Add a spinner or skeleton loader
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="edit-profile-container min-h-screen flex items-center justify-center bg-gray-900 text-white">
@@ -89,7 +106,6 @@ const EditProfile = () => {
               value={formData.firstName}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
-              placeholder="Enter your first name"
             />
           </div>
 
@@ -103,7 +119,6 @@ const EditProfile = () => {
               value={formData.lastName}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
-              placeholder="Enter your last name"
             />
           </div>
 
@@ -117,7 +132,6 @@ const EditProfile = () => {
               value={formData.billingAddress}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
-              placeholder="Enter your billing address"
             />
           </div>
 
@@ -131,7 +145,6 @@ const EditProfile = () => {
               value={formData.password}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
-              placeholder="Enter a new password"
             />
           </div>
 
@@ -145,11 +158,10 @@ const EditProfile = () => {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
-              placeholder="Enter your phone number"
             />
           </div>
 
-          {/* Email (Disabled) */}
+          {/* Email */}
           <div className="mb-4">
             <label htmlFor="email" className="block font-medium mb-2">Email</label>
             <input
@@ -162,7 +174,7 @@ const EditProfile = () => {
             />
           </div>
 
-          {/* Promotions Checkbox */}
+          {/* Promotions */}
           <div className="mb-4 flex items-center">
             <input
               type="checkbox"
@@ -175,10 +187,42 @@ const EditProfile = () => {
             <label htmlFor="promotions" className="font-medium">Receive Promotions</label>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-tealBlue py-2 rounded-md hover:bg-sageGreen transition duration-300"
-          >
+          {/* Cards */}
+          <div className="mb-4">
+            <label className="block font-medium mb-2">Cards</label>
+            <ul className="mb-2">
+              {formData.cards.map((card, index) => (
+                <li key={index} className="flex items-center justify-between mb-1">
+                  <span>{card}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeCard(index)}
+                    className="text-red-500 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="flex">
+              <input
+                type="text"
+                value={newCard}
+                onChange={handleCardChange}
+                className="w-full p-2 border rounded-md focus:outline-none mr-2"
+                placeholder="Add new card"
+              />
+              <button
+                type="button"
+                onClick={addCard}
+                className="bg-tealBlue py-2 px-4 rounded-md hover:bg-sageGreen transition"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" className="w-full bg-tealBlue py-2 rounded-md hover:bg-sageGreen transition">
             Save Changes
           </button>
         </form>
@@ -188,3 +232,4 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
+
