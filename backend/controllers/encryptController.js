@@ -1,6 +1,9 @@
-import { config } from 'dotenv';
-config({ path: '../.env' });
-import crypto from 'crypto';
+// import { config } from 'dotenv';
+// config({ path: '../.env' });
+// import crypto from 'crypto';
+
+require('dotenv').config({ path: '../.env' });
+const crypto = require("crypto");
 
 //use the key in the .env file
 const key = Buffer.from(process.env.ENCRYPTION_KEY, 'base64');
@@ -33,10 +36,10 @@ async function prepareUserData(userData) {
     userData.password = encryptedPassword;
 }
 
-export {
+module.exports = {
     encrypt,
     decrypt,
     prepareUserData,
-}
+};
 
 

@@ -9,11 +9,12 @@ import './globals.css';
 import MyVideoSlider from "../components/MyVideoSlider";
 import SearchBar from '../components/SearchBar';
 import Header from '../components/Header';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
   const [movies, setMovies] = useState([]);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -33,39 +34,22 @@ export default function Home() {
   
     fetchMovies();
   }, []);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    router.push('/login'); // Redirect to login page
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-700 text-white">
-      <header className="bg-tealBlue p-4 w-full">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/">
-          <Image
-            src="/cosmic-studios.png"
-            alt="Movie Logo"
-            width={200}
-            height={75}
-          />
-        </Link>
-        <nav className="flex items-center">
-          <ul className="flex space-x-4 mr-4">
-            <li><Link href="/signup" className="text-white hover:text-lightCyan">Sign Up</Link></li>
-            <li><Link href="/login" className="text-white hover:text-lightCyan">Login</Link></li>
-            <li><Link href="/admin" className="text-white hover:text-lightCyan">Admin</Link></li>
-            <li><Link href="/skeleton" className="text-white hover:text-lightCyan">Skeleton</Link></li>
-
-          </ul>
-          <Link href="/editProfile" className="text-white hover:text-lightCyan">
-            <Image
-              src="/user-icon.png"
-              alt="User Profile"
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-          </Link>
-        </nav>
-      </div>
-    </header>
+    <div>
+      <Header/>
 
       <main className="flex flex-col items-center flex-grow p-6 sm:p-12">
         {/* Hero Section */}
@@ -115,9 +99,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Action Button */}
+        {/* Only available to registered user */}
         <div className="mt-8">
-          {isLoggedIn ? (
+          {user ? (
             <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
               Book Ticket
             </button>

@@ -1,6 +1,10 @@
-import { encrypt, decrypt, prepareUserData } from './encryptController.js';
-import { config } from 'dotenv';
-config({ path: '../.env' });
+// import { encrypt, decrypt, prepareUserData } from './encryptController.js';
+// import { config } from 'dotenv';
+// config({ path: '../.env' });
+
+require('dotenv').config({ path: '../.env' });
+const { encrypt, decrypt, prepareUserData } = require('./encryptController.js');
+
 
 //Generate a random 256-bit (32 bytes) key for AES encryption
 //const key = crypto.randomBytes(32);
