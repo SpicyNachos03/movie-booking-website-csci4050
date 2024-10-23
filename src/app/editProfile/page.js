@@ -15,7 +15,7 @@ const EditProfile = () => {
   });
   const [newCard, setNewCard] = useState(''); // State for adding new cards
   const [loading, setLoading] = useState(true);
-  const userId = '67180a4a179c89087faf6286'; // Replace with actual user ID
+  const userId = 'pl3ase@gmail.com'; // Replace with actual user ID
 
   // Fetch user data from the database
   useEffect(() => {
@@ -109,6 +109,7 @@ const EditProfile = () => {
               value={formData.firstName}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
+              style={{ color: 'black' }} 
             />
           </div>
 
@@ -122,6 +123,7 @@ const EditProfile = () => {
               value={formData.lastName}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
+              style={{ color: 'black' }} 
             />
           </div>
 
@@ -135,6 +137,7 @@ const EditProfile = () => {
               value={formData.billingAddress}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
+              style={{ color: 'black' }} 
             />
           </div>
 
@@ -148,6 +151,7 @@ const EditProfile = () => {
               value={formData.password}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
+              style={{ color: 'black' }} 
             />
           </div>
 
@@ -161,6 +165,7 @@ const EditProfile = () => {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-md focus:outline-none"
+              style={{ color: 'black' }} 
             />
           </div>
 
@@ -174,6 +179,7 @@ const EditProfile = () => {
               value={formData.email}
               disabled
               className="w-full p-2 border rounded-md bg-gray-700 text-gray-400"
+              style={{ color: 'black' }} 
             />
           </div>
 
@@ -201,6 +207,7 @@ const EditProfile = () => {
                     type="button"
                     onClick={() => removeCard(index)}
                     className="text-red-500 hover:underline"
+        
                   >
                     Remove
                   </button>
@@ -214,6 +221,7 @@ const EditProfile = () => {
                 onChange={handleCardChange}
                 className="w-full p-2 border rounded-md focus:outline-none mr-2"
                 placeholder="Add new card"
+                style={{ color: 'black' }} 
               />
               <button
                 type="button"
