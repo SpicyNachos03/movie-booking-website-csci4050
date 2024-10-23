@@ -73,10 +73,12 @@ function Login() {
             console.log({ email, password });
             const result = await axios.post("http://localhost:8000/api/users/login", { email, password });
             if (result.data.message === "Success") {
+                const userData = {email,type: result.data.type};
                 if (rememberMe) {
                     localStorage.setItem('userEmail', email); 
                 } 
-                router.push('/home');
+                localStorage.setItem('user', JSON.stringify(userData));
+                router.push('/');
             } else {
                 
                 alert("An account is not associated with the information provided. Please Sign-up!");
