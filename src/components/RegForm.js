@@ -1,8 +1,10 @@
 import { useState } from "react";
+import axios from 'axios';
 
 export default function Form() {
     //States for registration
-    const [name, setName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
@@ -14,12 +16,17 @@ export default function Form() {
     const [error, setError] = useState(false);
 
     //JOSEPH ADD THE EVENT HANDLERS FOR PHONE NUMBER AND CONFIRM PASSWORD
-    // Handling the name change
-    const handleName = (e) => {
-        setName(e.target.value);
+    // Handling the first name change
+    const handleFirstName = (e) => {
+        setFirstName(e.target.value);
         setSubmitted(false);
     };
 
+    // Handling the last name change
+    const handleLastName = (e) => {
+        setLastName(e.target.value);
+        setSubmitted(false);
+    }
     // Handling the email change
     const handleEmail = (e) => {
         setEmail(e.target.value);
@@ -52,19 +59,38 @@ export default function Form() {
     // Handling the form submission
     // ADD email verification into submit handler if successful
     // Transfer the data from the form into the database if it is complete
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (name === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "") {
-            setError(true);
-        } 
-        else if (password !== confirmPassword){ //check for matching passwords
-            setError(true);
-            //maybe set an error message sayign passwords do not match
+             setError(true);
+        } else if (password !== confirmPassword){ //check for matching passwords
+             setError(true);
+             //maybe set an error message sayign passwords do not match
         }  
-        else {
-            setSubmitted(true);
-            setError(false);
+
+        const userData = {
+            name: name,
+            email: email,
+            phoneNumber: phoneNumber,
+            password: password,
+            receivePromotions: isChecked,
+        };
+
+        try { // FIX FRONTEND LOGIC THEN FIGURE OUT POSTING
+            // Attempting POST Request
+            const response = await axios.post("http://localhost:8000/api/users", userData);
+
+            if (response.status === 201) {
+                setSubmitted(true)
+                setError(false);
+            } else {
+                setError(true);
+            } 
+        } catch (error) {
+                console.log("Error Registrering User:", error);
+                setError(true);
         }
+        
     };
 
     // Showing success message
@@ -111,13 +137,24 @@ export default function Form() {
         <form className="formBox">
           {/* Labels and inputs for form data */}
           <div className="inputWrapper">
-          <label className="label">Name</label>
+          <label className="label">First Name</label>
           <input
-            onChange={handleName}
+            onChange={handleFirstName}
             className="input"
-            value={name}
+            value={firstName}
             type="text"
-            placeholder="Name"
+            placeholder="First Name"
+          />
+          </div>
+          
+          <div className="inputWrapper">
+          <label className="label">Last Name</label>
+          <input
+            onChange={handleLastName}
+            className="input"
+            value={lastName}
+            type="text"
+            placeholder="Last Name"
           />
           </div>
           
