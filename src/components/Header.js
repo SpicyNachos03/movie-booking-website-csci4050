@@ -55,7 +55,7 @@ export default function Header() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Retrieve user data from localStorage
+    
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
       setUser(storedUser);
@@ -63,7 +63,7 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    // Clear user data and redirect to login page
+    
     localStorage.removeItem('user');
     setUser(null);
     router.push('/login');
@@ -83,7 +83,7 @@ export default function Header() {
         <nav className="flex items-center">
           <ul className="flex space-x-4 mr-4">
             {user ? (
-              // If user is logged in
+              //if user successfully logged in
               <>
                 <li>
                   <Link href="/profile" className="text-white hover:text-lightCyan">
@@ -127,7 +127,7 @@ export default function Header() {
 
               </>
             ) : (
-              // If user is not logged in
+              // default for web users
               <>
                 <li>
                   <Link href="/signup" className="text-white hover:text-lightCyan">Sign Up</Link>
