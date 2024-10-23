@@ -61,6 +61,25 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    console.log('Fetching user with ID:', req.params.id); // Log the ID
+
+    const user = await User.findById(req.params.id); // Query by ID
+
+    if (!user) {
+      console.log('User not found for ID:', req.params.id); // Log if not found
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error fetching user by ID:', error);
+    res.status(500).json({ message: 'Error fetching user', error: error.message });
+  }
+};
+
+
 // Create a new user
 const createUser = async (req, res) => {
   const { firstName, lastName, email, phoneNumber, promotions, status, password, cards } = req.body;
@@ -88,7 +107,7 @@ const createUser = async (req, res) => {
   }
 };
 
-// Update a user by ID
+
 // Update a user by ID
 const updateUser = async (req, res) => {
   const { firstName, lastName, email, phoneNumber, promotions, status, password, cards } = req.body;
@@ -119,4 +138,4 @@ const updateUser = async (req, res) => {
 };
 
   
-  module.exports = {getUsers, userLogin, getUserByEmail, createUser, updateUser };
+  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser };

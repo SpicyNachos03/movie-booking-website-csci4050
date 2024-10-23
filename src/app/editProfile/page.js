@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Header from '@/components/Header';
 
 const EditProfile = () => {
   const [formData, setFormData] = useState({
@@ -94,8 +95,10 @@ const EditProfile = () => {
   return (
     <div className="edit-profile-container min-h-screen flex items-center justify-center bg-gray-900 text-white">
       <div className="max-w-md w-full p-6 bg-gray-800 rounded-lg shadow-md">
+      <Header></Header>
         <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
         <form onSubmit={handleSubmit}>
+          
           {/* First Name */}
           <div className="mb-4">
             <label htmlFor="firstName" className="block font-medium mb-2">First Name</label>
