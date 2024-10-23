@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import RegForm from '@/components/RegForm';
+
 import { Button } from 'react-bootstrap';
 export default function Signup() {
 
@@ -19,7 +21,9 @@ export default function Signup() {
     return (
         <div>
             <Header/>
-            <div className="signUpWrapper">
+            <RegForm/>
+
+            {/* <div className="signUpWrapper">
 
                 {registered ? ( 
                     <>
@@ -56,7 +60,7 @@ export default function Signup() {
                 </>
                 )}
 
-            </div>
+            </div> */}
             <Footer/>
         </div>
     )

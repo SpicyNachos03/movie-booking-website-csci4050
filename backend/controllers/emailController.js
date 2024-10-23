@@ -10,6 +10,7 @@ function lastFourDigits(number) {
   return lastFour;
 }
 
+//email method used to send verification email
 let emailTransporter = nodemailer.createTransport({
   service: 'gmail',
   port: 423,

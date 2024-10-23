@@ -7,6 +7,7 @@ export default function Form() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [isChecked, setIsChecked] = useState(false);
 
     // States for checking the errors
     const [submitted, setSubmitted] = useState(false);
@@ -43,7 +44,14 @@ export default function Form() {
         setSubmitted(false);
     };
 
+    //promotion check box handler (need to add functionality of sending promotions to users email)
+    const handlePromotion = () => {
+      setIsChecked(!isChecked);
+    };
+
     // Handling the form submission
+    // ADD email verification into submit handler if successful
+    // Transfer the data from the form into the database if it is complete
     const handleSubmit = (e) => {
         e.preventDefault();
         if (name === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "") {
@@ -88,63 +96,93 @@ export default function Form() {
     };
 
     return (
-        <div className="form">
-            <div>
-                <h1>User Registration</h1>
-            </div>
-
-            {/* Calling to the methods */}
-            <div className="messages">
-                {errorMessage()}
-                {successMessage()}
-            </div>
-
-            <form>
-                {/* Labels and inputs for form data */}
-                <label className="label">Name</label>
-                <input
-                    onChange={handleName}
-                    className="input"
-                    value={name}
-                    type="text"
-                />
-
-                <label className="label">Email</label>
-                <input
-                    onChange={handleEmail}
-                    className="input"
-                    value={email}
-                    type="email"
-                />
-
-                <label className="label">Phone Number</label>
-                <input
-                    onChange={handlePhoneNumber}
-                    className="input"
-                    value={phoneNumber}
-                    type="phone"
-                />
-
-                <label className="label">Password</label>
-                <input
-                    onChange={handlePassword}
-                    className="input"
-                    value={password}
-                    type="password"
-                />
-
-                <label className="label">Confirm Password</label>
-                <input
-                    onChange={handleConfirmPassword}
-                    className="input"
-                    value={confirmPassword}
-                    type="password"
-                />
-                //add checkbox for registering for promotions through email
-                <button onClick={handleSubmit} className="btn" type="submit">
-                    Submit
-                </button>
-            </form>
+      <div className="form">
+        <div>
+            {/*fix formatting css (make title bigger)*/}
+          <h1>User Registration</h1>
         </div>
+
+        {/* Calling to the methods */}
+        <div className="messages">
+          {errorMessage()}
+          {successMessage()}
+        </div>
+
+        <form className="formBox">
+          {/* Labels and inputs for form data */}
+          <div className="inputWrapper">
+          <label className="label">Name</label>
+          <input
+            onChange={handleName}
+            className="input"
+            value={name}
+            type="text"
+            placeholder="Name"
+          />
+          </div>
+          
+          <div className="inputWrapper">
+          <label className="label">Email</label>
+          <input
+            onChange={handleEmail}
+            className="input"
+            value={email}
+            type="email"
+            placeholder="Email"
+          />
+          </div>
+          
+          <div className="inputWrapper">
+          <label className="label">Phone Number</label>
+          <input
+            onChange={handlePhoneNumber}
+            className="input"
+            value={phoneNumber}
+            type="phone"
+            placeholder="###-###-####"
+          />
+          </div>
+          
+          <div className="inputWrapper">
+          <label className="label">Password</label>
+          <input
+            onChange={handlePassword}
+            className="input"
+            value={password}
+            type="password"
+            placeholder="Password"
+          />
+          </div>
+          
+          <div className="inputWrapper">
+          <label className="label">Confirm Password</label>
+          <input
+            onChange={handleConfirmPassword}
+            className="input"
+            value={confirmPassword}
+            type="password"
+            placeholder="Confirm Password"
+          />
+          </div>
+
+          {/* Promotions Checkbox */}
+          <div className="promotion">
+            <input
+              type="checkbox"
+              className="promotions"
+              checked={isChecked}
+              onChange={handlePromotion}
+            />
+            <label htmlFor="promotions" className="font-medium">Receive Promotions</label>
+          </div>
+         
+          {/*add checkbox for registering for promotions through email*/}
+          <button onClick={handleSubmit} className="button" type="submit">
+            Submit
+          </button>
+
+          {/*add button for login option*/}
+        </form>
+      </div>
     );
 }
