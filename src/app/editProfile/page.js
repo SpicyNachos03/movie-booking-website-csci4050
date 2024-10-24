@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
-
+import { useRouter} from 'next/navigation'; 
 
 const EditProfile = () => {
   const [formData, setFormData] = useState({
@@ -12,17 +12,21 @@ const EditProfile = () => {
     password: '',
     phoneNumber: '',
     promotions: false,
-    cards: [], // Manage cards here
+    cards: [],
   });
-  const [newCard, setNewCard] = useState(''); // State for adding new cards
+  const [newCard, setNewCard] = useState('');
   const [loading, setLoading] = useState(true);
-  const userId = 'pl3ase@gmail.com'; // Replace with actual user ID
+
+  // Fetch user email from local storage
+  const userEmail = JSON.parse(localStorage.getItem('user'))?.email; // Get the logged-in user's email
 
   // Fetch user data from the database
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!userEmail) return; // If no user email, exit early
+
       try {
-        const response = await fetch(`/api/users/${userId}`);
+        const response = await fetch(`/api/users/${userEmail}`);
         if (!response.ok) throw new Error('Failed to fetch user data');
 
         const user = await response.json();
@@ -38,7 +42,7 @@ const EditProfile = () => {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, [userEmail]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -75,7 +79,7 @@ const EditProfile = () => {
     };
 
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`/api/users/${userEmail}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData),
@@ -95,10 +99,9 @@ const EditProfile = () => {
   return (
     <div className="edit-profile-container min-h-screen flex items-center justify-center bg-gray-900 text-white">
       <div className="max-w-md w-full p-6 bg-gray-800 rounded-lg shadow-md">
-      <Header></Header>
+        <Header />
         <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
         <form onSubmit={handleSubmit}>
-          
           {/* First Name */}
           <div className="mb-4">
             <label htmlFor="firstName" className="block font-medium mb-2">First Name</label>
@@ -207,7 +210,6 @@ const EditProfile = () => {
                     type="button"
                     onClick={() => removeCard(index)}
                     className="text-red-500 hover:underline"
-        
                   >
                     Remove
                   </button>
@@ -243,4 +245,3 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
-
