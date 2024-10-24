@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Footer from '../components/Footer';
 import Image from "next/image";
 import Link from 'next/link';
@@ -15,41 +15,46 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [movies, setMovies] = useState([]);
   const router = useRouter();
+
+  const containerRefs = useRef({}); // Store references for each status section
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        console.log('Fetching movies...');
         const response = await fetch('http://localhost:8000/api/movies');
-        console.log('Response status:', response.status);
-        if (!response.ok) {
-          throw new Error('Failed to fetch movies');
-        }
+        if (!response.ok) throw new Error('Failed to fetch movies');
         const data = await response.json();
-        console.log('Fetched movies:', data);
         setMovies(data);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
     };
-  
     fetchMovies();
   }, []);
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser) {
-      setUser(storedUser);
-    }
+    if (storedUser) setUser(storedUser);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null);
-    router.push('/login'); // Redirect to login page
+    router.push('/login');
+  };
+
+  const statuses = ['Now Showing', 'Coming Soon', 'Special Event']; // Define statuses
+
+  // Scroll handler for buttons
+  const handleScroll = (status, direction) => {
+    const scrollAmount = 300; // Adjust how much to scroll per click
+    const container = containerRefs.current[status];
+    container.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
   };
 
   return (
     <div>
-      <Header/>
+      <Header />
 
       <main className="flex flex-col items-center flex-grow p-6 sm:p-12">
         {/* Hero Section */}
@@ -75,31 +80,61 @@ export default function Home() {
           <MyVideoSlider />
         </div>
 
-        {/* Movie Grid */}
-        <div className="w-full max-w-6xl mx-auto mb-12">
-          <h2 className="text-4xl font-semibold font-poppins text-center mb-6 tracking-wider text-lightCyan">
-            Now Showing
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {movies.map((movie) => (
-              <div key={movie._id} className="bg-gray-800 rounded-lg shadow-md overflow-hidden">
-                <Image
-                  src={movie.posterUrl}
-                  alt={movie.name}
-                  width={300}
-                  height={450}
-                  className="w-full h-auto"
-                />
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold text-white">{movie.name}</h3>
-                  <p className="text-sageGreen mt-2">{movie.status}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Movie Sections by Status */}
+        {statuses.map((status) => (
+          <div key={status} className="w-full max-w-6xl mx-auto mb-12">
+            <h2 className="text-4xl font-semibold font-poppins text-lightCyan mb-6 tracking-wide">
+              {status}
+            </h2>
+            
+            {/* Scroll Buttons */}
+            <div className="relative">
+              <button
+                onClick={() => handleScroll(status, 'left')}
+                className="absolute left-0 z-10 bg-tealBlue text-white p-3 rounded-full shadow-lg hover:bg-sageGreen -translate-y-1/2 top-1/2"
+              >
+                ◀
+              </button>
+              <button
+                onClick={() => handleScroll(status, 'right')}
+                className="absolute right-0 z-10 bg-tealBlue text-white p-3 rounded-full shadow-lg hover:bg-sageGreen -translate-y-1/2 top-1/2"
+              >
+                ▶
+              </button>
 
-        {/* Only available to registered user */}
+              {/* Movie List */}
+              <div
+                ref={(el) => (containerRefs.current[status] = el)}
+                className="flex gap-4 overflow-x-auto scrollbar-hide"
+                style={{ maxHeight: '400px', alignItems: 'flex-start' }} // Set a fixed height for the container
+              >
+                {movies
+                  .filter((movie) => movie.status === status)
+                  .map((movie) => (
+                    <div
+                      key={movie._id}
+                      className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105"
+                      style={{ flex: '0 0 auto', width: '200px', height: 'auto' }} // Smaller width for cards
+                    >
+                      <Image
+                        src={movie.posterUrl}
+                        alt={movie.name}
+                        width={150} // Smaller width
+                        height={225} // Smaller height
+                        className="w-full h-auto"
+                      />
+                      <div className="p-2"> {/* Adjust padding for better alignment */}
+                        <h3 className="text-lg font-semibold text-white">{movie.name}</h3>
+                        <p className="text-sageGreen text-sm mt-1">{movie.status}</p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* Book Ticket or Login Button */}
         <div className="mt-8">
           {user ? (
             <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
