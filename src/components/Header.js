@@ -135,6 +135,9 @@ export default function Header() {
                 <li>
                   <Link href="/login" className="text-white hover:text-lightCyan">Login</Link>
                 </li>
+                <li>
+                  <Link href="/skeleton">Skeleton</Link>
+                </li>
               </>
             )}
           </ul>
