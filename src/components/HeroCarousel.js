@@ -10,21 +10,21 @@ const HeroCarousel = () => {
       src: '/coco.png',
       alt: 'Coco',
       title: 'Coco',
-      description: 'A story of family and memories.',
+      description: 'A young boy named Miguel who journeys to the Land of the Dead',
     },
     {
       id: 2,
       src: '/captain.jpg',
       alt: 'Captain America',
-      title: 'Captain America',
-      description: 'The first Avenger fights for freedom.',
+      title: 'Captain America: New Brave World',
+      description: 'Sam Wilson finds himself at the center of an international incident',
     },
     {
       id: 3,
       src: '/wicked.jpg',
-      alt: 'Wicked',
+      alt: 'Wicked (2024)',
       title: 'Wicked',
-      description: 'A different take on the Wizard of Oz.',
+      description: 'A vivid reimagining of the classic The Wizard of Oz.',
     },
   ];
 
