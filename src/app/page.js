@@ -9,7 +9,10 @@ import './globals.css';
 import MyVideoSlider from "../components/MyVideoSlider";
 import SearchBar from '../components/SearchBar';
 import Header from '../components/Header';
+import HeroCarousel from '../components/HeroCarousel'; // Import the HeroCarousel component
 import { useRouter } from 'next/navigation';
+import 'slick-carousel/slick/slick.css'; 
+import 'slick-carousel/slick/slick-theme.css';
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -42,6 +45,7 @@ export default function Home() {
     setUser(null);
     router.push('/login');
   };
+  
 
   const statuses = ['Now Showing', 'Coming Soon', 'Special Event']; // Define statuses
 
@@ -56,8 +60,10 @@ export default function Home() {
     <div>
       <Header />
 
+      {/* Hero Carousel Section */}
+      <HeroCarousel /> 
+
       <main className="flex flex-col items-center flex-grow p-6 sm:p-12">
-        {/* Hero Section */}
         <div className="text-center max-w-4xl mb-10">
           <h2 className="text-6xl font-extrabold font-poppins text-sageGreen mb-6 leading-tight tracking-wide drop-shadow-lg">
             Your Cinematic Adventure Awaits
