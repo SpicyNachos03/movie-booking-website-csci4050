@@ -7,6 +7,10 @@ import Footer from '@/components/Footer';
 import { Button } from 'react-bootstrap';
 import Link from 'next/link';
 
+/* 
+    Don't need to touch until Sprint 3
+*/
+
 function Admin(){
     return(
         <div>

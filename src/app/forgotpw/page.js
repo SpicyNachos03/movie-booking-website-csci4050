@@ -7,6 +7,17 @@ import axios from 'axios';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import styles from "./forgotpw.css"
+/**
+ * Frontend UI looks good
+ * 
+ * Note: 
+ * - We're just gonna do a simple PUT Request instead of sending an email
+ * - Ask user for their email and check to see if it is in the system
+ * - If it is, just make a form to change password and it will just be changed (password is hashed)
+ * - We do not want to deal with sending an email, to them redirecting to a new page, 
+ * to then update a password (AKA, TOO MUCH WORK)
+ */
+
 
 function ForgotPassword() {
     //const email = "johndoe123@email.com";
