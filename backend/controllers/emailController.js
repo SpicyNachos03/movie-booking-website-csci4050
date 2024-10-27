@@ -34,11 +34,11 @@ async function sendTestEmail() {
 }
 
 
-async function sendConfirmationEmail() {
+async function sendConfirmationEmail(userEmail) {
   try {
     let emailInfo = await emailTransporter.sendMail({
       from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-      to: 'moviebooking03@gmail.com',
+      to: userEmail,
       subject: 'Confirmation of registration',
       text: 'Your registration was successful',
     });
@@ -48,7 +48,7 @@ async function sendConfirmationEmail() {
     console.error('Error sending email:', error);
   }
 }
-sendConfirmationEmail();
+
 async function sendProfileWasChangedEmail() {
   try {
     let emailInfo = await emailTransporter.sendMail({
@@ -63,7 +63,7 @@ async function sendProfileWasChangedEmail() {
     console.error('Error sending email:', error);
   }
 }
-sendProfileWasChangedEmail();
+
 async function sendVerificationEmail(req, res, next) {
 
   const verification_link = 'http://localhost:8000/api/users/verify?id=' + res.locals.verification_id; //will need to update this base on our implementation

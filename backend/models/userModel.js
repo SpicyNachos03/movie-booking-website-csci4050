@@ -12,7 +12,9 @@ const userSchema = new mongoose.Schema({
   email: { 
     type: String, 
     required: true, 
-    unique: true 
+    unique: true,
+    trim: true, 
+    lowercase: true
   },
   password: { 
     type: String, 
@@ -23,7 +25,8 @@ const userSchema = new mongoose.Schema({
     required: true 
   },
   billingAddress: { 
-    type: String 
+    type: String,
+    required: true //(WILL BE ADDED SOON)
   },
   promotions: { 
     type: Boolean, 
@@ -35,8 +38,6 @@ const userSchema = new mongoose.Schema({
   },
   status: { 
     type: String, 
-    enum: ['active', 'inactive'], 
-    default: 'inactive', 
     required: true 
   },
   type: { 

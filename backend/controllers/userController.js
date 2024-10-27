@@ -1,6 +1,11 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
+const { sendConfirmationEmail } = require('./emailController');
+const { encrypt, decrypt } = require('./encryptController')
+require('dotenv').config({ path: '../.env' });
 
+//use the key in the .env file
+const key = Buffer.from(process.env.ENCRYPTION_KEY, 'base64');
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -32,8 +37,11 @@ const userLogin = async (req, res) => {
       return res.status(404).json({ message: "An account is not associated with this email." });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);  
-    if (isPasswordValid) {
+    let unhashedPass = await decrypt(user.password, key);
+    if (password === unhashedPass) {
+      user.status = "active";
+      await user.save();
+      //within a login how do we also add a put request as well
       return res.status(200).json({ message: "Success" });
     } else {
       return res.status(400).json({ message: "The password is incorrect" });
@@ -82,24 +90,26 @@ const getUserById = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, promotions, status, password, cards } = req.body;
+  const { firstName, lastName, email, password, phoneNumber, billingAddress, promotions, status} = req.body;
 
   try {
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const hashedCards = await bcrypt.hash(cards, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedCards = await bcrypt.hash(cards, 10);
+    let hashPass = await encrypt(password, key)
     const newUser = new User({
       firstName,
       lastName,
       email,
+      password: hashPass,
       phoneNumber,
+      billingAddress,
       promotions,
       status,
-      password: hashedPassword, // Store the hashed password
-      cards: hashedCards, // Include cards here
     });
 
     const savedUser = await newUser.save();
+    await sendConfirmationEmail(savedUser.email);
     res.status(201).json(savedUser);
   } catch (error) {
     console.error('Error creating user:', error);
@@ -109,44 +119,12 @@ const createUser = async (req, res) => {
 
 
 const updateUser = async (req, res) => {
-  try {
-    const userId = req.params.id; // Ensure this is the correct ID
-    const updatedData = req.body; // Your update data
 
-    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).json({ message: 'Error updating user', error });
-  }
-};
-
-const getUserProfile = async (req, res) => {
-  const { email } = req.query; // Get email from query parameters
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Return user data excluding the password and cards for security reasons
-    const { firstName, lastName, billingAddress, promotions } = user;
-    res.status(200).json({ firstName, lastName, email, billingAddress, promotions });
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    res.status(500).json({ message: 'Error fetching user profile', error: error.message });
-  }
-};
-
-const updateUserProfile = async (req, res) => {
-  const { email, firstName, lastName, billingAddress, password, promotions } = req.body;
+  const { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, password, cards } = req.body;
 
   try {
-    const updateData = { firstName, lastName, billingAddress, promotions };
+    const updateData = { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, cards };
+
 
     // Hash the password only if it is provided
     if (password) {

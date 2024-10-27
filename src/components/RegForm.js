@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export default function Form() {
     //States for registration
@@ -9,8 +11,10 @@ export default function Form() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [address, setAddress] = useState("");
     const [isChecked, setIsChecked] = useState(false);
-    const [status, setStatus] = useState(false);
+    //const [status, setStatus] = useState(false);
 
     // States for checking the errors
     const [submitted, setSubmitted] = useState(false);
@@ -52,9 +56,20 @@ export default function Form() {
         setSubmitted(false);
     };
 
+    // Handling the address change
+    const handleAddress = (e) => {
+      setAddress(e.target.value);
+      setSubmitted(false);
+  };
+
     //promotion check box handler (need to add functionality of sending promotions to users email)
     const handlePromotion = () => {
       setIsChecked(!isChecked);
+    };
+
+    // Handing Password Visibility
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
     };
 
     // Handling the status change
@@ -63,26 +78,31 @@ export default function Form() {
     // Handling the form submission
     // ADD email verification into submit handler if successful
     // Transfer the data from the form into the database if it is complete
+    // ADD THE CORRECT CHANGES TO HANDLE SUBMIT OF FIRST NAME, LAST NAME, AND ADDRESS
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (name === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "") {
+        // Add address to check later (we will be adding billing address in registration)
+        if (firstName === "" || lastName === "" || email === "" || password === "" || phoneNumber === "" || address === "" || confirmPassword === "") {
              setError(true);
         } else if (password !== confirmPassword){ //check for matching passwords
              setError(true);
              //maybe set an error message sayign passwords do not match
-        }  
-
+        }
         const userData = {
-            name: name,
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             phoneNumber: phoneNumber,
+            billingAddress: address,
             password: password,
-            receivePromotions: isChecked,
+            promotions: isChecked,
+            cards: [],
+            status: "inactive"
         };
 
         try { // FIX FRONTEND LOGIC THEN FIGURE OUT POSTING
             // Attempting POST Request
-            const response = await axios.post("http://localhost:8000/api/users", userData);
+            const response = await axios.post("http://localhost:8000/api/users/signup", userData);
 
             if (response.status === 201) {
                 setSubmitted(true)
@@ -106,7 +126,7 @@ export default function Form() {
                     display: submitted ? "" : "none",
                 }}
             >
-                <h1>User {name} successfully registered!!</h1>
+                <h1>User {email} successfully registered!!</h1>
             </div>
         );
     };
@@ -183,16 +203,30 @@ export default function Form() {
             placeholder="###-###-####"
           />
           </div>
+
+          <div className="inputWrapper">
+          <label className="label">Address</label>
+          <input
+            onChange={handleAddress}
+            className="input"
+            value={address}
+            type="address"
+            placeholder="123 Main St."
+          />
+          </div>
           
           <div className="inputWrapper">
-          <label className="label">Password</label>
-          <input
-            onChange={handlePassword}
-            className="input"
-            value={password}
-            type="password"
-            placeholder="Password"
-          />
+            <label className="label">Password</label>
+            <input
+              onChange={handlePassword}
+              className="input"
+              value={password}
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+            />
+            <div onClick={togglePasswordVisibility}>
+              <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+            </div>
           </div>
           
           <div className="inputWrapper">
