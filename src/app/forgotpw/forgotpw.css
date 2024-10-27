@@ -1,0 +1,40 @@
+.forgotPwBox {
+    display: flex;
+    flex-direction: column;     
+    min-height: 100vh;
+    justify-self: center;
+    align-items: center;
+   
+  }
+  
+  .forgotPass {
+      display: flex;
+      justify-content: center;
+      border-radius: 25px;
+      background-color: rgb(107, 112, 116);
+      flex-direction: column;
+      margin: 45px auto;
+      padding: 20px;
+      align-items: center;
+      width: 100%; 
+      max-width: 500px;
+  }
+  
+  #emailBox {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%; 
+      padding: 10px; 
+      border-radius: 5px; 
+      box-sizing: border-box; 
+  }
+  
+  #emailBox input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      box-sizing: border-box; 
+      color: black;
+    }
