@@ -82,7 +82,7 @@ const getUserById = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, password, phoneNumber, billingAddress, promotions, status, cards } = req.body;
+  const { firstName, lastName, email, password, phoneNumber, promotions, status} = req.body;
 
   try {
     // Hash the password

@@ -12,8 +12,9 @@ export default function Form() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [address, setAddress] = useState("");
     const [isChecked, setIsChecked] = useState(false);
-    const [status, setStatus] = useState(false);
+    //const [status, setStatus] = useState(false);
 
     // States for checking the errors
     const [submitted, setSubmitted] = useState(false);
@@ -55,6 +56,12 @@ export default function Form() {
         setSubmitted(false);
     };
 
+    // Handling the address change
+    const handleAddress = (e) => {
+      setAddress(e.target.value);
+      setSubmitted(false);
+  };
+
     //promotion check box handler (need to add functionality of sending promotions to users email)
     const handlePromotion = () => {
       setIsChecked(!isChecked);
@@ -71,21 +78,25 @@ export default function Form() {
     // Handling the form submission
     // ADD email verification into submit handler if successful
     // Transfer the data from the form into the database if it is complete
+    // ADD THE CORRECT CHANGES TO HANDLE SUBMIT OF FIRST NAME, LAST NAME, AND ADDRESS
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (name === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "") {
+        if (firstName === "" || lastName === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "" || address === "") {
              setError(true);
         } else if (password !== confirmPassword){ //check for matching passwords
              setError(true);
              //maybe set an error message sayign passwords do not match
         }  
 
+        //
         const userData = {
-            name: name,
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             phoneNumber: phoneNumber,
             password: password,
-            receivePromotions: isChecked,
+            billingAddress: address,
+            promotions: isChecked,
         };
 
         try { // FIX FRONTEND LOGIC THEN FIGURE OUT POSTING
