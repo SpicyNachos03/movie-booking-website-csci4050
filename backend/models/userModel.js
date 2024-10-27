@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
     required: true 
   },
   billingAddress: { 
-    type: String 
+    type: String,
+    required: true
   },
   promotions: { 
     type: Boolean, 
