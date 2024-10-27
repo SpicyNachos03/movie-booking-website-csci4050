@@ -33,8 +33,11 @@ const userLogin = async (req, res) => {
       return res.status(404).json({ message: "An account is not associated with this email." });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);  
-    if (isPasswordValid) {
+    // const isPasswordValid = await bcrypt.compare(password, user.password);  
+    if (password === user.password) {
+      user.status = "active";
+      await user.save();
+      //within a login how do we also add a put request as well
       return res.status(200).json({ message: "Success" });
     } else {
       return res.status(400).json({ message: "The password is incorrect" });
@@ -112,10 +115,10 @@ const createUser = async (req, res) => {
 
 // Update a user by ID
 const updateUser = async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, promotions, status, password, cards } = req.body;
+  const { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, password, cards } = req.body;
 
   try {
-    const updateData = { firstName, lastName, email, phoneNumber, promotions, status, cards };
+    const updateData = { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, cards };
 
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
