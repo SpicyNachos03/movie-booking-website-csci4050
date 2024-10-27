@@ -25,12 +25,18 @@ router.get('/', getUsers);
 // Route to get a user by email
 router.get('/:email', getUserByEmail);
 
-router.get('/id/:id', getUserById);
+router.get('/:id', getUserById);
 // Route to create a new user
 router.post('/signup', createUser);
 
 // Route to update a user by ID
 router.put('/:id', updateUser);
+
+// Route to get user profile by email
+router.get('/profile', getUserByEmail);
+
+// Route to update user profile by email (adjust the logic in the controller accordingly)
+router.put('/profile', updateUser);
 
 // Route to delete a user by ID
 // router.delete('/:id', deleteUser);

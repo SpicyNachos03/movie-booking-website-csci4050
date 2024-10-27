@@ -10,7 +10,6 @@ export default function Header() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) {
       setUser(storedUser);
@@ -18,7 +17,6 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    
     localStorage.removeItem('user');
     setUser(null);
     router.push('/login');
@@ -38,13 +36,8 @@ export default function Header() {
         <nav className="flex items-center">
           <ul className="flex space-x-4 mr-4">
             {user ? (
-              //if user successfully logged in
+              // If user successfully logged in
               <>
-                <li>
-                  <Link href="/profile" className="text-white hover:text-lightCyan">
-                    Profile
-                  </Link>
-                </li>
                 <li>
                   <Link href="/editBookings" className="text-white hover:text-lightCyan">
                     Bookings
@@ -56,10 +49,9 @@ export default function Header() {
                       Admin
                     </Link>
                   </li>
-                  
                 )}
                 {user && (
-                  <button onClick={() => router.push('/editProfile')}
+                  <button onClick={() => router.push('/profile')} // Update here to route to Profile
                     className="text-white hover:text-lightCyan"
                   >
                     <Image
@@ -79,10 +71,9 @@ export default function Header() {
                     Logout
                   </button>
                 </li>
-
               </>
             ) : (
-              // default for web users
+              // Default for web users
               <>
                 <li>
                   <Link href="/signup" className="text-white hover:text-lightCyan">Sign Up</Link>
@@ -93,7 +84,6 @@ export default function Header() {
               </>
             )}
           </ul>
-          
         </nav>
       </div>
     </header>

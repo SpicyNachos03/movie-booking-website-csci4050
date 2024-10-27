@@ -118,20 +118,22 @@ const createUser = async (req, res) => {
 };
 
 
-// Update a user by ID
 const updateUser = async (req, res) => {
+
   const { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, password, cards } = req.body;
 
   try {
     const updateData = { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, cards };
 
+
+    // Hash the password only if it is provided
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       updateData.password = hashedPassword;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
+    const updatedUser = await User.findOneAndUpdate(
+      { email }, // Keep email unchanged
       updateData,
       { new: true, runValidators: true }
     );
@@ -142,10 +144,10 @@ const updateUser = async (req, res) => {
 
     res.status(200).json(updatedUser);
   } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).json({ message: 'Error updating user', error });
+    console.error('Error updating user profile:', error);
+    res.status(500).json({ message: 'Error updating user profile', error });
   }
 };
 
   
-  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser };
+  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, getUserProfile, updateUserProfile };
