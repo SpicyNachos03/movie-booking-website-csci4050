@@ -1,7 +1,11 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const { sendConfirmationEmail } = require('./emailController');
+const { encrypt, decrypt } = require('./encryptController')
+require('dotenv').config({ path: '../.env' });
 
+//use the key in the .env file
+const key = Buffer.from(process.env.ENCRYPTION_KEY, 'base64');
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -33,8 +37,8 @@ const userLogin = async (req, res) => {
       return res.status(404).json({ message: "An account is not associated with this email." });
     }
 
-    // const isPasswordValid = await bcrypt.compare(password, user.password);  
-    if (password === user.password) {
+    let unhashedPass = await decrypt(user.password, key);
+    if (password === unhashedPass) {
       user.status = "active";
       await user.save();
       //within a login how do we also add a put request as well
@@ -92,11 +96,12 @@ const createUser = async (req, res) => {
     // Hash the password
     // const hashedPassword = await bcrypt.hash(password, 10);
     // const hashedCards = await bcrypt.hash(cards, 10);
+    let hashPass = await encrypt(password, key)
     const newUser = new User({
       firstName,
       lastName,
       email,
-      password,
+      password: hashPass,
       phoneNumber,
       billingAddress,
       promotions,
