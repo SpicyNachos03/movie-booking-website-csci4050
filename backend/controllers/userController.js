@@ -94,10 +94,8 @@ const createUser = async (req, res) => {
       email,
       password,
       phoneNumber,
-      billingAddress,
       promotions,
       status,
-      cards
     });
 
     const savedUser = await newUser.save();
