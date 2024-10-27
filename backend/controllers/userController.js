@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
+const { sendConfirmationEmail } = require('./emailController');
 
 
 // Get all users
@@ -82,7 +83,7 @@ const getUserById = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const { firstName, lastName, email, password, phoneNumber, promotions, status} = req.body;
+  const { firstName, lastName, email, password, phoneNumber, billingAddress, promotions, status} = req.body;
 
   try {
     // Hash the password
@@ -94,11 +95,13 @@ const createUser = async (req, res) => {
       email,
       password,
       phoneNumber,
+      billingAddress,
       promotions,
       status,
     });
 
     const savedUser = await newUser.save();
+    await sendConfirmationEmail(savedUser.email);
     res.status(201).json(savedUser);
   } catch (error) {
     console.error('Error creating user:', error);

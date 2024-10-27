@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   },
   billingAddress: { 
     type: String,
-    //required: true (WILL BE ADDED SOON)
+    required: true //(WILL BE ADDED SOON)
   },
   promotions: { 
     type: Boolean, 

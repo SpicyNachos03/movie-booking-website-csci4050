@@ -82,7 +82,7 @@ export default function Form() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Add address to check later (we will be adding billing address in registration)
-        if (firstName === "" || lastName === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "") {
+        if (firstName === "" || lastName === "" || email === "" || password === "" || phoneNumber === "" || address === "" || confirmPassword === "") {
              setError(true);
         } else if (password !== confirmPassword){ //check for matching passwords
              setError(true);
@@ -93,6 +93,7 @@ export default function Form() {
             lastName: lastName,
             email: email,
             phoneNumber: phoneNumber,
+            billingAddress: address,
             password: password,
             promotions: isChecked,
             cards: [],
@@ -200,6 +201,17 @@ export default function Form() {
             value={phoneNumber}
             type="phone"
             placeholder="###-###-####"
+          />
+          </div>
+
+          <div className="inputWrapper">
+          <label className="label">Address</label>
+          <input
+            onChange={handleAddress}
+            className="input"
+            value={address}
+            type="address"
+            placeholder="123 Main St."
           />
           </div>
           
