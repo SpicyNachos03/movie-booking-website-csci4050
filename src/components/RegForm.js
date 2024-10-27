@@ -81,27 +81,28 @@ export default function Form() {
     // ADD THE CORRECT CHANGES TO HANDLE SUBMIT OF FIRST NAME, LAST NAME, AND ADDRESS
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (firstName === "" || lastName === "" || email === "" || password === "" || phoneNumber === "" || confirmPassword === "" || address === "") {
+        // Add address to check later (we will be adding billing address in registration)
+        if (firstName === "" || lastName === "" || email === "" || password === "" || phoneNumber === "" || address === "" || confirmPassword === "") {
              setError(true);
         } else if (password !== confirmPassword){ //check for matching passwords
              setError(true);
              //maybe set an error message sayign passwords do not match
-        }  
-
-        //
+        }
         const userData = {
             firstName: firstName,
             lastName: lastName,
             email: email,
             phoneNumber: phoneNumber,
-            password: password,
             billingAddress: address,
+            password: password,
             promotions: isChecked,
+            cards: [],
+            status: "inactive"
         };
 
         try { // FIX FRONTEND LOGIC THEN FIGURE OUT POSTING
             // Attempting POST Request
-            const response = await axios.post("http://localhost:8000/api/users", userData);
+            const response = await axios.post("http://localhost:8000/api/users/signup", userData);
 
             if (response.status === 201) {
                 setSubmitted(true)
@@ -125,7 +126,7 @@ export default function Form() {
                     display: submitted ? "" : "none",
                 }}
             >
-                <h1>User {name} successfully registered!!</h1>
+                <h1>User {email} successfully registered!!</h1>
             </div>
         );
     };
@@ -200,6 +201,17 @@ export default function Form() {
             value={phoneNumber}
             type="phone"
             placeholder="###-###-####"
+          />
+          </div>
+
+          <div className="inputWrapper">
+          <label className="label">Address</label>
+          <input
+            onChange={handleAddress}
+            className="input"
+            value={address}
+            type="address"
+            placeholder="123 Main St."
           />
           </div>
           
