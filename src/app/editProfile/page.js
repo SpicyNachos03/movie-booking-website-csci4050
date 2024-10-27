@@ -4,6 +4,15 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { useRouter} from 'next/navigation'; 
 
+/**
+ * Frontend UI is correct
+ * 
+ * Note:
+ * - We need to make sure backend and frontend is connected (Sunday)
+ * - Make sure we utilize cookies to autofill textforms as intended for the rubric
+ * - Make sure functionality works (Adding up to 4 cards, 1 address added, etc)
+ */
+
 const EditProfile = () => {
   const [formData, setFormData] = useState({
     firstName: '',

@@ -16,11 +16,9 @@
       margin: 45px auto;
       padding: 20px;
       align-items: center;
-      width: 100%; /* Optional: Makes the container fill horizontally */
+      width: 100%; 
       max-width: 500px;
   }
-  
-   
   
   #emailBox {
       display: flex;
