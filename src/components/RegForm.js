@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export default function Form() {
     //States for registration
@@ -9,6 +11,7 @@ export default function Form() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
     const [isChecked, setIsChecked] = useState(false);
     const [status, setStatus] = useState(false);
 
@@ -55,6 +58,11 @@ export default function Form() {
     //promotion check box handler (need to add functionality of sending promotions to users email)
     const handlePromotion = () => {
       setIsChecked(!isChecked);
+    };
+
+    // Handing Password Visibility
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
     };
 
     // Handling the status change
@@ -185,14 +193,17 @@ export default function Form() {
           </div>
           
           <div className="inputWrapper">
-          <label className="label">Password</label>
-          <input
-            onChange={handlePassword}
-            className="input"
-            value={password}
-            type="password"
-            placeholder="Password"
-          />
+            <label className="label">Password</label>
+            <input
+              onChange={handlePassword}
+              className="input"
+              value={password}
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+            />
+            <div onClick={togglePasswordVisibility}>
+              <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+            </div>
           </div>
           
           <div className="inputWrapper">
