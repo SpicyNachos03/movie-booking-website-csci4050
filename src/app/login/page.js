@@ -1,3 +1,4 @@
+// Login.js
 'use client';
 
 import Image from "next/image";
@@ -12,7 +13,6 @@ import Cookies from 'js-cookie'; // Import js-cookie
 import "./login.css";
 
 function Login() {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -38,7 +38,8 @@ function Login() {
                     localStorage.setItem('userEmail', email); 
                 }
 
-                router.push('/');
+                // Redirect to the home page or the profile page as needed
+                router.push('/'); // Or router.push('/profile') if you want to go directly to the profile
             } else {
                 alert("An account is not associated with the information provided. Please Sign-up!");
             }

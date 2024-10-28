@@ -4,20 +4,30 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Cookies from 'js-cookie'; // Import js-cookie
 
 export default function Header() {
   const router = useRouter();
   const [user, setUser] = useState(null);
 
+  // Sync user state with cookies
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser) {
-      setUser(storedUser);
-    }
+    const storedUser = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
+    setUser(storedUser);
+    
+    // Optional: Handle cookie updates (e.g., if login changes happen in another tab)
+    const handleCookieChange = () => {
+      const updatedUser = Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
+      setUser(updatedUser);
+    };
+
+    // Adding an interval to check for changes every second (you can adjust this)
+    const interval = setInterval(handleCookieChange, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    Cookies.remove('user'); // Remove user cookie
     setUser(null);
     router.push('/login');
   };
@@ -33,36 +43,45 @@ export default function Header() {
             height={75}
           />
         </Link>
+
         <nav className="flex items-center">
           <ul className="flex space-x-4 mr-4">
             {user ? (
-              // If user successfully logged in
               <>
+                {/* Bookings */}
                 <li>
                   <Link href="/editBookings" className="text-white hover:text-lightCyan">
                     Bookings
                   </Link>
                 </li>
-                {user.type === '1' && ( // Check if the user is an admin
+
+                {/* Admin link (only for admin users) */}
+                {user.type === '1' && (
                   <li>
                     <Link href="/admin" className="text-white hover:text-lightCyan">
                       Admin
                     </Link>
                   </li>
                 )}
-                {user && (
-                  <button onClick={() => router.push('/profile')} // Update here to route to Profile
-                    className="text-white hover:text-lightCyan"
+
+                {/* Profile */}
+                <li>
+                  <button
+                    onClick={() => router.push('/profile')}
+                    className="text-white hover:text-lightCyan flex items-center"
                   >
                     <Image
                       src="/user-icon.png"
                       alt="User Profile"
                       width={32}
                       height={32}
-                      className="rounded-full"
+                      className="rounded-full mr-2"
                     />
+                    <span>Profile</span>
                   </button>
-                )}
+                </li>
+
+                {/* Logout */}
                 <li>
                   <button
                     onClick={handleLogout}
@@ -73,13 +92,17 @@ export default function Header() {
                 </li>
               </>
             ) : (
-              // Default for web users
               <>
+                {/* Default links for non-logged-in users */}
                 <li>
-                  <Link href="/signup" className="text-white hover:text-lightCyan">Sign Up</Link>
+                  <Link href="/signup" className="text-white hover:text-lightCyan">
+                    Sign Up
+                  </Link>
                 </li>
                 <li>
-                  <Link href="/login" className="text-white hover:text-lightCyan">Login</Link>
+                  <Link href="/login" className="text-white hover:text-lightCyan">
+                    Login
+                  </Link>
                 </li>
               </>
             )}

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Cookies from 'js-cookie'; // Import js-cookie
 
 function Profile() {
     const [user, setUser] = useState(null);
@@ -14,7 +15,7 @@ function Profile() {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const userData = JSON.parse(localStorage.getItem('user'));
+            const userData = JSON.parse(Cookies.get('user')); // Get user data from cookies
             if (userData) {
                 try {
                     const response = await axios.get(`http://localhost:8000/api/users/${userData.email}`);
@@ -39,6 +40,10 @@ function Profile() {
         return <p>Loading...</p>;
     }
 
+    const handleEditProfile = () => {
+        router.push('/editProfile'); // Navigate to Edit Profile page
+    };
+
     return (
         <div className="profile-container flex flex-col min-h-screen bg-gray-900 text-white">
             <Header />
@@ -54,11 +59,9 @@ function Profile() {
                         <p className="text-lg mb-2"><strong>Promotions:</strong> {user.promotions ? 'Subscribed' : 'Not Subscribed'}</p>
                         <p className="text-lg mb-2"><strong>Cards:</strong> {user.cards.length > 0 ? user.cards.join(', ') : 'No cards added'}</p>
                     </div>
-                    <Link href="/editProfile">
-                        <button className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 w-full mt-6">
-                            Edit Profile
-                        </button>
-                    </Link>
+                    <button onClick={handleEditProfile} className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 w-full mt-6">
+                        Edit Profile
+                    </button>
                 </div>
             </div>
             <Footer />
