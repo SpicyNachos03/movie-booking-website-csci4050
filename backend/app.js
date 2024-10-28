@@ -1,15 +1,21 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser'); // Import cookie-parser
 require('dotenv').config({ path: '.env' });
 const mongoose = require('mongoose');
 const movieRoutes = require('./routes/movieRoutes'); 
 const userRoutes = require('./routes/userRoutes'); // Import user routes
 
 const app = express();
+
+// CORS configuration with credentials
 app.use(cors({
-  origin: 'http://localhost:3000' 
+  origin: 'http://localhost:3000',
+  credentials: true, // Allow credentials (cookies)
 }));
-app.use(express.json()); // middleware
+
+app.use(express.json()); // Middleware to parse JSON bodies
+app.use(cookieParser()); // Middleware to parse cookies
 
 // Connect to MongoDB
 mongoose
