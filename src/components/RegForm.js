@@ -146,7 +146,7 @@ export default function Form() {
     };
 
     return (
-      <div className="form">
+      <div className="signUpWrapper">
         <div>
             {/*fix formatting css (make title bigger)*/}
           <h1>User Registration</h1>
