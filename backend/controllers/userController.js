@@ -122,6 +122,10 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const { firstName, lastName, billingAddress, phoneNumber, cards } = req.body;
 
+  // for (let i  = 0; i < cards.length; i++) {
+  //     cards[i] = await encrypt(cards[i], key);
+  // }
+
   try {
       const user = await User.findByIdAndUpdate(
           req.params.id, // Change from email to ID
