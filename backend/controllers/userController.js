@@ -1,6 +1,6 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
-const { sendConfirmationEmail } = require('./emailController');
+const { sendConfirmationEmail, sendProfileWasChangedEmail } = require('./emailController');
 const { encrypt, decrypt } = require('./encryptController')
 require('dotenv').config({ path: '../.env' });
 
@@ -136,6 +136,8 @@ const updateUser = async (req, res) => {
       if (!user) {
           return res.status(404).json({ message: 'User not found' });
       }
+
+      await sendProfileWasChangedEmail(user.email);
 
       res.status(200).json({ message: 'User updated successfully', user });
   } catch (error) {

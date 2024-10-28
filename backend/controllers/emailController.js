@@ -49,11 +49,11 @@ async function sendConfirmationEmail(userEmail) {
   }
 }
 
-async function sendProfileWasChangedEmail() {
+async function sendProfileWasChangedEmail(userEmail) {
   try {
     let emailInfo = await emailTransporter.sendMail({
       from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-      to: 'moviebooking03@gmail.com',
+      to: userEmail,
       subject: 'Notification of changes to your profile',
       text: 'Changes have been made to your user profile',
     });
