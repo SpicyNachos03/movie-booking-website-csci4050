@@ -1,7 +1,11 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
-const { sendConfirmationEmail } = require('./emailController');
+const { sendConfirmationEmail, sendProfileWasChangedEmail } = require('./emailController');
+const { encrypt, decrypt } = require('./encryptController')
+require('dotenv').config({ path: '../.env' });
 
+//use the key in the .env file
+const key = Buffer.from(process.env.ENCRYPTION_KEY, 'base64');
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -33,8 +37,8 @@ const userLogin = async (req, res) => {
       return res.status(404).json({ message: "An account is not associated with this email." });
     }
 
-    // const isPasswordValid = await bcrypt.compare(password, user.password);  
-    if (password === user.password) {
+    let unhashedPass = await decrypt(user.password, key);
+    if (password === unhashedPass) {
       user.status = "active";
       await user.save();
       //within a login how do we also add a put request as well
@@ -92,11 +96,12 @@ const createUser = async (req, res) => {
     // Hash the password
     // const hashedPassword = await bcrypt.hash(password, 10);
     // const hashedCards = await bcrypt.hash(cards, 10);
+    let hashPass = await encrypt(password, key)
     const newUser = new User({
       firstName,
       lastName,
       email,
-      password,
+      password: hashPass,
       phoneNumber,
       billingAddress,
       promotions,
@@ -115,32 +120,89 @@ const createUser = async (req, res) => {
 
 // Update a user by ID
 const updateUser = async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, password, cards } = req.body;
+  const { firstName, lastName, billingAddress, phoneNumber, cards } = req.body;
+
+  // for (let i  = 0; i < cards.length; i++) {
+  //     cards[i] = await encrypt(cards[i], key);
+  // }
 
   try {
-    const updateData = { firstName, lastName, email, phoneNumber, billingAddress, promotions, status, cards };
+      const user = await User.findByIdAndUpdate(
+          req.params.id, // Change from email to ID
+          { firstName, lastName, billingAddress, phoneNumber, cards },
+          { new: true, runValidators: true } // Return the updated document and run validators
+      );
 
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updateData.password = hashedPassword;
-    }
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true, runValidators: true }
-    );
+      await sendProfileWasChangedEmail(user.email);
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(200).json(updatedUser);
+      res.status(200).json({ message: 'User updated successfully', user });
   } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).json({ message: 'Error updating user', error });
+      console.error('Error updating user:', error);
+      res.status(500).json({ message: 'Error updating user', error: error.message });
   }
 };
 
+// Updates a user's password - Used in Forgot Pass & Edit Profile
+const updatePassword = async (req, res) => {
+  // Grabs from form input
+  const { oldPassword, newPassword } = req.body
+
+  try {
+    // Grabs individual user
+    const user = await User.findOne({ email: req.params.email }); //finds a user
+    const filter = { user_id: user.id }
+
+    // Checking if password is the same on the form & DB
+    let unhashedPass = await decrypt(user.password, key);
+    if (unhashedPass === oldPassword) {
+      let newPass = await encrypt(newPassword, key);
+      const updateDoc = {
+        $set: {
+          password: newPass
+        }
+      }
+      // Put's the newly hashed password as the new password
+      const updatePass = await user.updateOne(filter, updateDoc)
+    }
+    // Note: Add an else condition for a 400 error probably
+    res.status(200).json({ message: 'Updated password successfully', user})
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    res.status(400).json({ message: 'Error updating password', error: error.message });
+  }
+};
+
+// Updates a user's password - Used in Forgot Pass & Edit Profile
+const forgotPassword = async (req, res) => {
+  // Grabs from form input
+  const { newPassword } = req.body
+
+  try {
+    // Grabs individual user
+    const user = await User.findOne({ email: req.params.email }); //finds a user
+    const filter = { user_id: user.id }
+
+    // Checking if password is the same on the form & DB
+    // let unhashedPass = await decrypt(user.password, key);
+      let newPass = await encrypt(newPassword, key);
+      const updateDoc = {
+        $set: {
+          password: newPass
+        }
+      }
+      // Put's the newly hashed password as the new password
+      const updatePass = await user.updateOne(filter, updateDoc)
+    
+    // Note: Add an else condition for a 400 error probably
+    res.status(200).json({ message: 'Updated password successfully', user})
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    res.status(400).json({ message: 'Error updating password', error: error.message });
+  }
+};
   
-  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser };
+  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword};

@@ -1,256 +1,225 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
-import { useRouter} from 'next/navigation'; 
+import Footer from '@/components/Footer';
+import { useCookies } from 'react-cookie';
 
-/**
- * Frontend UI is correct
- * 
- * Note:
- * - We need to make sure backend and frontend is connected (Sunday)
- * - Make sure we utilize cookies to autofill textforms as intended for the rubric
- * - Make sure functionality works (Adding up to 4 cards, 1 address added, etc)
- */
-
-const EditProfile = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    billingAddress: '',
-    password: '',
-    phoneNumber: '',
-    promotions: false,
-    cards: [],
-  });
-  const [newCard, setNewCard] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  // Fetch user email from local storage
-  const userEmail = JSON.parse(localStorage.getItem('user'))?.email; // Get the logged-in user's email
-
-  // Fetch user data from the database
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!userEmail) return; // If no user email, exit early
-
-      try {
-        const response = await fetch(`/api/users/${userEmail}`);
-        if (!response.ok) throw new Error('Failed to fetch user data');
-
-        const user = await response.json();
-        setFormData({
-          ...user,
-          promotions: user.promotions === 1,
-        });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, [userEmail]);
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value,
+function EditProfile() {
+    const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState('');
+    const router = useRouter();    
+    const [formState, setFormState] = useState({
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
     });
-  };
 
-  const handleCardChange = (e) => setNewCard(e.target.value);
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userData = cookies.user; // Get user data from cookies
+            if (userData) {
+                try {
+                    // Fetch user data from backend API
+                    const response = await axios.get(`http://localhost:8000/api/users/${userData.email}`);
+                    setUser(response.data); // Set user data in state
+                } catch (err) {
+                    console.error(err);
+                    setError("Failed to fetch user data."); // Set error if fetching fails
+                }
+            } else {
+                router.push('/login'); // Redirect to login if no user data found
+            }
+        };
 
-  const addCard = () => {
-    if (newCard) {
-      setFormData((prev) => ({
-        ...prev,
-        cards: [...prev.cards, newCard],
-      }));
-      setNewCard('');
-    }
-  };
+        fetchUserData();
+    }, [cookies.user, router]);
 
-  const removeCard = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      cards: prev.cards.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const updatedData = {
-      ...formData,
-      promotions: formData.promotions ? 1 : 0,
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser({ ...user, [name]: value });
     };
 
-    try {
-      const response = await fetch(`/api/users/${userEmail}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedData),
-      });
+    const handleCardChange = (index, value) => {
+        const newCards = [...user.cards];
+        newCards[index] = value;
+        setUser({ ...user, cards: newCards });
+    };
 
-      if (!response.ok) throw new Error('Failed to update user');
+    const addCard = () => {
+        if (user.cards.length < 4) {
+            setUser({ ...user, cards: [...user.cards, ''] });
+        }
+    };
 
-      const updatedUser = await response.json();
-      console.log('Profile Updated:', updatedUser);
-    } catch (error) {
-      console.error(error);
+    const handlePasswordInputChange = (e) => {
+        setFormState({
+            ...formState,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const removeCard = (index) => {
+        const newCards = user.cards.filter((_, i) => i !== index);
+        setUser({ ...user, cards: newCards });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const { oldPassword, newPassword, confirmPassword } = formState;
+
+        //set up conditional to check if password is changed or not here
+        // check for old password with database
+        // check that newPassword equals confirmPassword
+        // would we have to check if oldPassword does not equal newPassword
+
+        if (newPassword!== confirmPassword){
+            alert("New password and confirm password do not match")
+            return;
+        }
+
+        if (oldPassword === newPassword) {
+            alert("New password cannot be the same as the old password");
+            return;
+        }
+
+        try {
+            // Send PUT request using user ID
+            await axios.put(`http://localhost:8000/api/users/${user._id}`, user); // Use user._id
+            await axios.put(`http://localhost:8000/api/users/updatePassword`, { oldPassword, newPassword }); //does this change the password even if there already is a password
+            alert('Profile updated successfully');
+            router.push('/profile');
+        } catch (err) {
+            console.error(err);
+            setError("Failed to update profile.");
+        }
+    };
+
+    if (error) {
+        return <p className="errorMessage">{error}</p>;
     }
-  };
 
-  if (loading) return <div>Loading...</div>;
+    if (!user) {
+        return <p>Loading...</p>;
+    }
 
-  return (
-    <div className="edit-profile-container min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <div className="max-w-md w-full p-6 bg-gray-800 rounded-lg shadow-md">
-        <Header />
-        <h2 className="text-2xl font-semibold mb-4">Edit Profile</h2>
-        <form onSubmit={handleSubmit}>
-          {/* First Name */}
-          <div className="mb-4">
-            <label htmlFor="firstName" className="block font-medium mb-2">First Name</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded-md focus:outline-none"
-              style={{ color: 'black' }} 
-            />
-          </div>
+    return (
+        <div className="profile-container flex flex-col min-h-screen bg-gray-900 text-white">
+            <Header />
+            <div className="profile-content flex-grow flex justify-center items-center">
+                <div className="profile-box max-w-lg w-full mx-4 p-6 bg-gray-800 rounded-lg shadow-xl">
+                    <h1 className="text-4xl font-bold text-center mb-6">Edit Profile</h1>
+                    <form onSubmit={handleSubmit}>
+                        <div className="profile-details">
+                            {/* Input fields for first name and last name */}
+                            <div className="mb-4">
+                                <label className="block text-lg" htmlFor="firstName"><strong>First Name:</strong></label>
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    value={user.firstName}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-lg" htmlFor="lastName"><strong>Last Name:</strong></label>
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    value={user.lastName}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
+                                    required
+                                />
+                            </div>
 
-          {/* Last Name */}
-          <div className="mb-4">
-            <label htmlFor="lastName" className="block font-medium mb-2">Last Name</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded-md focus:outline-none"
-              style={{ color: 'black' }} 
-            />
-          </div>
+                            {/* Input field for billing address */}
+                            <div className="mb-4">
+                                <label className="block text-lg" htmlFor="billingAddress"><strong>Billing Address:</strong></label>
+                                <input
+                                    type="text"
+                                    name="billingAddress"
+                                    value={user.billingAddress}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
+                                    required
+                                />
+                            </div>
 
-          {/* Billing Address */}
-          <div className="mb-4">
-            <label htmlFor="billingAddress" className="block font-medium mb-2">Billing Address</label>
-            <input
-              type="text"
-              id="billingAddress"
-              name="billingAddress"
-              value={formData.billingAddress}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded-md focus:outline-none"
-              style={{ color: 'black' }} 
-            />
-          </div>
+                            <hr></hr>
+                            <small className="text-gray-400">Leave blank to keep current password.</small>
 
-          {/* Password */}
-          <div className="mb-4">
-            <label htmlFor="password" className="block font-medium mb-2">New Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded-md focus:outline-none"
-              style={{ color: 'black' }} 
-            />
-          </div>
+                            {/* Input field for old password */}
+                            <div className="mb-4">
+                                <label className="block text-lg" htmlFor="password"><strong>Original Password:</strong></label>
+                                <input
+                                    type="password"
+                                    name="oldPassword"
+                                    onChange={handlePasswordInputChange}
+                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
+                                />
+                            </div>
 
-          {/* Phone Number */}
-          <div className="mb-4">
-            <label htmlFor="phoneNumber" className="block font-medium mb-2">Phone Number</label>
-            <input
-              type="tel"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded-md focus:outline-none"
-              style={{ color: 'black' }} 
-            />
-          </div>
+                            {/* Input field for new password */}
+                            <div className="mb-4">
+                                <label className="block text-lg" htmlFor="password"><strong>New Password:</strong></label>
+                                <input
+                                    type="password"
+                                    name="newPassword"
+                                    onChange={handlePasswordInputChange}
+                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
+                                />
+                            </div>
 
-          {/* Email */}
-          <div className="mb-4">
-            <label htmlFor="email" className="block font-medium mb-2">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              disabled
-              className="w-full p-2 border rounded-md bg-gray-700 text-gray-400"
-              style={{ color: 'black' }} 
-            />
-          </div>
+                            {/* Input field for confirm password */}
+                            <div className="mb-4">
+                                <label className="block text-lg" htmlFor="password"><strong>Confirm New Password:</strong></label>
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    onChange={handlePasswordInputChange}
+                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
+                                />
+                            </div>
 
-          {/* Promotions */}
-          <div className="mb-4 flex items-center">
-            <input
-              type="checkbox"
-              id="promotions"
-              name="promotions"
-              checked={formData.promotions}
-              onChange={handleInputChange}
-              className="mr-2"
-            />
-            <label htmlFor="promotions" className="font-medium">Receive Promotions</label>
-          </div>
+                            <hr></hr>
 
-          {/* Cards */}
-          <div className="mb-4">
-            <label className="block font-medium mb-2">Cards</label>
-            <ul className="mb-2">
-              {formData.cards.map((card, index) => (
-                <li key={index} className="flex items-center justify-between mb-1">
-                  <span>{card}</span>
-                  <button
-                    type="button"
-                    onClick={() => removeCard(index)}
-                    className="text-red-500 hover:underline"
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="flex">
-              <input
-                type="text"
-                value={newCard}
-                onChange={handleCardChange}
-                className="w-full p-2 border rounded-md focus:outline-none mr-2"
-                placeholder="Add new card"
-                style={{ color: 'black' }} 
-              />
-              <button
-                type="button"
-                onClick={addCard}
-                className="bg-tealBlue py-2 px-4 rounded-md hover:bg-sageGreen transition"
-              >
-                Add
-              </button>
+                            {/* Payment cards */}
+                            <div className="mb-4">
+                                <label className="block text-lg"><strong>Payment Cards:</strong></label>
+                                {user.cards.map((card, index) => (
+                                    <div key={index} className="flex items-center mb-2">
+                                        <input
+                                            type="text"
+                                            value={card}
+                                            onChange={(e) => handleCardChange(index, e.target.value)}
+                                            className="w-full p-2 bg-gray-700 rounded-md text-white"
+                                            placeholder={`Card ${index + 1}`}
+                                        />
+                                        <button type="button" onClick={() => removeCard(index)} className="ml-2 text-red-500">Remove</button>
+                                    </div>
+                                ))}
+                                <button type="button" onClick={addCard} className="text-teal-500 hover:underline">Add Card</button>
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 w-full mt-6"
+                        >
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
             </div>
-          </div>
-
-          <button type="submit" className="w-full bg-tealBlue py-2 rounded-md hover:bg-sageGreen transition">
-            Save Changes
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
+            <Footer />
+        </div>
+    );
+}
 
 export default EditProfile;
