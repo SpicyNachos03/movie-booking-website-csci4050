@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Footer from '../components/Footer';
 import Image from "next/image";
-import Link from 'next/link';
+import Link from 'next/link';  // Import Link for navigation
 import 'react-image-gallery/styles/css/image-gallery.css';
 import './globals.css';
 import MyVideoSlider from "../components/MyVideoSlider";
@@ -21,6 +21,7 @@ export default function Home() {
 
   const containerRefs = useRef({}); // Store references for each status section
 
+  // Fetch movies on page load
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -35,6 +36,7 @@ export default function Home() {
     fetchMovies();
   }, []);
 
+  // Get user data from local storage
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) setUser(storedUser);
@@ -45,7 +47,6 @@ export default function Home() {
     setUser(null);
     router.push('/login');
   };
-  
 
   const statuses = ['Now Showing', 'Coming Soon', 'Special Event']; // Define statuses
 
@@ -117,23 +118,24 @@ export default function Home() {
                 {movies
                   .filter((movie) => movie.status === status)
                   .map((movie) => (
-                    <div
-                      key={movie._id}
-                      className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105"
-                      style={{ flex: '0 0 auto', width: '200px', height: 'auto' }} // Smaller width for cards
-                    >
-                      <Image
-                        src={movie.posterUrl}
-                        alt={movie.name}
-                        width={150} // Smaller width
-                        height={225} // Smaller height
-                        className="w-full h-auto"
-                      />
-                      <div className="p-2"> {/* Adjust padding for better alignment */}
-                        <h3 className="text-lg font-semibold text-white">{movie.name}</h3>
-                        <p className="text-sageGreen text-sm mt-1">{movie.status}</p>
+                    <Link key={movie._id} href={`/seating/${movie._id}`}> {/* Link to movie's seating page */}
+                      <div
+                        className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105"
+                        style={{ flex: '0 0 auto', width: '200px', height: 'auto' }} // Smaller width for cards
+                      >
+                        <Image
+                          src={movie.posterUrl}
+                          alt={movie.name}
+                          width={150} // Smaller width
+                          height={225} // Smaller height
+                          className="w-full h-auto"
+                        />
+                        <div className="p-2"> {/* Adjust padding for better alignment */}
+                          <h3 className="text-lg font-semibold text-white">{movie.name}</h3>
+                          <p className="text-sageGreen text-sm mt-1">{movie.status}</p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
               </div>
             </div>
@@ -143,13 +145,17 @@ export default function Home() {
         {/* Book Ticket or Login Button */}
         <div className="mt-8">
           {user ? (
-            <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
-              Book Ticket
-            </button>
+            <Link href="/book-ticket">
+              <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                Book Ticket
+              </button>
+            </Link>
           ) : (
-            <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
-              Login
-            </button>
+            <Link href="/login">
+              <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                Login
+              </button>
+            </Link>
           )}
         </div>
       </main>
