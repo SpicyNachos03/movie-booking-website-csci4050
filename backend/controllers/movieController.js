@@ -29,14 +29,101 @@ const getMovieById = async (req, res) => {
 
 // Create a new movie
 const createMovie = async (req, res) => {
-  const { name, posterUrl, status, showingTimes } = req.body;
+  const { name, posterUrl, status, showingTimes, seating, ticketPrices } = req.body;
+
+  console.log('Name:', name);
+  console.log('Poster URL:', posterUrl);
+  console.log('Status:', status);
+  console.log('Showing Times:', showingTimes);
+  console.log('Seating:', seating); // Should not be undefined
+  console.log('Ticket Prices:', ticketPrices); // Should not be undefined
+
   try {
-    const movie = new Movie({ name, posterUrl, status, showingTimes });
+    const movie = new Movie({
+      name,
+      posterUrl,
+      status,
+      showingTimes,
+      seating, // Include seating and ticketPrices in the saved object
+      ticketPrices,
+    });
+
+    console.log('Movie object before saving:', movie);
+
     const savedMovie = await movie.save();
+    console.log('Saved movie:', savedMovie);
     res.status(201).json(savedMovie);
   } catch (error) {
+    console.error('Error saving movie:', error);
     res.status(400).json({ message: error.message });
   }
 };
 
-module.exports = { getMovies, getMovieById, createMovie };
+
+// Update movie by ID
+const updateMovie = async (req, res) => {
+  try {
+    const updatedMovie = await Movie.findOneAndUpdate(
+      { _id: req.params.id }, // Find movie by ID
+      req.body, // Full movie update
+      { new: true, runValidators: true } // Return updated doc and validate
+    );
+
+    if (!updatedMovie) {
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+
+    res.json(updatedMovie);
+  } catch (error) {
+    console.error('Error updating movie:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Controller method to handle the PATCH request for seating
+const updateSeatingStatus = async (req, res) => {
+  const movieId = req.params.id;
+  const { row, seatNumber, status } = req.body;
+
+  try {
+    const movie = await Movie.findById(movieId);
+    if (!movie) {
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+
+    // Find the row and seat
+    const rowObj = movie.seating.find(seat => seat.row === row);
+    if (!rowObj) {
+      return res.status(404).json({ message: 'Row not found' });
+    }
+
+    const seat = rowObj.seats.find(seat => seat.seatNumber === seatNumber);
+    if (!seat) {
+      return res.status(404).json({ message: 'Seat not found' });
+    }
+
+    // Update the seat status
+    seat.status = status;
+    await movie.save();
+    
+    res.json({ message: 'Seating status updated successfully', movie });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getSeatingStatus = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id, 'seating'); // Only fetch the seating field
+    if (!movie) {
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+    res.json(movie.seating);
+  } catch (error) {
+    console.error('Error fetching seating status:', error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { getMovies, getMovieById, createMovie, updateMovie, updateSeatingStatus, getSeatingStatus };
