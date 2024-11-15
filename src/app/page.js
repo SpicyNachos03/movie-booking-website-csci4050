@@ -13,6 +13,7 @@ import HeroCarousel from '../components/HeroCarousel'; // Import the HeroCarouse
 import { useRouter } from 'next/navigation';
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css';
+import MovieCard from '../components/MovieCard'; // Import MovieCard
 
 export default function Home() {
   const [user, setUser] = useState(null);
