@@ -27,15 +27,16 @@ export default function Home() {
     const fetchMovies = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/movies');
-        if (!response.ok) throw new Error('Failed to fetch movies');
+        if (!response.ok) throw new Error(`Failed to fetch movies: ${response.statusText}`);
         const data = await response.json();
         setMovies(data);
       } catch (error) {
         console.error('Error fetching movies:', error);
+        alert('Failed to load movies. Please try again later.'); // Display error
       }
     };
     fetchMovies();
-  }, []);
+  }, []);  
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
