@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Movie = require('../models/movieModel');
 
 // Get all movies
@@ -13,9 +14,27 @@ const getMovies = async (req, res) => {
   }
 };
 
+// Get movie by ID
+const getMovieById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const movie = await Movie.findById(id);
+    if (!movie) {
+      console.error(`Movie with ID ${id} not found`); // Log missing movie
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+    res.json(movie);
+  } catch (error) {
+    console.error(`Error fetching movie with ID ${id}:`, error.message);
+    res.status(500).json({ message: 'Error fetching movie', error: error.message });
+  }
+};
+
+
 // Create a new movie
 const createMovie = async (req, res) => {
-  console.log('Received request body:', req.body); // Log incoming request body
+  console.log('Received request body:', req.body);
   const {
     title,
     category,
@@ -45,17 +64,17 @@ const createMovie = async (req, res) => {
       trailerVideo,
       mpaaRating,
       showInformation,
-      status,  // Ensure this field is included
-      posterUrl // Ensure this field is included
+      status,
+      posterUrl,
     });
 
     const savedMovie = await movie.save();
-    console.log('Saved movie:', savedMovie);  // Log the saved movie to check if status and posterUrl are saved
+    console.log('Saved movie:', savedMovie);
     res.status(201).json({
       title: savedMovie.title,
       status: savedMovie.status,
       posterUrl: savedMovie.posterUrl,
-      otherFields: savedMovie._doc // Optional: log other fields to check
+      otherFields: savedMovie._doc, // Optional: log other fields to check
     });
   } catch (error) {
     console.error('Error creating movie:', error.message);
@@ -63,9 +82,30 @@ const createMovie = async (req, res) => {
   }
 };
 
+// Update movie details
+const updateMovie = async (req, res) => {
+  const { id } = req.params;
 
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid movie ID format' });
+  }
 
-// Controller method to handle the PATCH request for seating
+  try {
+    const updatedMovie = await Movie.findByIdAndUpdate(id, req.body, {
+      new: true, // Return the updated document
+    });
+    if (!updatedMovie) {
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+    res.status(200).json(updatedMovie);
+  } catch (error) {
+    console.error('Error updating movie:', error.message);
+    res.status(500).json({ message: 'Error updating movie', error: error.message });
+  }
+};
+
+// Update seating status
 const updateSeatingStatus = async (req, res) => {
   const movieId = req.params.id;
   const { row, seatNumber, status } = req.body;
@@ -96,7 +136,7 @@ const updateSeatingStatus = async (req, res) => {
   }
 };
 
-
+// Get seating status
 const getSeatingStatus = async (req, res) => {
   const { id } = req.params;
 
@@ -117,4 +157,11 @@ const getSeatingStatus = async (req, res) => {
   }
 };
 
-module.exports = { getMovies, getMovieById, createMovie, updateMovie, updateSeatingStatus, getSeatingStatus };
+module.exports = {
+  getMovies,
+  getMovieById,
+  createMovie,
+  updateMovie,
+  updateSeatingStatus,
+  getSeatingStatus,
+};

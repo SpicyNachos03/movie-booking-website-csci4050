@@ -9,18 +9,20 @@ const MovieCard = ({ movieId, onClose }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('Movie ID:', movieId); // Check movieId value
+    console.log('Fetching movie details for ID:', movieId); // Debug log
     axios
       .get(`/api/movies/${movieId}`)
       .then((response) => {
+        console.log('Fetched movie:', response.data); // Debug log
         setMovie(response.data);
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching movie details:', error);
+        console.error('Error fetching movie details:', error); // Error log
         setLoading(false);
       });
   }, [movieId]);
+  
   
 
   const handleShowTimeChange = (e) => {
