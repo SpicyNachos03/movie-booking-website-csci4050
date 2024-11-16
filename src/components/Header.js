@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie'; // Import js-cookie
+import SearchBar from './SearchBar';
 
 export default function Header() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function Header() {
             height={75}
           />
         </Link>
-
+        <SearchBar/>
         <nav className="flex items-center">
           <ul className="flex space-x-4 mr-4">
             {user ? (

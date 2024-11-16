@@ -8,6 +8,7 @@ import PrivateRoute from './utils/PrivateRoute';
 import MovieCard from './components/MovieCard';  // Add MovieCard import here
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import AlertComponent from './components/AlertComponent/AlertComponent';  
+import SearchBar from './components/SearchBar';
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -17,6 +18,7 @@ function App() {
     <Router>
       <div className="App">
         <Header title={title}/>
+    
         <div className="container d-flex align-items-center flex-column">
           <Switch>
             <Route path="/" exact={true}>

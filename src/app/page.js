@@ -82,7 +82,7 @@ export default function Home() {
         </div>
 
         <div className="w-full max-w-2xl mb-12">
-          <SearchBar />
+         {/*} <SearchBar /> */}
         </div>
 
         <div className="w-full max-w-5xl mx-auto mb-12">
