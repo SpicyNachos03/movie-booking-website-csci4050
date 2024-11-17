@@ -17,6 +17,7 @@ function ManageMovies(){
             <Header></Header>
             <Link href="/admin/manageMovies/addMovie" className="text-white hover:text-lightCyan"> Add New Movie </Link>
             <h1>This is the manage movies page</h1>
+            
             <div className="card">
                 <p>Movie 1</p>
                 <p>Name: Deadpool & Wolverine</p>

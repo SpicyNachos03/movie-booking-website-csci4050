@@ -29,24 +29,23 @@ const getMovieById = async (req, res) => {
 
 // Create a new movie
 const createMovie = async (req, res) => {
-  const { name, posterUrl, status, showingTimes, seating, ticketPrices } = req.body;
+  const { title, category, status, posterUrl, cast, director, producer, synopsis, reviews, trailerPicture, trailerVideo, mpaaRating } = req.body;
 
-  console.log('Name:', name);
-  console.log('Poster URL:', posterUrl);
-  console.log('Status:', status);
-  console.log('Showing Times:', showingTimes);
-  console.log('Seating:', seating); // Should not be undefined
-  console.log('Ticket Prices:', ticketPrices); // Should not be undefined
-
+  const movie = new Movie({
+    title,
+    category,
+    status,
+    posterUrl,
+    cast,
+    director,
+    producer,
+    synopsis,
+    reviews,
+    trailerPicture,
+    trailerVideo,
+    mpaaRating,
+  });
   try {
-    const movie = new Movie({
-      name,
-      posterUrl,
-      status,
-      showingTimes,
-      seating, // Include seating and ticketPrices in the saved object
-      ticketPrices,
-    });
 
     console.log('Movie object before saving:', movie);
 

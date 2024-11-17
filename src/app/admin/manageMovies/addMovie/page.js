@@ -1,18 +1,21 @@
 'use client'
 
 import { useState } from 'react';
-
+import axios from 'axios';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from '../../../signup/signup.css';
+import { useRouter } from 'next/navigation'; 
+
 //copy and paste this skeleton page if you want to create a new page
 //within Header.js copy the same <Link></Link> list item and rename is accordingly to access it through the header
 
 
 function addMovie() {
-    const [movieTitle, setMovieTitle] = useState('');
+    const [title, setMovieTitle] = useState('');
+    const [category, setCategory] = useState('');
     const [status, setStatus] = useState('');
     const [posterUrl, setPosterUrl] = useState('');
     const [cast, setCast] = useState('');
@@ -24,14 +27,27 @@ function addMovie() {
     const [trailerVideo, setTrailerVideo] = useState('');
     const [mpaaRating, setMpaaRating] = useState('');
 
+
+
+    // States for checking the errors
+    const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState(false);
+
+    const router = useRouter();
+
+
     const handleInputChange = (setter) => (e) => {
         setter(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = {
-            movieTitle,
+        if (title === '' || category ==='' || status === '' || posterUrl === '' || cast === '' || director === '' || producer === '' || synopsis === '' || reviews === '' || trailerPicture === '' || trailerVideo === '' || mpaaRating === '') {
+            setError(true);
+        }
+        const movieData = {
+            title,
+            category,
             status,
             posterUrl,
             cast,
@@ -43,23 +59,85 @@ function addMovie() {
             trailerVideo,
             mpaaRating,
         };
-        console.log('Form Data:', formData);
-        // Submit the form data to the backend or perform another action
+        try {
+            const response = await axios.post("http://localhost:8000/api/movies", movieData);
+
+            if (response.status === 201) {
+                setSubmitted(true)
+                setError(false);
+            } else {
+                setError(true);
+            } 
+        } catch (error) {
+            console.log("Error Adding User:", error);
+            setError(true);
+        }
     };
+
+
+    // Showing success message
+    const successMessage = () => {
+        return (
+            <div
+                className="success"
+                style={{
+                    display: submitted ? "" : "none",
+                }}
+            >
+                <h1>Movie {title} has been successfully added!</h1>
+            </div>
+        );
+    };
+
+    // Showing error message if error is true
+    const errorMessage = () => {
+        return (
+            <div
+                className="error"
+                style={{
+                    display: error ? "" : "none",
+                }}
+            >
+                <h1>Please enter all the fields</h1>
+            </div>
+        );
+    };
+
+    const returnManageMovies = () => {
+        router.push('/admin/manageMovies');
+    }
+
     return (
         <div>
             <Header></Header>
             <div className="formWrapper">
+                <button onClick={returnManageMovies}> Go Back to Manage Movies </button>
                 <h1>To add a new movie, fill out this form:</h1>
-                <form className="formBox" onSubmit={handleSubmit}>
+                {/* Calling to the methods */}
+                <div className="messages">
+                    {errorMessage()}
+                    {successMessage()}
+                </div>
+                <form className="formBox">
                     <div className="inputWrapper">
                         <label className="label">Movie Title</label>
                         <input
                             onChange={handleInputChange(setMovieTitle)}
                             className="input"
-                            value={movieTitle}
+                            value={title}
                             type="text"
                             placeholder="Movie Title"
+                        />
+                    </div>
+
+                    <div className="inputWrapper">
+                        <label className="label">Category</label>
+                        <input
+                            onChange={handleInputChange(setCategory)}
+                            className="input"
+                            value={category}
+                            type="text"
+                            placeholder="Category"
                         />
                     </div>
 
@@ -173,7 +251,7 @@ function addMovie() {
                         />
                     </div>
 
-                    <button type="submit" className="submitButton">
+                    <button onClick={handleSubmit} className="button" type="submit">
                         Submit
                     </button>
                 </form>
