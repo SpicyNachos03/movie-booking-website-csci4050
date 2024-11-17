@@ -14,6 +14,7 @@ import Link from 'next/link';
 function Admin(){
     return(
         <div>
+            <Header></Header>
             <h1>This is the admin page</h1>
             <p>We need options to manage:
                 -movies
@@ -30,6 +31,7 @@ function Admin(){
             <div>
                 <Link href="/admin/managePromotions" className="text-white hover:text-lightCyan">Manage Promotions</Link>
             </div>
+            <Footer></Footer>
         </div>
     )
 }
