@@ -22,13 +22,13 @@ function Admin(){
             </p>
             <p>Add links to access the manage movies, manage users, and manage promotions screens</p>
             <div>
-                <Link href="/manageMovies" className="text-white hover:text-lightCyan">Manage Movies</Link>
+                <Link href="/admin/manageMovies" className="text-white hover:text-lightCyan">Manage Movies</Link>
             </div>
             <div>
-                <Link href="/manageUsers" className="text-white hover:text-lightCyan">Manage Users</Link>
+                <Link href="/admin/manageUsers" className="text-white hover:text-lightCyan">Manage Users</Link>
             </div>
             <div>
-                <Link href="/managePromotions" className="text-white hover:text-lightCyan">Manage Promotions</Link>
+                <Link href="/admin/managePromotions" className="text-white hover:text-lightCyan">Manage Promotions</Link>
             </div>
         </div>
     )

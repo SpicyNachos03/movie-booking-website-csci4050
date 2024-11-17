@@ -28,8 +28,9 @@ function Login() {
 
             const result = await axios.post("http://localhost:8000/api/users/login", { email, password });
 
+            const user = await axios.get(`http://localhost:8000/api/users/${email}`);
             if (result.data.message === "Success") {
-                const userData = { email, type: result.data.type };
+                const userData = user;
 
                 // Store user data in cookies
                 Cookies.set('user', JSON.stringify(userData), { expires: rememberMe ? 7 : undefined });

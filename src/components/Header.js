@@ -56,7 +56,7 @@ export default function Header() {
                 </li>
 
                 {/* Admin link (only for admin users) */}
-                {user.type === '1' && (
+                {user.data.type === '2' && (
                   <li>
                     <Link href="/admin" className="text-white hover:text-lightCyan">
                       Admin
