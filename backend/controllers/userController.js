@@ -153,26 +153,36 @@ const updatePassword = async (req, res) => {
 
   try {
     // Grabs individual user
+    console.log('Request received:', req.body, req.params);
     const user = await User.findOne({ email: req.params.email }); //finds a user
-    const filter = { user_id: user.id }
-
-    // Checking if password is the same on the form & DB
-    let unhashedPass = await decrypt(user.password, key);
-    if (unhashedPass === oldPassword) {
-      let newPass = await encrypt(newPassword, key);
-      const updateDoc = {
-        $set: {
-          password: newPass
-        }
-      }
-      // Put's the newly hashed password as the new password
-      const updatePass = await user.updateOne(filter, updateDoc)
+    
+    if (!user) {
+      console.log('User not found:', req.params.email);
+      return res.status(404).json({ message: 'User not found'});
     }
+    console.log('User found:', user.email);
+
+    // Decrypt and compare the old password
+    const unhashedPass = await decrypt(user.password, key);
+    if (unhashedPass !== oldPassword) {
+      console.log('Old password mismatch');
+      return res.status(400).json({ message: 'Old password is incorrect'});
+    }
+    console.log('Passwords match, updating password...');
+
+
+    //Encrypt the new password and update it
+    const newHashedPass = await encrypt(newPassword, key);
+    user.password = newHashedPass;
+
+    // Save updated user
+    await user.save()
+
     // Note: Add an else condition for a 400 error probably
-    res.status(200).json({ message: 'Updated password successfully', user})
+    res.status(200).json({ message: 'Password updated successfully', user})
   } catch (error) {
-    console.error("Error updating user data:", error);
-    res.status(400).json({ message: 'Error updating password', error: error.message });
+    console.error("Error updating user password:", error);
+    res.status(500).json({ message: 'Error updating password', error: error.message });
   }
 };
 

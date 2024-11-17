@@ -44,7 +44,7 @@ router.get('/profile', getUserByEmail);
 // router.delete('/:id', deleteUser);
 
 // Route to update a password when you change password
-router.put('/updatePassword', updatePassword);
+router.put('/api/users/:email/updatePassword', updatePassword);
 
 // Route to update a password when you forget
 router.put('/forgotPassword', forgotPassword);
