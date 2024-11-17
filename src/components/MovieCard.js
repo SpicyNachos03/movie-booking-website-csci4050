@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './MovieCard.css';
+import { useRouter } from 'next/navigation';
 
 const MovieCard = ({ movieId, onClose }) => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter(); // Use Next.js router for navigation
 
   useEffect(() => {
     if (!movieId) {
       console.error('No movieId provided.');
       return;
     }
-  
+
     setLoading(true);
     axios
       .get(`http://localhost:8000/api/movies/${movieId}`)
@@ -28,6 +30,10 @@ const MovieCard = ({ movieId, onClose }) => {
       });
   }, [movieId]);
 
+  const handleShowtimeClick = (showtime) => {
+    router.push(`/seating?movieId=${movieId}&showtime=${encodeURIComponent(showtime)}`);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -35,7 +41,9 @@ const MovieCard = ({ movieId, onClose }) => {
   if (!movie) {
     return (
       <div className="movie-card-modal">
-        <button className="close-btn" onClick={onClose}>Close</button>
+        <button className="close-btn" onClick={onClose}>
+          Close
+        </button>
         <p className="error">Movie not found</p>
       </div>
     );
@@ -43,8 +51,10 @@ const MovieCard = ({ movieId, onClose }) => {
 
   return (
     <div className="movie-card-modal">
-      <button className="close-btn" onClick={onClose}>Close</button>
-      <div className="movie-card-details">
+      <button className="close-btn" onClick={onClose}>
+        Close
+      </button>
+      <div className="movie-card-content">
         <h2>{movie.title}</h2>
         <p><strong>Category:</strong> {movie.category}</p>
         <p><strong>Status:</strong> {movie.status}</p>
@@ -55,14 +65,22 @@ const MovieCard = ({ movieId, onClose }) => {
         <p><strong>Synopsis:</strong> {movie.synopsis}</p>
         <p><strong>Reviews:</strong> {movie.reviews}</p>
         <img src={movie.trailerPicture} alt="Trailer Picture" className="movie-trailer-picture" />
-        <a href={movie.trailerVideo} target="_blank" rel="noopener noreferrer">Watch Trailer</a>
+        <a href={movie.trailerVideo} target="_blank" rel="noopener noreferrer">
+          Watch Trailer
+        </a>
         <p><strong>MPAA Rating:</strong> {movie.mpaaRating}</p>
-        <p><strong>Show Information:</strong></p>
-        <ul>
+        <div>
+          <p><strong>Show Information:</strong></p>
           {movie.showInformation.map((showtime, index) => (
-            <li key={index}>{showtime}</li>
+            <button
+              key={index}
+              onClick={() => handleShowtimeClick(showtime)}
+              className="showtime-btn"
+            >
+              {showtime}
+            </button>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
