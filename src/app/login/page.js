@@ -99,7 +99,7 @@ function Login() {
                     </div>
                     <div className="bottom">
                         <Button variant="primary" type="submit" >Login</Button>
-                        <Link href="/forgotpw">Forgot Password?</Link>
+                        <Link href="/login/forgotPassword">Forgot Password?</Link>
                     </div>
                 </form>
             </div>
