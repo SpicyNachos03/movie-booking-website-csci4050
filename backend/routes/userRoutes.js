@@ -20,6 +20,9 @@ router.use(express.json());
 // Route to login
 router.post('/login', userLogin);
 
+// Route to update a password when you forget
+router.put('/forgotPassword', forgotPassword);
+
 // Route to get all users
 router.get('/', getUsers);
 
@@ -46,7 +49,6 @@ router.get('/profile', getUserByEmail);
 // Route to update a password when you change password
 router.put('/api/users/:email/updatePassword', updatePassword);
 
-// Route to update a password when you forget
-router.put('/forgotPassword', forgotPassword);
+
 
 module.exports = router;

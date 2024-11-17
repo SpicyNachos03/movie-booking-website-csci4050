@@ -189,25 +189,21 @@ const updatePassword = async (req, res) => {
 // Updates a user's password - Used in Forgot Pass & Edit Profile
 const forgotPassword = async (req, res) => {
   // Grabs from form input
-  const { newPassword } = req.body
+  const { email, phoneNumber, newPass } = req.body
 
   try {
     // Grabs individual user
-    const user = await User.findOne({ email: req.params.email }); //finds a user
-    const filter = { user_id: user.id }
-
-    // Checking if password is the same on the form & DB
-    // let unhashedPass = await decrypt(user.password, key);
-      let newPass = await encrypt(newPassword, key);
-      const updateDoc = {
-        $set: {
-          password: newPass
-        }
-      }
-      // Put's the newly hashed password as the new password
-      const updatePass = await user.updateOne(filter, updateDoc)
+    const user = await User.findOne({ email: email }); //finds a user
     
-    // Note: Add an else condition for a 400 error probably
+    if (user.phoneNumber !== phoneNumber) {
+      res.status(400).json({ message: 'Phone numbers do not match.'})
+    }
+
+    const hashedPass = await encrypt(newPass, key);
+
+    user.password = hashedPass;
+    await user.save();
+
     res.status(200).json({ message: 'Updated password successfully', user})
   } catch (error) {
     console.error("Error updating user data:", error);
