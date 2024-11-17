@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import RegForm from '@/components/RegForm';
 import { useRouter } from 'next/navigation';
 import { Button } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
@@ -16,7 +17,7 @@ function ManageUsers(){
     const router = useRouter();
 
     const handleCreateUser = () => {
-        router.push('../../signup');
+        router.push('/admin/manageUsers/createUser');
     }
 
     return(
@@ -26,6 +27,8 @@ function ManageUsers(){
             <h1>This is the manage users page</h1>
 
             <button onClick={handleCreateUser}>Add User</button>
+
+            {/*<RegForm></RegForm>*/}
 
             <div class="card">
                 <p>User 1</p>
