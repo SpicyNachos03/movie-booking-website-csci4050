@@ -93,8 +93,8 @@ function Login() {
                         <Link href="/signup">Sign-up</Link>
                     </div>
                     <div className="bottom">
-                        <Button variant="primary" type="submit">Login</Button>
-                        <Link href="/forgotpw">Forgot Password?</Link>
+                        <Button variant="primary" type="submit" >Login</Button>
+                        <Link href="/login/forgotPassword">Forgot Password?</Link>
                     </div>
                 </form>
             </div>

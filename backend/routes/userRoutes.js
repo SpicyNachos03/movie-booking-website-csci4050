@@ -5,7 +5,9 @@ const {
   createUser,
   userLogin,
   updateUser,
-  getUserById
+  getUserById,
+  updatePassword,
+  forgotPassword
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -17,6 +19,9 @@ router.use(express.json());
 
 // Route to login
 router.post('/login', userLogin);
+
+// Route to update a password when you forget
+router.put('/forgotPassword', forgotPassword);
 
 // Route to get all users
 router.get('/', getUsers);
@@ -40,5 +45,10 @@ router.get('/profile', getUserByEmail);
 
 // Route to delete a user by ID
 // router.delete('/:id', deleteUser);
+
+// Route to update a password when you change password
+router.put('/api/users/:email/updatePassword', updatePassword);
+
+
 
 module.exports = router;
