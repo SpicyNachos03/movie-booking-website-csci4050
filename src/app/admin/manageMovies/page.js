@@ -14,8 +14,10 @@ import './manageMovies.css';
 function ManageMovies(){
     return(
         <div>
+            <Header></Header>
+            <Link href="/admin/manageMovies/addMovie" className="text-white hover:text-lightCyan"> Add New Movie </Link>
             <h1>This is the manage movies page</h1>
-            <div class="card">
+            <div className="card">
                 <p>Movie 1</p>
                 <p>Name: Deadpool & Wolverine</p>
                 <p>Poster: <img src="https://m.media-amazon.com/images/M/MV5BZTk5ODY0MmQtMzA3Ni00NGY1LThiYzItZThiNjFiNDM4MTM3XkEyXkFqcGc@._V1_.jpg" width="200"></img></p>
@@ -24,7 +26,7 @@ function ManageMovies(){
                 <button>Edit</button>
                 <button>Delete</button>
             </div>
-            <div class="card">
+            <div className="card">
                 <p>Movie 2</p>
                 <p>Name: Avengers: Endgame</p>
                 <p>Poster: <img src="https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_.jpg" width="200"></img></p>
@@ -33,7 +35,7 @@ function ManageMovies(){
                 <button>Edit</button>
                 <button>Delete</button>
             </div>
-            <div class="card">
+            <div className="card">
                 <p>Movie 3</p>
                 <p>Name: The Wolf of Wall Street</p>
                 <p>Poster: <img src="https://m.media-amazon.com/images/M/MV5BMjIxMjgxNTk0MF5BMl5BanBnXkFtZTgwNjIyOTg2MDE@._V1_.jpg" width="200"></img></p>
@@ -42,7 +44,7 @@ function ManageMovies(){
                 <button>Edit</button>
                 <button>Delete</button>
             </div>
-            <button>Add Movie</button>
+            <Footer></Footer>
         </div>
     )
 }

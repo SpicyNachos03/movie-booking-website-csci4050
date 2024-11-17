@@ -44,7 +44,7 @@ const movieSchema = new mongoose.Schema({
   },
   showInformation: {
     type: [String],
-    required: true,
+    required: false,
   },
   // name: {
   //   type: String,
