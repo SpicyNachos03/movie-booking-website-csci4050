@@ -44,7 +44,7 @@ export default function Header() {
             height={75}
           />
         </Link>
-        <SearchBar/>
+      
         <nav className="flex items-center">
           <ul className="flex space-x-4 mr-4">
             {user ? (
