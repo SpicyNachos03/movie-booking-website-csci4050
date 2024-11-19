@@ -57,7 +57,7 @@ export default function Header() {
                 </li>
 
                 {/* Admin link (only for admin users) */}
-                {user.type === '1' && (
+                {user.data.type === '2' && (
                   <li>
                     <Link href="/admin" className="text-white hover:text-lightCyan">
                       Admin
@@ -104,6 +104,9 @@ export default function Header() {
                   <Link href="/login" className="text-white hover:text-lightCyan">
                     Login
                   </Link>
+                </li>
+                <li>
+                  <Link href="/skeleton">Skeleton</Link>
                 </li>
               </>
             )}

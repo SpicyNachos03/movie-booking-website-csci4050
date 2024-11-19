@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import RegForm from '@/components/RegForm';
+import { useRouter } from 'next/navigation';
 import { Button } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import './manageUsers.css';
@@ -12,9 +14,22 @@ import './manageUsers.css';
 //within Header.js copy the same <Link></Link> list item and rename is accordingly to access it through the header
 
 function ManageUsers(){
+    const router = useRouter();
+
+    const handleCreateUser = () => {
+        router.push('/admin/manageUsers/createUser');
+    }
+
     return(
         <div>
+            <Header></Header>
+
             <h1>This is the manage users page</h1>
+
+            <button onClick={handleCreateUser}>Add User</button>
+
+            {/*<RegForm></RegForm>*/}
+
             <div class="card">
                 <p>User 1</p>
                 <p>ID: 1</p>
@@ -40,6 +55,8 @@ function ManageUsers(){
                 <button>Delete</button>
             </div>
             <button>Add User</button>
+
+            <Footer></Footer>
         </div>
     )
 }

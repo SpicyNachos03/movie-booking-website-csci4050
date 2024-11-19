@@ -28,8 +28,9 @@ function Login() {
 
             const result = await axios.post("http://localhost:8000/api/users/login", { email, password });
 
+            const user = await axios.get(`http://localhost:8000/api/users/${email}`);
             if (result.data.message === "Success") {
-                const userData = { email, type: result.data.type };
+                const userData = user;
 
                 // Store user data in cookies
                 Cookies.set('user', JSON.stringify(userData), { expires: rememberMe ? 7 : undefined });
@@ -93,8 +94,8 @@ function Login() {
                         <Link href="/signup">Sign-up</Link>
                     </div>
                     <div className="bottom">
-                        <Button variant="primary" type="submit">Login</Button>
-                        <Link href="/forgotpw">Forgot Password?</Link>
+                        <Button variant="primary" type="submit" >Login</Button>
+                        <Link href="/login/forgotPassword">Forgot Password?</Link>
                     </div>
                 </form>
             </div>

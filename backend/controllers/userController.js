@@ -146,6 +146,69 @@ const updateUser = async (req, res) => {
   }
 };
 
+// Updates a user's password - Used in Forgot Pass & Edit Profile
+const updatePassword = async (req, res) => {
+  // Grabs from form input
+  const { oldPassword, newPassword } = req.body
 
+  try {
+    // Grabs individual user
+    console.log('Request received:', req.body, req.params);
+    const user = await User.findOne({ email: req.params.email }); //finds a user
+    
+    if (!user) {
+      console.log('User not found:', req.params.email);
+      return res.status(404).json({ message: 'User not found'});
+    }
+    console.log('User found:', user.email);
+
+    // Decrypt and compare the old password
+    const unhashedPass = await decrypt(user.password, key);
+    if (unhashedPass !== oldPassword) {
+      console.log('Old password mismatch');
+      return res.status(400).json({ message: 'Old password is incorrect'});
+    }
+    console.log('Passwords match, updating password...');
+
+
+    //Encrypt the new password and update it
+    const newHashedPass = await encrypt(newPassword, key);
+    user.password = newHashedPass;
+
+    // Save updated user
+    await user.save()
+
+    // Note: Add an else condition for a 400 error probably
+    res.status(200).json({ message: 'Password updated successfully', user})
+  } catch (error) {
+    console.error("Error updating user password:", error);
+    res.status(500).json({ message: 'Error updating password', error: error.message });
+  }
+};
+
+// Updates a user's password - Used in Forgot Pass & Edit Profile
+const forgotPassword = async (req, res) => {
+  // Grabs from form input
+  const { email, phoneNumber, newPass } = req.body
+
+  try {
+    // Grabs individual user
+    const user = await User.findOne({ email: email }); //finds a user
+    
+    if (user.phoneNumber !== phoneNumber) {
+      res.status(400).json({ message: 'Phone numbers do not match.'})
+    }
+
+    const hashedPass = await encrypt(newPass, key);
+
+    user.password = hashedPass;
+    await user.save();
+
+    res.status(200).json({ message: 'Updated password successfully', user})
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    res.status(400).json({ message: 'Error updating password', error: error.message });
+  }
+};
   
-  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser};
+  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword};
