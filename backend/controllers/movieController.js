@@ -41,10 +41,13 @@ const getMovieById = async (req, res) => {
 
 // Create a new movie
 const createMovie = async (req, res) => {
-  console.log('Received request body:', req.body);
-  const {
+  const { title, category, status, posterUrl, cast, director, producer, synopsis, reviews, trailerPicture, trailerVideo, mpaaRating } = req.body;
+
+  const movie = new Movie({
     title,
     category,
+    status,
+    posterUrl,
     cast,
     director,
     producer,
@@ -53,26 +56,15 @@ const createMovie = async (req, res) => {
     trailerPicture,
     trailerVideo,
     mpaaRating,
-    showInformation,
-    status,
-    posterUrl,
-  } = req.body;
-
+  });
   try {
     const movie = new Movie({
-      title,
-      category,
-      cast,
-      director,
-      producer,
-      synopsis,
-      reviews,
-      trailerPicture,
-      trailerVideo,
-      mpaaRating,
-      showInformation,
-      status,
+      name,
       posterUrl,
+      status,
+      showingTimes,
+      seating, // Include seating and ticketPrices in the saved object
+      ticketPrices,
     });
 
     const savedMovie = await movie.save();
