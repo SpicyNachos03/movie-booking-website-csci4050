@@ -25,17 +25,6 @@ body {
     flex-direction: column;
 }
 
-.movie-container select {
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    border: 0;
-    padding: 10px 20px;
-    margin-bottom: 40px;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
 .container {
     perspective: 1000px;
     margin: 40px 0;
@@ -43,6 +32,31 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.screen {
+    background: #fff;
+    height: 100px;
+    width: 80%;
+    margin-bottom: 20px;
+    transform: rotateX(-45deg);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0;
+    position: relative;
+}
+
+.row .row-label {
+    position: absolute;
+    left: -25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
 }
 
 .seat {
@@ -54,11 +68,11 @@ body {
     border-top-right-radius: 10px;
 }
 
-.selected {
+.seat.selected {
     background-color: #62A388;
 }
 
-.occupied {
+.seat.occupied {
     background-color: #fff;
 }
 
@@ -76,7 +90,7 @@ body {
     display: flex;
     justify-content: space-between;
     list-style-type: none;
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
     padding: 10px;
     border-radius: 5px;
     color: #777;
@@ -92,34 +106,9 @@ body {
     margin-left: 5px;
 }
 
-.row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.screen {
-    background: #fff;
-    height: 100px;
-    width: 80%;
-    margin-bottom: 20px;
-    transform: rotateX(-45deg);
-    box-shadow: 0 3px 10px rgba(255,255,255,0.7);
-}
-
-p.text {
-    margin-top: 40px;
-    font-size: 18px;
-}
-
-p.text span {
-    color: #0081cb;
-    font-weight: bold;
-}
-
 .age-counters {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-top: 20px;
     width: 100%;
 }
@@ -128,7 +117,6 @@ p.text span {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 10px;
 }
 
 .counter button {
@@ -157,4 +145,8 @@ button {
 
 button:hover {
     background-color: #4a8b6d;
+}
+
+p {
+    margin-top: 20px;
 }
