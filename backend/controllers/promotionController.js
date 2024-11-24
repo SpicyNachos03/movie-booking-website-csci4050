@@ -1,11 +1,19 @@
 const Promotion = require('../models/promotionModel');
 
 const getPromotions = async (req, res) => {
-
+    try {
+        console.log('Attempting to fetch promotions...');
+        const promotions = await Promotion.find();
+        res.json(promotions);
+        console.log('Promotions fetched successfully:', promotions);
+      } catch (error) {
+        console.error('Error fetching promotions:', error);
+        res.status(500).json({ message: 'Error fetching promotions', error: error.message });
+      };
 };
 
 const getPromotionById = async (req, res) => {
-
+    console.log("To implement if needed");
 };
 
 const createPromotion = async (req, res) => {
