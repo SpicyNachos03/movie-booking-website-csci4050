@@ -29,4 +29,4 @@ async function runTests() {
     await testDecrypt(encryptedData);
 }
 
-runTests().catch(console.error);
+//runTests().catch(console.error);
