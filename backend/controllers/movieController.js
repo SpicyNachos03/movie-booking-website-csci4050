@@ -46,26 +46,17 @@ const getMovieById = async (req, res) => {
         });
     }
 
-    try {
-        const movie = await Movie.findById(id);
-        if (!movie) {
-            return res.status(404).json({
-                success: false,
-                message: 'Movie not found',
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            data: movie,
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Error retrieving movie',
-            error: error.message,
-        });
+    const movie = await Movie.findById(id);
+    if (!movie) {
+      console.error(`Movie with ID ${id} not found in database.`);
+      return res.status(404).json({ message: 'Movie not found' });
     }
+
+    res.json(movie);
+  } catch (error) {
+    console.error(`Error fetching movie with ID ${id}:`, error.message);
+    res.status(500).json({ message: 'Error fetching movie', error: error.message });
+  }
 };
 
 
@@ -88,8 +79,14 @@ const createMovie = async (req, res) => {
     mpaaRating,
   });
   try {
-
-    console.log('Movie object before saving:', movie);
+    const movie = new Movie({
+      name,
+      posterUrl,
+      status,
+      showingTimes,
+      seating, // Include seating and ticketPrices in the saved object
+      ticketPrices,
+    });
 
     const savedMovie = await movie.save();
     console.log('Saved movie:', savedMovie);
