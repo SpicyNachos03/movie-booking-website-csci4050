@@ -5,10 +5,10 @@ const roomSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    seatArray: {
-        type: [Seat],
-        required: true,
-    },
+    // seatArray: {
+    //     type: [Seat],
+    //     required: true,
+    // },
     numSeats: {
         type: Int32,
         required: false,
