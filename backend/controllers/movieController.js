@@ -15,50 +15,28 @@ const getMovies = async (req, res) => {
 };
 
 // Get movie by ID
-const getMovieById = async (req, res) => {
-  // const { id } = req.params;
-
-  // try {
-  //   // Validate ID format
-  //   if (!mongoose.Types.ObjectId.isValid(id)) {
-  //     console.error(`Invalid movie ID format: ${id}`);
-  //     return res.status(400).json({ message: 'Invalid movie ID format' });
-  //   }
-
-  //   const movie = await Movie.findById(id);
-  //   if (!movie) {
-  //     console.error(`Movie with ID ${id} not found in database.`);
-  //     return res.status(404).json({ message: 'Movie not found' });
-  //   }
-
-  //   res.json(movie);
-  // } catch (error) {
-  //   console.error(`Error fetching movie with ID ${id}:`, error.message);
-  //   res.status(500).json({ message: 'Error fetching movie', error: error.message });
-  // }
-  const { id } = req.params;
- 
-    // Validate ObjectId format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({
-            success: false,
-            message: 'Invalid movie ID format',
-        });
+  const getMovieById = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Validate ID format
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        console.error(`Invalid movie ID format: ${id}`);
+        return res.status(400).json({ message: 'Invalid movie ID format' });
+      }
+  
+      const movie = await Movie.findById(id);
+      if (!movie) {
+        console.error(`Movie with ID ${id} not found in database.`);
+        return res.status(404).json({ message: 'Movie not found' });
+      }
+  
+      res.json(movie);
+    } catch (error) {
+      console.error(`Error fetching movie with ID ${id}:`, error.message);
+      res.status(500).json({ message: 'Error fetching movie', error: error.message });
     }
-
-    const movie = await Movie.findById(id);
-    if (!movie) {
-      console.error(`Movie with ID ${id} not found in database.`);
-      return res.status(404).json({ message: 'Movie not found' });
-    }
-
-    res.json(movie);
-  } catch (error) {
-    console.error(`Error fetching movie with ID ${id}:`, error.message);
-    res.status(500).json({ message: 'Error fetching movie', error: error.message });
-  }
-};
-
+  };
 
 // Create a new movie
 const createMovie = async (req, res) => {
