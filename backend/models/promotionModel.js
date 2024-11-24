@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const promotionSchema = new mongoose.Schema({
-    promotionRate: {
-        type: Double,
+    promotionName: {
+        type: String,
         required: true,
     },
-    promotionType: {
-        type: String,
+    promotionRate: {
+        type: Double,
         required: true,
     },
 });
