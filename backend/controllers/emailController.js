@@ -3,6 +3,36 @@ const movieDB = require('../models/movieModel.js');
 const userDB = require('../models/userModel.js');
 
 
+async function sendPromotionNotificationEmail() {
+  try {
+    // Query the database to find users who have subscribed to promotions
+    const subscribedUsers = await User.find({ promotions: true });
+
+    if (subscribedUsers.length === 0) {
+      console.log('No users found who have subscribed to promotions.');
+      return;
+    }
+
+    for (const user of subscribedUsers) {
+      try {
+        let emailInfo = await emailTransporter.sendMail({
+          from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
+          to: user.email, // Access the email field from the User model
+          subject: 'Notification of promotion',
+          text: `Dear ${user.firstName},\n\nLog in to your profile to check out new promotions available to you now!\n\nBest regards,\nMovie Booking Team`,
+        });
+
+        console.log(`Email sent to ${user.email}:`, emailInfo.messageId);
+      } catch (error) {
+        console.error(`Error sending email to ${user.email}:`, error);
+      }
+    }
+  } catch (error) {
+    console.error('Error querying the user database:', error);
+  }
+}
+
+
 async function sendPromotionNotificationVecEmail(userEmailVec) {
   for (const userEmail of userEmailVec) {
     try {
@@ -31,35 +61,6 @@ async function sendPromotionNotificationVecEmail(userEmailVec) {
     } catch (error) {
       console.error(`Error processing email for ${userEmail}:`, error);
     }
-  }
-}
-
-async function sendPromotionNotificationEmail() {
-  try {
-    // Query the database to find users who have subscribed to promotions
-    const subscribedUsers = await User.find({ promotions: true });
-
-    if (subscribedUsers.length === 0) {
-      console.log('No users found who have subscribed to promotions.');
-      return;
-    }
-
-    for (const user of subscribedUsers) {
-      try {
-        let emailInfo = await emailTransporter.sendMail({
-          from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-          to: user.email, // Access the email field from the User model
-          subject: 'Notification of promotion',
-          text: `Dear ${user.firstName},\n\nLog in to your profile to check out new promotions available to you now!\n\nBest regards,\nMovie Booking Team`,
-        });
-
-        console.log(`Email sent to ${user.email}:`, emailInfo.messageId);
-      } catch (error) {
-        console.error(`Error sending email to ${user.email}:`, error);
-      }
-    }
-  } catch (error) {
-    console.error('Error querying the user database:', error);
   }
 }
 
@@ -167,7 +168,7 @@ async function sendOrderConfirmEmail(req, res, next) {
   }
 }
 
-sendTestEmail();
+//sendTestEmail();
 
 module.exports = {
   sendVerificationEmail,
