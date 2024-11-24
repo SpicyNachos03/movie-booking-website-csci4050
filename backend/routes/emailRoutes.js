@@ -1,6 +1,6 @@
 const express = require('express');
-const router = express.Router();
 const emailController = require('../controllers/emailController');
+const router = express.Router();
 
 router.post('/notify-promotion', async (req, res) => {
   try {

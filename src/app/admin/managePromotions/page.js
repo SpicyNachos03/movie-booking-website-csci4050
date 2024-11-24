@@ -17,7 +17,7 @@ import './managePromotions.css';
 function ManagePromotions() {
     const handleNotifyPromotion = async () => {
       try {
-        const response = await axios.post('/api/promotions/notify-promotion');
+        const response = await axios.post('/api/emails/notify-promotion');
         alert(response.data.message);
       } catch (error) {
         console.error('Error notifying promotion:', error);
