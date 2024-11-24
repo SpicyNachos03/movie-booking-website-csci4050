@@ -7,7 +7,7 @@ export default function ScheduleMovie() {
 
     return(
         <div>
-
+            
         </div>
     );
 
