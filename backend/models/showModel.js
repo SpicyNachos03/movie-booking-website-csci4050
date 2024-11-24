@@ -5,7 +5,7 @@ const showSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    showInformation: {
+    dateTime: {
         type: String,
         required: true,
     },

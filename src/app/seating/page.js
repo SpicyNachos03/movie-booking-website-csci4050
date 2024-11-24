@@ -1,7 +1,9 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import './seating.css';
-import OrderSummary from './OrderSummary';  // Ensure correct import
-import { useRouter } from 'next/router';
+import OrderSummary from '../ordersummary/page';  // Ensure correct import
+import { useRouter } from 'next/navigation';
 
 const SeatingPage = ({ movieId, showtime }) => {
   const [selectedSeats, setSelectedSeats] = useState([]);

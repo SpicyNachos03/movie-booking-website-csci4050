@@ -69,7 +69,7 @@ function addMovie() {
                 setError(true);
             } 
         } catch (error) {
-            console.log("Error Adding User:", error);
+            console.log("Error Adding Movie:", error);
             setError(true);
         }
     };

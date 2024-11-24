@@ -16,9 +16,10 @@ function Profile() {
     useEffect(() => {
         const fetchUserData = async () => {
             const userData = JSON.parse(Cookies.get('user')); // Get user data from cookies
+            console.log(userData);
             if (userData) {
                 try {
-                    const response = await axios.get(`http://localhost:8000/api/users/${userData.email}`);
+                    const response = await axios.get(`http://localhost:8000/api/users/${userData.data.email}`);
                     setUser(response.data);
                 } catch (err) {
                     console.error(err);
