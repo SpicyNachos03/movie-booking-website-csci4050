@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Movie = require('../models/movieModel');
 
 // Get all movies
@@ -13,19 +14,30 @@ const getMovies = async (req, res) => {
   }
 };
 
-// Get a single movie by ID
+// Get movie by ID
 const getMovieById = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const movie = await Movie.findById(req.params.id);
-    if (movie) {
-      res.json(movie);
-    } else {
-      res.status(404).json({ message: 'Movie not found' });
+    // Validate ID format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.error(`Invalid movie ID format: ${id}`);
+      return res.status(400).json({ message: 'Invalid movie ID format' });
     }
+
+    const movie = await Movie.findById(id);
+    if (!movie) {
+      console.error(`Movie with ID ${id} not found in database.`);
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+
+    res.json(movie);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(`Error fetching movie with ID ${id}:`, error.message);
+    res.status(500).json({ message: 'Error fetching movie', error: error.message });
   }
 };
+
 
 // Create a new movie
 const createMovie = async (req, res) => {
@@ -46,41 +58,53 @@ const createMovie = async (req, res) => {
     mpaaRating,
   });
   try {
-
-    console.log('Movie object before saving:', movie);
+    const movie = new Movie({
+      name,
+      posterUrl,
+      status,
+      showingTimes,
+      seating, // Include seating and ticketPrices in the saved object
+      ticketPrices,
+    });
 
     const savedMovie = await movie.save();
     console.log('Saved movie:', savedMovie);
-    res.status(201).json(savedMovie);
+    res.status(201).json({
+      title: savedMovie.title,
+      status: savedMovie.status,
+      posterUrl: savedMovie.posterUrl,
+      otherFields: savedMovie._doc, // Optional: log other fields to check
+    });
   } catch (error) {
-    console.error('Error saving movie:', error);
-    res.status(400).json({ message: error.message });
+    console.error('Error creating movie:', error.message);
+    res.status(400).json({ message: 'Error creating movie', error: error.message });
   }
 };
 
-
-// Update movie by ID
+// Update movie details
 const updateMovie = async (req, res) => {
-  try {
-    const updatedMovie = await Movie.findOneAndUpdate(
-      { _id: req.params.id }, // Find movie by ID
-      req.body, // Full movie update
-      { new: true, runValidators: true } // Return updated doc and validate
-    );
+  const { id } = req.params;
 
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid movie ID format' });
+  }
+
+  try {
+    const updatedMovie = await Movie.findByIdAndUpdate(id, req.body, {
+      new: true, // Return the updated document
+    });
     if (!updatedMovie) {
       return res.status(404).json({ message: 'Movie not found' });
     }
-
-    res.json(updatedMovie);
+    res.status(200).json(updatedMovie);
   } catch (error) {
-    console.error('Error updating movie:', error);
-    res.status(500).json({ message: error.message });
+    console.error('Error updating movie:', error.message);
+    res.status(500).json({ message: 'Error updating movie', error: error.message });
   }
 };
 
-
-// Controller method to handle the PATCH request for seating
+// Update seating status
 const updateSeatingStatus = async (req, res) => {
   const movieId = req.params.id;
   const { row, seatNumber, status } = req.body;
@@ -91,30 +115,37 @@ const updateSeatingStatus = async (req, res) => {
       return res.status(404).json({ message: 'Movie not found' });
     }
 
-    // Find the row and seat
-    const rowObj = movie.seating.find(seat => seat.row === row);
+    const rowObj = movie.seating.find((seatRow) => seatRow.row === row);
     if (!rowObj) {
       return res.status(404).json({ message: 'Row not found' });
     }
 
-    const seat = rowObj.seats.find(seat => seat.seatNumber === seatNumber);
+    const seat = rowObj.seats.find((seat) => seat.seatNumber === seatNumber);
     if (!seat) {
       return res.status(404).json({ message: 'Seat not found' });
     }
 
-    // Update the seat status
     seat.status = status;
     await movie.save();
-    
-    res.json({ message: 'Seating status updated successfully', movie });
+
+    res.json({ message: 'Seating status updated successfully', seating: movie.seating });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error updating seating status:', error.message);
+    res.status(500).json({ message: 'Error updating seating status', error: error.message });
   }
 };
 
+// Get seating status
 const getSeatingStatus = async (req, res) => {
+  const { id } = req.params;
+
+  // Check if the ID is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid movie ID format' });
+  }
+
   try {
-    const movie = await Movie.findById(req.params.id, 'seating'); // Only fetch the seating field
+    const movie = await Movie.findById(id, 'seating'); // Only fetch the seating field
     if (!movie) {
       return res.status(404).json({ message: 'Movie not found' });
     }
@@ -125,4 +156,11 @@ const getSeatingStatus = async (req, res) => {
   }
 };
 
-module.exports = { getMovies, getMovieById, createMovie, updateMovie, updateSeatingStatus, getSeatingStatus };
+module.exports = {
+  getMovies,
+  getMovieById,
+  createMovie,
+  updateMovie,
+  updateSeatingStatus,
+  getSeatingStatus,
+};
