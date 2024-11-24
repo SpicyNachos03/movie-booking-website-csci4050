@@ -6,7 +6,7 @@ const promotionSchema = new mongoose.Schema({
         required: true,
     },
     promotionRate: {
-        type: Double,
+        type: Number,
         required: true,
     },
 });

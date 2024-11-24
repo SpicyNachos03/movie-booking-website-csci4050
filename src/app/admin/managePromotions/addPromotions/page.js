@@ -31,15 +31,19 @@ function addPromotions() {
         if (promotionRate === '' || promotionName === '') {
             setError(true);
         }
-
         const promotion = {
             promotionName,
             promotionRate,
         };
-
         try {
             const response = await axios.post("http://localhost:8000/api/promotions", promotion);
 
+            if (response.status === 201) {
+                setSubmitted(true)
+                setError(false);
+            } else {
+                setError(true);
+            } 
         } catch (error) {
             console.log("Error Adding Promotion:", error);
             setError(true);
