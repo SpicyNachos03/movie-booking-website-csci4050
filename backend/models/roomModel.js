@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const roomSchema = new mongoose.Schema({
-    roomNumber: {
+    roomName: {
         type: String,
         required: true,
     },
@@ -10,7 +10,7 @@ const roomSchema = new mongoose.Schema({
     //     required: true,
     // },
     numSeats: {
-        type: Int32,
+        type: Number,
         required: false,
     },
 });
