@@ -16,6 +16,7 @@ function ManageMovies(){
         <div>
             <Header></Header>
             <Link href="/admin/manageMovies/addMovie" className="text-white hover:text-lightCyan"> Add New Movie </Link>
+            <Link href="/admin/manageMovies/scheduleMovie" className="text-white hover:text-lightCyan"> Schedule New Movie Showing </Link>
             <h1>This is the manage movies page</h1>
             
             <div className="card">

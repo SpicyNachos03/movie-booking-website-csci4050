@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const showSchema = new mongoose.Schema({
-    movieId: {
+    movieName: {
         type: String,
         required: true,
     },
-    showInformation: {
+    dateTime: {
         type: String,
         required: true,
     },
-    roomId: {
+    roomName: {
         type: String,
         required: true,
     },
