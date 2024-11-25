@@ -55,9 +55,9 @@ const ScheduleMovie = () => {
   const isDuplicateShow = () => {
     return scheduledShows.some(
       (show) =>
-        show.movie === selectedMovie &&
+        show.movieName === selectedMovie &&
         show.dateTime === dateTime &&
-        show.room === selectedRoom
+        show.roomName === selectedRoom
     );
   };
 
@@ -68,13 +68,14 @@ const ScheduleMovie = () => {
       alert("Please fill in all fields.");
       return;
     }
+    console.log(selectedRoom);
 
     if (isDuplicateShow()) {
       alert("Duplicate show detected! Please adjust the schedule.");
       return;
     }
 
-    const newShow = { movie: selectedMovie, dateTime, room: selectedRoom };
+    const newShow = { movieName: selectedMovie, dateTime, roomName: selectedRoom };
 
     try {
       const response = await axios.post("http://localhost:8000/api/shows", newShow, {
@@ -148,12 +149,12 @@ const ScheduleMovie = () => {
             style = {{ color: "black "}}
             required
           >
-            <option value="" disabled>
+            <option value="" disabled color="black">
               -- Select a Room --
             </option>
             {rooms.map((room) => (
-              <option key={room._id} value={room.name || room.number}>
-                {room.name || room.number}
+              <option key={room._id} value={room.roomName}>
+                {room.roomName}
               </option>
             ))}
           </select>
@@ -166,7 +167,7 @@ const ScheduleMovie = () => {
       <ul>
         {scheduledShows.map((show, index) => (
           <li key={index}>
-            {show.movie} | {show.dateTime} | Room: {show.room}
+            {show.movieName} | {show.dateTime} | Room: {show.roomName}
           </li>
         ))}
       </ul>

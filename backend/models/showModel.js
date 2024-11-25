@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const showSchema = new mongoose.Schema({
-    movieId: {
+    movieName: {
         type: String,
         required: true,
     },
@@ -9,7 +9,7 @@ const showSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    roomId: {
+    roomName: {
         type: String,
         required: true,
     },

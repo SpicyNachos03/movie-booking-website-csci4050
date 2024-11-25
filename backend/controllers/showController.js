@@ -1,12 +1,12 @@
 const Show = require('../models/showModel');
 
 const createShow = async (req, res) => {
-    const { movieId, dateTime, roomId } = req.body;
+    const { movieName, dateTime, roomName } = req.body;
 
     const show = new Show({
-        movieId,
+        movieName,
         dateTime,
-        roomId,
+        roomName,
     });
 
     try {
