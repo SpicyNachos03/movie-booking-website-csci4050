@@ -1,12 +1,20 @@
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
-
   title: {
     type: String,
     required: true,
   },
   category: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ['Coming Soon', 'Now Showing', 'Special Event'],
+    required: true,
+  },
+  posterUrl: {
     type: String,
     required: true,
   },
@@ -27,7 +35,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   reviews: {
-    type: String, 
+    type: String,
     required: true,
   },
   trailerPicture: {
@@ -46,23 +54,6 @@ const movieSchema = new mongoose.Schema({
     type: [String],
     required: false,
   },
-  // name: {
-  //   type: String,
-  //   required: true,
-  // },
-  // posterUrl: {
-  //   type: String,
-  //   required: true,
-  // },
-  // status: {
-  //   type: String,
-  //   enum: ['Now Showing', 'Coming Soon', 'Special Event'],
-  //   required: true,
-  // },
-  // showingTimes: {
-  //   type: [String], // Array of time strings
-  //   required: true,
-  // },
 });
 
 const Movie = mongoose.model('Movie', movieSchema);

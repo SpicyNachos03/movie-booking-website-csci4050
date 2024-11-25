@@ -14,6 +14,10 @@ router.post('/', createMovie);
 
 router.get('/:id/seating', getSeatingStatus);  // if you need to just fetch seating status
 
+// Route to update a movie by ID
+router.put('/:id', updateMovie); // Ensure this route exists
+
+
 // Route to update the seating status for a movie
 router.patch('/:id/seating', updateSeatingStatus);
 module.exports = router;

@@ -3,40 +3,41 @@
 import { useState, useEffect, useRef } from 'react';
 import Footer from '../components/Footer';
 import Image from "next/image";
-import Link from 'next/link';  // Import Link for navigation
+import Link from 'next/link';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import './globals.css';
 import MyVideoSlider from "../components/MyVideoSlider";
 import SearchBar from '../components/SearchBar';
 import Header from '../components/Header';
-import HeroCarousel from '../components/HeroCarousel'; // Import the HeroCarousel component
+import HeroCarousel from '../components/HeroCarousel';
 import { useRouter } from 'next/navigation';
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css';
+import MovieCard from '../components/MovieCard';
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const [movies, setMovies] = useState([]);
+  const [selectedMovieId, setSelectedMovieId] = useState(null); // Track selected movie
   const router = useRouter();
 
-  const containerRefs = useRef({}); // Store references for each status section
+  const containerRefs = useRef({});
 
-  // Fetch movies on page load
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/movies');
-        if (!response.ok) throw new Error('Failed to fetch movies');
+        if (!response.ok) throw new Error(`Failed to fetch movies: ${response.statusText}`);
         const data = await response.json();
         setMovies(data);
       } catch (error) {
         console.error('Error fetching movies:', error);
+        alert('Failed to load movies. Please try again later.'); // Display error
       }
     };
     fetchMovies();
-  }, []);
+  }, []);  
 
-  // Get user data from local storage
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) setUser(storedUser);
@@ -48,21 +49,27 @@ export default function Home() {
     router.push('/login');
   };
 
-  const statuses = ['Now Showing', 'Coming Soon', 'Special Event']; // Define statuses
+  const statuses = ['Now Showing', 'Coming Soon', 'Special Event'];
 
-  // Scroll handler for buttons
   const handleScroll = (status, direction) => {
-    const scrollAmount = 300; // Adjust how much to scroll per click
+    const scrollAmount = 300;
     const container = containerRefs.current[status];
     container.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+  };
+
+  const handleMovieClick = (movieId) => {
+    setSelectedMovieId(movieId); // Set selected movie ID to show MovieCard
+  };
+
+  const closeMovieCard = () => {
+    setSelectedMovieId(null); // Clear the selected movie ID to close MovieCard
   };
 
   return (
     <div>
       <Header />
 
-      {/* Hero Carousel Section */}
-      <HeroCarousel /> 
+      <HeroCarousel />
 
       <main className="flex flex-col items-center flex-grow p-6 sm:p-12">
         <div className="text-center max-w-4xl mb-10">
@@ -74,12 +81,10 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Search Bar */}
         <div className="w-full max-w-2xl mb-12">
           <SearchBar />
         </div>
 
-        {/* Featured Trailers */}
         <div className="w-full max-w-5xl mx-auto mb-12">
           <h1 className="text-4xl font-semibold font-poppins text-center mb-6 tracking-wider text-lightCyan">
             Featured Trailers
@@ -87,14 +92,12 @@ export default function Home() {
           <MyVideoSlider />
         </div>
 
-        {/* Movie Sections by Status */}
         {statuses.map((status) => (
           <div key={status} className="w-full max-w-6xl mx-auto mb-12">
             <h2 className="text-4xl font-semibold font-poppins text-lightCyan mb-6 tracking-wide">
               {status}
             </h2>
             
-            {/* Scroll Buttons */}
             <div className="relative">
               <button
                 onClick={() => handleScroll(status, 'left')}
@@ -109,40 +112,38 @@ export default function Home() {
                 ▶
               </button>
 
-              {/* Movie List */}
               <div
                 ref={(el) => (containerRefs.current[status] = el)}
                 className="flex gap-4 overflow-x-auto scrollbar-hide"
-                style={{ maxHeight: '400px', alignItems: 'flex-start' }} // Set a fixed height for the container
+                style={{ maxHeight: '400px', alignItems: 'flex-start' }}
               >
                 {movies
                   .filter((movie) => movie.status === status)
                   .map((movie) => (
-                    <Link key={movie._id} href={`/seating/${movie._id}`}> {/* Link to movie's seating page */}
-                      <div
-                        className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105"
-                        style={{ flex: '0 0 auto', width: '200px', height: 'auto' }} // Smaller width for cards
-                      >
-                        <Image
-                          src={movie.posterUrl}
-                          alt={movie.name}
-                          width={150} // Smaller width
-                          height={225} // Smaller height
-                          className="w-full h-auto"
-                        />
-                        <div className="p-2"> {/* Adjust padding for better alignment */}
-                          <h3 className="text-lg font-semibold text-white">{movie.name}</h3>
-                          <p className="text-sageGreen text-sm mt-1">{movie.status}</p>
-                        </div>
+                    <div
+                      key={movie._id}
+                      onClick={() => handleMovieClick(movie._id)} // Handle movie click
+                      className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
+                      style={{ flex: '0 0 auto', width: '200px', height: 'auto' }}
+                    >
+                      <Image
+                        src={movie.posterUrl}
+                        alt={movie.title}
+                        width={150}
+                        height={225}
+                        className="w-full h-auto"
+                      />
+                      <div className="p-2">
+                        <h3 className="text-lg font-semibold text-white">{movie.title}</h3>
+                        <p className="text-sageGreen text-sm mt-1">{movie.status}</p>
                       </div>
-                    </Link>
+                    </div>
                   ))}
               </div>
             </div>
           </div>
         ))}
 
-        {/* Book Ticket or Login Button */}
         <div className="mt-8">
           {user ? (
             <Link href="/book-ticket">
@@ -159,6 +160,12 @@ export default function Home() {
           )}
         </div>
       </main>
+
+      {selectedMovieId && ( // Conditionally render MovieCard
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <MovieCard movieId={selectedMovieId} onClose={closeMovieCard} />
+        </div>
+      )}
 
       <Footer />
     </div>

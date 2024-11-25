@@ -5,7 +5,9 @@ require('dotenv').config({ path: '.env' });
 const mongoose = require('mongoose');
 const movieRoutes = require('./routes/movieRoutes'); 
 const userRoutes = require('./routes/userRoutes'); // Import user routes
-const emailRoutes = require('./routes/emailRoutes'); // Import email routes
+const promotionRoutes = require('./routes/promotionRoutes');
+const roomRoutes = require('./routes/roomRoutes');
+const showRoutes = require('./routes/showRoutes');const emailRoutes = require('./routes/emailRoutes'); // Import email routes
 
 const app = express();
 
@@ -27,7 +29,9 @@ mongoose
 // Use routes
 app.use('/api/movies', movieRoutes); // Movie routes
 app.use('/api/users', userRoutes);   // User routes
-app.use('/api/emails', emailRoutes); // Email routes
+app.use('/api/promotions', promotionRoutes);
+app.use('/api/room', roomRoutes);
+app.use('/api/show', showRoutes);app.use('/api/emails', emailRoutes); // Email routes
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

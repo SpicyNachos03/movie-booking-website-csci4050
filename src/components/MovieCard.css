@@ -1,0 +1,80 @@
+.movie-card-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #343434;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 900px; /* Fixed width */
+    height: 800px; /* Fixed height */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .movie-card-content {
+    flex: 1; /* Take up remaining space in modal */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-right: 10px; /* Add some space for scrollbar */
+  }
+  
+  .movie-card-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .movie-card-content p {
+    margin: 10px 0;
+  }
+  
+  .movie-poster {
+    width: 100%;
+    max-width: 300px;
+    margin: 20px 0;
+  }
+  
+  .movie-trailer-picture {
+    width: 100%;
+    max-width: 200px;
+    margin: 20px 0;
+  }
+  
+  button.close-btn {
+    align-self: flex-end; /* Position button at the top-right */
+    background-color: #62A388;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.2rem;
+  }
+  
+  button.close-btn:hover {
+    background-color: #4e8c6e;
+  }
+  
+  .error {
+    color: red;
+    font-size: 1.2rem;
+  }
+  
+  .showtime-btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 15px;
+    background-color: #62A388;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .showtime-btn:hover {
+    background-color: #4e8c6e;
+  }
+  
