@@ -10,7 +10,7 @@ const roomSchema = new mongoose.Schema({
     //     required: true,
     // },
     numSeats: {
-        type: Int32,
+        type: Number,
         required: false,
     },
 });

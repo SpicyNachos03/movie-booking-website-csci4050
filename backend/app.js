@@ -29,8 +29,8 @@ mongoose
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes); // Add user routes
 app.use('/api/promotions', promotionRoutes);
-app.use('/api/room', roomRoutes);
-app.use('/api/show', showRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/shows', showRoutes);
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
