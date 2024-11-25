@@ -1,12 +1,13 @@
 const nodemailer = require('nodemailer');
 const movieDB = require('../models/movieModel.js');
+//const userDB = require('../models/userModel.js');
 const userDB = require('../models/userModel.js');
 
 
 async function sendPromotionNotificationEmail() {
   try {
     // Query the database to find users who have subscribed to promotions
-    const subscribedUsers = await User.find({ promotions: true });
+    const subscribedUsers = await userDB.find({ promotions: true });
 
     if (subscribedUsers.length === 0) {
       console.log('No users found who have subscribed to promotions.');
@@ -37,7 +38,7 @@ async function sendPromotionNotificationVecEmail(userEmailVec) {
   for (const userEmail of userEmailVec) {
     try {
       // Double-check if the user is subscribed to promotions
-      const user = await User.findOne({ email: userEmail });
+      const user = await userDB.findOne({ email: userEmail });
 
       if (!user) {
         console.log(`User with email ${userEmail} not found.`);
