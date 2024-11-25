@@ -38,10 +38,23 @@ const getMovieById = async (req, res) => {
   }
 };
 
-
 // Create a new movie
 const createMovie = async (req, res) => {
-  const { title, category, status, posterUrl, cast, director, producer, synopsis, reviews, trailerPicture, trailerVideo, mpaaRating } = req.body;
+  const { 
+    title, 
+    category, 
+    status, 
+    posterUrl, 
+    cast, 
+    director, 
+    producer, 
+    synopsis, 
+    reviews, 
+    trailerPicture, 
+    trailerVideo, 
+    mpaaRating, 
+    showInformation 
+  } = req.body;
 
   const movie = new Movie({
     title,
@@ -56,30 +69,20 @@ const createMovie = async (req, res) => {
     trailerPicture,
     trailerVideo,
     mpaaRating,
+    showInformation  // Optional field, will be saved if provided
   });
-  try {
-    const movie = new Movie({
-      name,
-      posterUrl,
-      status,
-      showingTimes,
-      seating, // Include seating and ticketPrices in the saved object
-      ticketPrices,
-    });
 
+  try {
     const savedMovie = await movie.save();
     console.log('Saved movie:', savedMovie);
-    res.status(201).json({
-      title: savedMovie.title,
-      status: savedMovie.status,
-      posterUrl: savedMovie.posterUrl,
-      otherFields: savedMovie._doc, // Optional: log other fields to check
-    });
+    res.status(201).json(savedMovie); // Return the saved movie data as JSON
   } catch (error) {
     console.error('Error creating movie:', error.message);
     res.status(400).json({ message: 'Error creating movie', error: error.message });
   }
 };
+
+
 
 // Update movie details
 const updateMovie = async (req, res) => {
