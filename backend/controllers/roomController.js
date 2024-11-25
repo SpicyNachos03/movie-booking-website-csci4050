@@ -19,4 +19,16 @@ const createRoom = async (req, res) => {
     };
 };
 
-module.exports = { createRoom };
+const getRooms = async (req, res) => {
+    try {
+        console.log('Attempting to fetch rooms...');
+        const rooms = await Room.find();
+        res.json(rooms);
+        console.log('Rooms fetched successfully:', rooms);
+      } catch (error) {
+        console.error('Error fetching promotions:', error);
+        res.status(500).json({ message: 'Error fetching rooms', error: error.message });
+      };
+};
+
+module.exports = { createRoom, getRooms };
