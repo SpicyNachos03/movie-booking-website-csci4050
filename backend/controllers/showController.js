@@ -38,4 +38,16 @@ const getShowById = async (req, res) => {
     };
 };
 
-module.exports = { createShow, getShowById };
+const getShows = async (req, res) => {
+    try {
+        console.log('Attempting to fetch shows...');
+        const shows = await Show.find();
+        res.json(shows);
+        console.log('Shows fetched successfully:', shows);
+      } catch (error) {
+        console.error('Error fetching shows:', error);
+        res.status(500).json({ message: 'Error fetching shows', error: error.message });
+      }
+};
+
+module.exports = { createShow, getShowById, getShows };
