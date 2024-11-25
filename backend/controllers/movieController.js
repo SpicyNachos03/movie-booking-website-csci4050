@@ -59,7 +59,6 @@ const createMovie = async (req, res) => {
   });
   try {
 
-
     const savedMovie = await movie.save();
     console.log('Saved movie:', savedMovie);
     res.status(201).json(savedMovie);
