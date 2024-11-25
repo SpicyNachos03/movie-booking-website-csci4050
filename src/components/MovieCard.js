@@ -7,8 +7,12 @@ const MovieCard = ({ movieId, onClose }) => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter(); // Use Next.js router for navigation
+  const [scheduledShows, setScheduledShows] = useState([]); // Existing shows for duplicate checks
+
 
   useEffect(() => {
+    fetchScheduledShows();
+
     if (!movieId) {
       console.error('No movieId provided.');
       return;
@@ -30,6 +34,20 @@ const MovieCard = ({ movieId, onClose }) => {
       });
   }, [movieId]);
 
+  const fetchScheduledShows = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/shows"); // Adjust URL as needed
+      setScheduledShows(response.data); // Assuming the API returns a list of scheduled shows
+    } catch (error) {
+      console.error("Error fetching scheduled shows:", error.message);
+    }
+  };
+
+  // Filter scheduled shows for the current movie
+  const getMovieShows = () => {
+    return scheduledShows.filter((show) => show.movieName === movie.title);
+  }
+
   const handleShowtimeClick = (showtime) => {
     router.push(`/seating?movieId=${movieId}&showtime=${encodeURIComponent(showtime)}`);
   };
@@ -48,6 +66,8 @@ const MovieCard = ({ movieId, onClose }) => {
       </div>
     );
   }
+
+  const movieShows = getMovieShows();
 
   return (
     <div className="movie-card-modal">
@@ -80,6 +100,27 @@ const MovieCard = ({ movieId, onClose }) => {
               {showtime}
             </button>
           ))}
+        </div>
+
+        <div>
+          <h3>Scheduled Shows for {movie.title}</h3>
+          {movieShows.length > 0 ? (
+            movieShows.map((show, index) => (
+              <button
+                key={index}
+                onClick={() =>
+                  router.push(
+                    `/seating?movieId=${movieId}&showtime=${encodeURIComponent(show.dateTime)}&room=${encodeURIComponent(show.roomName)}`
+                  )
+                }
+                className="scheduled-show-btn"
+              >
+                {`${show.dateTime} | Room: ${show.roomName}`}
+              </button>
+            ))
+          ) : (
+            <p>No shows scheduled for this movie.</p>
+          )}
         </div>
       </div>
     </div>
