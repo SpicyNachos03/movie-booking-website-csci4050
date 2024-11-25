@@ -7,7 +7,9 @@ const movieRoutes = require('./routes/movieRoutes');
 const userRoutes = require('./routes/userRoutes'); // Import user routes
 const promotionRoutes = require('./routes/promotionRoutes');
 const roomRoutes = require('./routes/roomRoutes');
-const showRoutes = require('./routes/showRoutes');const seatingRoutes = require('./routes/seatingRoutes'); // Import seating routes
+const showRoutes = require('./routes/showRoutes');
+const seatingRoutes = require('./routes/seatingRoutes'); // Import seating routes
+const emailRoutes = require('./routes/emailRoutes'); // Import email routes
 
 const app = express();
 
@@ -26,12 +28,14 @@ mongoose
   .then(() => console.log('DB Connected'))
   .catch((err) => console.log('DB Not Connected', err));
 
-// Use movie routes
-app.use('/api/movies', movieRoutes);
-app.use('/api/users', userRoutes); // Add user routes
+// Use routes
+app.use('/api/movies', movieRoutes); // Movie routes
+app.use('/api/users', userRoutes);   // User routes
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/rooms', roomRoutes);
-app.use('/api/shows', showRoutes);app.use('/api/seating', seatingRoutes); // Add seating routes
+app.use('/api/shows', showRoutes);
+app.use('/api/seating', seatingRoutes); // Add seating routes
+app.use('/api/emails', emailRoutes); // Email routes
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
