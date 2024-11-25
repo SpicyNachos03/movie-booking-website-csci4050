@@ -6,13 +6,10 @@ import { useRouter } from 'next/navigation';
 const MovieCard = ({ movieId, onClose }) => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter(); // Use Next.js router for navigation
-  const [scheduledShows, setScheduledShows] = useState([]); // Existing shows for duplicate checks
-
+  const [playTrailer, setPlayTrailer] = useState(false); // State to toggle trailer playback
+  const router = useRouter();
 
   useEffect(() => {
-    fetchScheduledShows();
-
     if (!movieId) {
       console.error('No movieId provided.');
       return;
@@ -34,22 +31,8 @@ const MovieCard = ({ movieId, onClose }) => {
       });
   }, [movieId]);
 
-  const fetchScheduledShows = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/api/shows"); // Adjust URL as needed
-      setScheduledShows(response.data); // Assuming the API returns a list of scheduled shows
-    } catch (error) {
-      console.error("Error fetching scheduled shows:", error.message);
-    }
-  };
-
-  // Filter scheduled shows for the current movie
-  const getMovieShows = () => {
-    return scheduledShows.filter((show) => show.movieName === movie.title);
-  }
-
-  const handleShowtimeClick = (showtime) => {
-    router.push(`/seating?movieId=${movieId}&showtime=${encodeURIComponent(showtime)}`);
+  const handlePlayTrailer = () => {
+    setPlayTrailer(true); // Toggle trailer playback
   };
 
   if (loading) {
@@ -67,8 +50,6 @@ const MovieCard = ({ movieId, onClose }) => {
     );
   }
 
-  const movieShows = getMovieShows();
-
   return (
     <div className="movie-card-modal">
       <button className="close-btn" onClick={onClose}>
@@ -84,43 +65,46 @@ const MovieCard = ({ movieId, onClose }) => {
         <p><strong>Producer:</strong> {movie.producer}</p>
         <p><strong>Synopsis:</strong> {movie.synopsis}</p>
         <p><strong>Reviews:</strong> {movie.reviews}</p>
-        <img src={movie.trailerPicture} alt="Trailer Picture" className="movie-trailer-picture" />
-        <a href={movie.trailerVideo} target="_blank" rel="noopener noreferrer">
-          Watch Trailer
-        </a>
+
+        <div>
+          <p><strong>Trailer:</strong></p>
+          {playTrailer ? (
+            <div className="trailer-player">
+              <iframe
+                width="560"
+                height="315"
+                src={movie.trailerVideo.replace("watch?v=", "embed/")}
+                title="YouTube trailer"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          ) : (
+            <img
+              src={movie.trailerPicture}
+              alt="Trailer Picture"
+              className="movie-trailer-picture"
+              onClick={handlePlayTrailer}
+              style={{ cursor: 'pointer' }}
+            />
+          )}
+        </div>
+
         <p><strong>MPAA Rating:</strong> {movie.mpaaRating}</p>
         <div>
           <p><strong>Show Information:</strong></p>
           {movie.showInformation.map((showtime, index) => (
             <button
               key={index}
-              onClick={() => handleShowtimeClick(showtime)}
+              onClick={() =>
+                router.push(`/seating?movieId=${movieId}&showtime=${encodeURIComponent(showtime)}`)
+              }
               className="showtime-btn"
             >
               {showtime}
             </button>
           ))}
-        </div>
-
-        <div>
-          <h3>Scheduled Shows for {movie.title}</h3>
-          {movieShows.length > 0 ? (
-            movieShows.map((show, index) => (
-              <button
-                key={index}
-                onClick={() =>
-                  router.push(
-                    `/seating?movieId=${movieId}&showtime=${encodeURIComponent(show.dateTime)}&room=${encodeURIComponent(show.roomName)}`
-                  )
-                }
-                className="scheduled-show-btn"
-              >
-                {`${show.dateTime} | Room: ${show.roomName}`}
-              </button>
-            ))
-          ) : (
-            <p>No shows scheduled for this movie.</p>
-          )}
         </div>
       </div>
     </div>
@@ -128,3 +112,4 @@ const MovieCard = ({ movieId, onClose }) => {
 };
 
 export default MovieCard;
+
