@@ -55,7 +55,6 @@ const ScheduleMovie = () => {
   const isDuplicateShow = () => {
     return scheduledShows.some(
       (show) =>
-        show.movieName === selectedMovie &&
         show.dateTime === dateTime &&
         show.roomName === selectedRoom
     );
@@ -71,7 +70,7 @@ const ScheduleMovie = () => {
     console.log(selectedRoom);
 
     if (isDuplicateShow()) {
-      alert("Duplicate show detected! Please adjust the schedule.");
+      alert("Duplicate show during the same time and room detected! Please adjust the schedule.");
       return;
     }
 
