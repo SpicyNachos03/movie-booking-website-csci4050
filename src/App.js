@@ -9,6 +9,7 @@ import MovieCard from './components/MovieCard/MovieCard'; // Correct path to Mov
 import SeatingPage from './components/SeatingPage/SeatingPage'; // Add SeatingPage import
 import AlertComponent from './components/AlertComponent/AlertComponent';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import SearchBar from './components/SearchBar';
 
 function App() {
   const [title, updateTitle] = useState(null);

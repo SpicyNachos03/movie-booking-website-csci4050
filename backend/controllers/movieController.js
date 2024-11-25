@@ -16,13 +16,34 @@ const getMovies = async (req, res) => {
 
 // Get movie by ID
 const getMovieById = async (req, res) => {
-  const { id } = req.params;
+  // const { id } = req.params;
 
-  try {
-    // Validate ID format
+  // try {
+  //   // Validate ID format
+  //   if (!mongoose.Types.ObjectId.isValid(id)) {
+  //     console.error(`Invalid movie ID format: ${id}`);
+  //     return res.status(400).json({ message: 'Invalid movie ID format' });
+  //   }
+
+  //   const movie = await Movie.findById(id);
+  //   if (!movie) {
+  //     console.error(`Movie with ID ${id} not found in database.`);
+  //     return res.status(404).json({ message: 'Movie not found' });
+  //   }
+
+  //   res.json(movie);
+  // } catch (error) {
+  //   console.error(`Error fetching movie with ID ${id}:`, error.message);
+  //   res.status(500).json({ message: 'Error fetching movie', error: error.message });
+  // }
+  const { id } = req.params;
+ 
+    // Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.error(`Invalid movie ID format: ${id}`);
-      return res.status(400).json({ message: 'Invalid movie ID format' });
+        return res.status(400).json({
+            success: false,
+            message: 'Invalid movie ID format',
+        });
     }
 
     const movie = await Movie.findById(id);
@@ -72,7 +93,6 @@ const createMovie = async (req, res) => {
 // Update movie details
 const updateMovie = async (req, res) => {
   const { id } = req.params;
-
   // Check if the ID is a valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: 'Invalid movie ID format' });
@@ -144,6 +164,44 @@ const getSeatingStatus = async (req, res) => {
   }
 };
 
+
+const searchMovies = async (req, res) => {
+  const { title } = req.query;
+
+  if (!title) {
+      return res.status(400).json({
+          success: false,
+          message: 'Please provide a title to search.',
+      });
+  }
+
+  try {
+      const movies = await Movie.find({
+          title: { $regex: title, $options: 'i' },
+      });
+
+      if (movies.length === 0) {
+          return res.status(404).json({
+              success: false,
+              message: 'No movies found matching the title.',
+          });
+      }
+
+      res.status(200).json({
+          success: true,
+          data: movies,
+      });
+  } catch (error) {
+      res.status(500).json({
+          success: false,
+          message: 'An error occurred while searching for movies.',
+          error: error.message,
+      });
+  }
+};
+
+
+
 module.exports = {
   getMovies,
   getMovieById,
@@ -151,4 +209,5 @@ module.exports = {
   updateMovie,
   updateSeatingStatus,
   getSeatingStatus,
+  searchMovies
 };
