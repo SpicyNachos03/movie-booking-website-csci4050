@@ -1,7 +1,5 @@
 // routes/seatingRoutes.js
 const express = require('express');
-const Seat = require('../models/Seat');
-const Show = require('../models/Show');
 
 const router = express.Router();
 
