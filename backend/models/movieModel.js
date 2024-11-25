@@ -11,7 +11,7 @@ const movieSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Coming Soon', 'Now Showing', 'Special Event'],
+    enum: ['Coming Soon', 'Now Showing', 'Special Event', 'Leaving Soon'],
     required: true,
   },
   posterUrl: {

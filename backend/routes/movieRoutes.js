@@ -1,7 +1,10 @@
 const express = require('express');
-const { getMovies, getMovieById, createMovie, updateSeatingStatus, updateMovie, getSeatingStatus } = require('../controllers/movieController');
+const { getMovies, getMovieById, createMovie, updateSeatingStatus, updateMovie, getSeatingStatus, searchMovies } = require('../controllers/movieController');
 const router = express.Router();
 const bodyParser = require("body-parser");
+
+// Route to search
+router.get('/search', searchMovies);
 
 // Route to get all movies
 router.get('/', getMovies);
@@ -20,4 +23,6 @@ router.put('/:id', updateMovie); // Ensure this route exists
 
 // Route to update the seating status for a movie
 router.patch('/:id/seating', updateSeatingStatus);
+
+
 module.exports = router;
