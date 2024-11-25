@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation';
 const MovieCard = ({ movieId, onClose }) => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [playTrailer, setPlayTrailer] = useState(false); // State to toggle trailer playback
   const router = useRouter(); // Use Next.js router for navigation
   const [scheduledShows, setScheduledShows] = useState([]); // Existing shows for duplicate checks
-
 
   useEffect(() => {
     fetchScheduledShows();
@@ -36,20 +36,24 @@ const MovieCard = ({ movieId, onClose }) => {
 
   const fetchScheduledShows = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/shows"); // Adjust URL as needed
+      const response = await axios.get('http://localhost:8000/api/shows'); // Adjust URL as needed
       setScheduledShows(response.data); // Assuming the API returns a list of scheduled shows
     } catch (error) {
-      console.error("Error fetching scheduled shows:", error.message);
+      console.error('Error fetching scheduled shows:', error.message);
     }
   };
 
   // Filter scheduled shows for the current movie
   const getMovieShows = () => {
     return scheduledShows.filter((show) => show.movieName === movie.title);
-  }
+  };
 
   const handleShowtimeClick = (showtime) => {
     router.push(`/seating?movieId=${movieId}&showtime=${encodeURIComponent(showtime)}`);
+  };
+
+  const handlePlayTrailer = () => {
+    setPlayTrailer(true);
   };
 
   if (loading) {
@@ -76,21 +80,61 @@ const MovieCard = ({ movieId, onClose }) => {
       </button>
       <div className="movie-card-content">
         <h2>{movie.title}</h2>
-        <p><strong>Category:</strong> {movie.category}</p>
-        <p><strong>Status:</strong> {movie.status}</p>
+        <p>
+          <strong>Category:</strong> {movie.category}
+        </p>
+        <p>
+          <strong>Status:</strong> {movie.status}
+        </p>
         <img src={movie.posterUrl} alt={movie.title} className="movie-poster" />
-        <p><strong>Cast:</strong> {movie.cast}</p>
-        <p><strong>Director:</strong> {movie.director}</p>
-        <p><strong>Producer:</strong> {movie.producer}</p>
-        <p><strong>Synopsis:</strong> {movie.synopsis}</p>
-        <p><strong>Reviews:</strong> {movie.reviews}</p>
-        <img src={movie.trailerPicture} alt="Trailer Picture" className="movie-trailer-picture" />
-        <a href={movie.trailerVideo} target="_blank" rel="noopener noreferrer">
-          Watch Trailer
-        </a>
-        <p><strong>MPAA Rating:</strong> {movie.mpaaRating}</p>
+        <p>
+          <strong>Cast:</strong> {movie.cast}
+        </p>
+        <p>
+          <strong>Director:</strong> {movie.director}
+        </p>
+        <p>
+          <strong>Producer:</strong> {movie.producer}
+        </p>
+        <p>
+          <strong>Synopsis:</strong> {movie.synopsis}
+        </p>
+        <p>
+          <strong>Reviews:</strong> {movie.reviews}
+        </p>
         <div>
-          <p><strong>Show Information:</strong></p>
+          <p>
+            <strong>Trailer:</strong>
+          </p>
+          {playTrailer ? (
+            <div className="trailer-player">
+              <iframe
+                width="560"
+                height="315"
+                src={movie.trailerVideo.replace('watch?v=', 'embed/')}
+                title="YouTube trailer"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          ) : (
+            <img
+              src={movie.trailerPicture}
+              alt="Trailer Picture"
+              className="movie-trailer-picture"
+              onClick={handlePlayTrailer}
+              style={{ cursor: 'pointer' }}
+            />
+          )}
+        </div>
+        <p>
+          <strong>MPAA Rating:</strong> {movie.mpaaRating}
+        </p>
+        <div>
+          <p>
+            <strong>Show Information:</strong>
+          </p>
           {movie.showInformation.map((showtime, index) => (
             <button
               key={index}
@@ -110,7 +154,9 @@ const MovieCard = ({ movieId, onClose }) => {
                 key={index}
                 onClick={() =>
                   router.push(
-                    `/seating?movieId=${movieId}&showtime=${encodeURIComponent(show.dateTime)}&room=${encodeURIComponent(show.roomName)}`
+                    `/seating?movieId=${movieId}&showtime=${encodeURIComponent(
+                      show.dateTime
+                    )}&room=${encodeURIComponent(show.roomName)}`
                   )
                 }
                 className="scheduled-show-btn"
