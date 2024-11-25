@@ -150,7 +150,7 @@ export default function Home() {
               <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
                 Book Ticket
               </button>
-            </Link>
+            </Link> 
           ) : (
             <Link href="/login">
               <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">

@@ -7,7 +7,8 @@ const movieRoutes = require('./routes/movieRoutes');
 const userRoutes = require('./routes/userRoutes'); // Import user routes
 const promotionRoutes = require('./routes/promotionRoutes');
 const roomRoutes = require('./routes/roomRoutes');
-const showRoutes = require('./routes/showRoutes');
+const showRoutes = require('./routes/showRoutes');const seatingRoutes = require('./routes/seatingRoutes'); // Import seating routes
+
 const app = express();
 
 // CORS configuration with credentials
@@ -30,7 +31,8 @@ app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes); // Add user routes
 app.use('/api/promotions', promotionRoutes);
 app.use('/api/rooms', roomRoutes);
-app.use('/api/shows', showRoutes);
+app.use('/api/shows', showRoutes);app.use('/api/seating', seatingRoutes); // Add seating routes
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

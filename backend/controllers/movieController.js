@@ -15,28 +15,28 @@ const getMovies = async (req, res) => {
 };
 
 // Get movie by ID
-  const getMovieById = async (req, res) => {
-    const { id } = req.params;
-  
-    try {
-      // Validate ID format
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        console.error(`Invalid movie ID format: ${id}`);
-        return res.status(400).json({ message: 'Invalid movie ID format' });
-      }
-  
-      const movie = await Movie.findById(id);
-      if (!movie) {
-        console.error(`Movie with ID ${id} not found in database.`);
-        return res.status(404).json({ message: 'Movie not found' });
-      }
-  
-      res.json(movie);
-    } catch (error) {
-      console.error(`Error fetching movie with ID ${id}:`, error.message);
-      res.status(500).json({ message: 'Error fetching movie', error: error.message });
+const getMovieById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Validate ID format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.error(`Invalid movie ID format: ${id}`);
+      return res.status(400).json({ message: 'Invalid movie ID format' });
     }
-  };
+
+    const movie = await Movie.findById(id);
+    if (!movie) {
+      console.error(`Movie with ID ${id} not found in database.`);
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+
+    res.json(movie);
+  } catch (error) {
+    console.error(`Error fetching movie with ID ${id}:`, error.message);
+    res.status(500).json({ message: 'Error fetching movie', error: error.message });
+  }
+};
 
 // Create a new movie
 const createMovie = async (req, res) => {
@@ -60,6 +60,7 @@ const createMovie = async (req, res) => {
 
     const savedMovie = await movie.save();
     console.log('Saved movie:', savedMovie);
+    res.status(201).json(savedMovie);
     res.status(201).json(savedMovie);
   } catch (error) {
     console.error('Error creating movie:', error.message);
@@ -141,49 +142,6 @@ const getSeatingStatus = async (req, res) => {
   }
 };
 
-
-
-const searchMovies = async (req, res) => {
-  const { title, category } = req.query;
-  console.log(req);
-  try {
-    // Build a dynamic query object
-    const query = {};
-    
-    if (title) {
-      query.title = { $regex: title, $options: 'i' }; // Case-insensitive regex for title
-    }
-    
-    if (category) {
-      query.category = { $regex: category, $options: 'i' }; // Case-insensitive regex for category
-    }
-
-
-    // Perform the search with the constructed query
-    const movies = await Movie.find(query);
-
-    if (movies.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'No movies found matching the search criteria.',
-      });
-    }
-
-    // Return the results
-    res.status(200).json({
-      success: true,
-      data: movies,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'An error occurred while searching for movies.',
-      error: error.message,
-    });
-  }
-};
-
-
 module.exports = {
   getMovies,
   getMovieById,
@@ -192,4 +150,7 @@ module.exports = {
   updateSeatingStatus,
   getSeatingStatus,
   searchMovies
+
+
 };
+

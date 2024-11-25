@@ -1,0 +1,137 @@
+.order-summary {
+    background-color: #f9fafb; /* Slightly lighter gray */
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 30px auto;
+    font-family: 'Arial', sans-serif;
+}
+
+.order-summary h1 {
+    color: #374151; /* Dark gray heading */
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.selected-seats h3 {
+    color: #1f2937; /* Even darker gray */
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.seat-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    border: 1px solid #e5e7eb; /* Light border */
+    border-radius: 8px;
+    background-color: #ffffff;
+    margin-bottom: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.seat-info:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.seat-info span {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827; /* Almost black */
+}
+
+.seat-info button {
+    background-color: #ef4444; /* Tailwind danger red */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.seat-info button:hover {
+    background-color: #dc2626; /* Darker red */
+}
+
+.order-summary p {
+    font-size: 18px;
+    color: #374151;
+    text-align: center;
+    margin: 20px 0;
+}
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    margin-top: 30px;
+}
+
+.action-buttons button {
+    padding: 15px 30px; /* Bigger button size */
+    border: none;
+    border-radius: 10px;
+    font-size: 18px; /* Prominent text */
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.action-buttons button:first-child {
+    background-color: #f87171; /* Bright red */
+    color: #ffffff;
+}
+
+.action-buttons button:first-child:hover {
+    background-color: #dc2626; /* Darker red */
+    transform: scale(1.05);
+}
+
+.action-buttons button:last-child {
+    background-color: #34d399; /* Bright green */
+    color: #ffffff;
+}
+
+.action-buttons button:last-child:hover {
+    background-color: #059669; /* Darker green */
+    transform: scale(1.05);
+}
+.order-summary .action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.action-buttons button {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.return-button {
+  background-color: #dc3545; /* Bootstrap danger red */
+  color: white;
+}
+
+.return-button:hover {
+  background-color: #bd2130;
+  transform: scale(1.05);
+}
+
+.continue-button {
+  background-color: #62a388; /* Sage green */
+  color: white;
+}
+
+.continue-button:hover {
+  background-color: #4a8b6d;
+  transform: scale(1.05);
+}
