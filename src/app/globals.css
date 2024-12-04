@@ -32,6 +32,11 @@ body {
   line-height: 1.6; /* Set line height */
 }
 
+.container {
+  width: 100vw; /* Stretch to full screen width */
+  max-width: 100%; /* Ensure it doesn't shrink below screen width */
+}
+
 /* Utility Classes */
 @layer utilities {
   .text-balance {
@@ -101,10 +106,10 @@ html, body {
 
 /* Specific styles for the red button */
 .red-button {
-  background-color: red; /* Red background color */
-  padding: 12px 20px; /* Adjust padding for a larger button */
+  background-color: red;
+  padding: 12px 20px;
 }
 
 .red-button:hover {
-  background-color: darkred; /* Darker shade on hover */
+  background-color: darkred;
 }

@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
 
-body {
+.seating-page body {
     font-family: "Montserrat", sans-serif;
     min-height: 100vh;
     display: flex;
@@ -25,13 +25,17 @@ body {
     flex-direction: column;
 }
 
-.container {
+.seating-page .container {
     perspective: 1000px;
     margin: 40px 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+header .container {
+    margin: 0;
 }
 
 .screen {
@@ -133,7 +137,7 @@ body {
     background-color: #006fa2;
 }
 
-button {
+.seating-page button {
     background-color: #62a388;
     color: white;
     border: none;
@@ -143,7 +147,7 @@ button {
     border-radius: 5px;
 }
 
-button:hover {
+.seating-page button:hover {
     background-color: #4a8b6d;
 }
 
@@ -201,7 +205,7 @@ p {
     margin-top: 10px;
   }
   
-  button {
+.seating-page button {
     background-color: #62a388;
     color: white;
     border: none;
@@ -212,12 +216,12 @@ p {
     margin-top: 20px;
   }
   
-  button:disabled {
+.seating-page button:disabled {
     background-color: #a5c4b3;
     cursor: not-allowed;
   }
   
-  button:hover:not(:disabled) {
+.seating-page  button:hover:not(:disabled) {
     background-color: #4a8b6d;
   }
   .ticket-type {

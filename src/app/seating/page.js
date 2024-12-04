@@ -1,9 +1,8 @@
 'use client';
 
-'use client'
-
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Header from '../../components/Header';
 import './seating.css';
 
 const SeatingPage = () => {
@@ -76,56 +75,59 @@ const SeatingPage = () => {
   ); // 65 is the ASCII code for 'A'
 
   return (
-    <div className="seating-page">
-      <h1>Select Seats for {movieTitle}</h1> {/* Display movie title */}
-      <p>Showtime: {showtime || 'Not Selected'}</p>
+    <div className="container">
+      <Header></Header>
+      <div className="seating-page">
+        <h1>Select Seats for {movieTitle}</h1> {/* Display movie title */}
+        <p>Showtime: {showtime || 'Not Selected'}</p>
 
-      {/* Seat Selection */}
-      <div className="seating-chart">
-        {rowLetters.map((rowLetter) => (
-          <div className="row" key={rowLetter}>
-            {Array.from({ length: 10 }).map((_, seatIndex) => {
-              const seatId = `${rowLetter}${seatIndex + 1}`; // Format: A1, B2
-              return (
-                <div
-                  key={seatId}
-                  className={`seat ${
-                    selectedSeats.includes(seatId) ? 'selected' : ''
-                  }`}
-                  onClick={() => handleSeatSelect(seatId)}
-                >
-                  {seatId}
-                </div>
-              );
-            })}
+        {/* Seat Selection */}
+        <div className="seating-chart">
+          {rowLetters.map((rowLetter) => (
+            <div className="row" key={rowLetter}>
+              {Array.from({ length: 10 }).map((_, seatIndex) => {
+                const seatId = `${rowLetter}${seatIndex + 1}`; // Format: A1, B2
+                return (
+                  <div
+                    key={seatId}
+                    className={`seat ${
+                      selectedSeats.includes(seatId) ? 'selected' : ''
+                    }`}
+                    onClick={() => handleSeatSelect(seatId)}
+                  >
+                    {seatId}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        {/* Ticket Types */}
+        {selectedSeats.map((seat, index) => (
+          <div key={seat} className="ticket-type">
+            <label htmlFor={`ticket-type-${seat}`}>Ticket Type for {seat}:</label>
+            <select
+              id={`ticket-type-${seat}`}
+              value={ticketTypes[index] || ''}
+              onChange={(e) => {
+                const updatedTypes = [...ticketTypes];
+                updatedTypes[index] = e.target.value;
+                setTicketTypes(updatedTypes);
+              }}
+            >
+              <option value="">Select Ticket Type</option>
+              <option value="Adult">Adult</option>
+              <option value="Child">Child</option>
+              <option value="Senior">Senior</option>
+            </select>
           </div>
         ))}
+
+        <button onClick={handleNext} disabled={!selectedSeats.length}>
+          Next
+        </button>
       </div>
-
-      {/* Ticket Types */}
-      {selectedSeats.map((seat, index) => (
-        <div key={seat} className="ticket-type">
-          <label htmlFor={`ticket-type-${seat}`}>Ticket Type for {seat}:</label>
-          <select
-            id={`ticket-type-${seat}`}
-            value={ticketTypes[index] || ''}
-            onChange={(e) => {
-              const updatedTypes = [...ticketTypes];
-              updatedTypes[index] = e.target.value;
-              setTicketTypes(updatedTypes);
-            }}
-          >
-            <option value="">Select Ticket Type</option>
-            <option value="Adult">Adult</option>
-            <option value="Child">Child</option>
-            <option value="Senior">Senior</option>
-          </select>
-        </div>
-      ))}
-
-      <button onClick={handleNext} disabled={!selectedSeats.length}>
-        Next
-      </button>
     </div>
   );
 };

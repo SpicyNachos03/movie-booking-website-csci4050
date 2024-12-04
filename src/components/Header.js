@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie'; // Import js-cookie
-import SearchBar from './SearchBar';
 
 export default function Header() {
   const router = useRouter();
@@ -34,7 +33,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-tealBlue p-4 w-full">
+    <header className="bg-tealBlue p-4 w-auto">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
           <Image
@@ -51,17 +50,23 @@ export default function Header() {
               <>
                 {/* Bookings */}
                 <li>
-                  <Link href="/seating" className="text-white hover:text-lightCyan">
+                  <button
+                    onClick={() => router.push('/seating')}
+                    className="text-white hover:text-lightCyan flex items-center"
+                  >
                     Bookings
-                  </Link>
+                  </button>
                 </li>
 
                 {/* Admin link (only for admin users) */}
                 {user.data.type === '2' && (
                   <li>
-                    <Link href="/admin" className="text-white hover:text-lightCyan">
+                    <button
+                      onClick={() => router.push('/admin')}
+                      className="text-white hover:text-lightCyan flex items-center"
+                    >
                       Admin
-                    </Link>
+                    </button>
                   </li>
                 )}
 
@@ -69,7 +74,7 @@ export default function Header() {
                 <li>
                   <button
                     onClick={() => router.push('/profile')}
-                    className="text-white hover:text-lightCyan flex items-center"
+                    /* className="text-white hover:text-lightCyan flex items-center" */
                   >
                     <Image
                       src="/user-icon.png"
@@ -78,7 +83,7 @@ export default function Header() {
                       height={32}
                       className="rounded-full mr-2"
                     />
-                    <span>Profile</span>
+                    {/* <span>Profile</span> */}
                   </button>
                 </li>
 

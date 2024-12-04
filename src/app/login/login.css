@@ -2,6 +2,7 @@ body, html {
   height: 100%;
   margin: 0;
 }
+/*
 .container34{
   display: flex;
   flex-direction: column;     
@@ -9,6 +10,7 @@ body, html {
   justify-self: center;
   align-items: center;
 }
+  */
 .loginBox {
   display: flex;
   flex-direction: column;
@@ -29,8 +31,9 @@ h1, h2 {
   font-weight: bolder;
 }
 
+/*
 button {
-  -webkit-transition-duration: 0.1s; /* Safari */
+  -webkit-transition-duration: 0.1s;
   transition-duration: 0.1s;
   background-color: #F4595B;
   border-radius: 8px;
@@ -76,7 +79,7 @@ button:active {
   font-family: 'Oxygen', sans-serif;
   letter-spacing: 2px;
 }
-  
+*/
 #authorized{
   flex-grow: 1;
   display: flex;
@@ -94,7 +97,7 @@ input {
   
 }
   
-button, input[type="submit"] {
+/*button, */input[type="submit"] {
   margin: 20px;
   padding: 10px auto;
   border-radius: 10px;
