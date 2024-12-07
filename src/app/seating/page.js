@@ -76,6 +76,13 @@ const SeatingPage = () => {
     String.fromCharCode(65 + i)
   ); // 65 is the ASCII code for 'A'
 
+  // Ticket prices
+  const ticketPrices = {
+    Adult: 10,
+    Child: 7,
+    Senior: 8,
+  };
+
   return (
     <div className="seating-page">
       <h1>Select Seats for {movieTitle}</h1> {/* Display movie title */}
@@ -107,20 +114,27 @@ const SeatingPage = () => {
       {selectedSeats.map((seat, index) => (
         <div key={seat} className="ticket-type">
           <label htmlFor={`ticket-type-${seat}`}>Ticket Type for {seat}:</label>
-          <select
-            id={`ticket-type-${seat}`}
-            value={ticketTypes[index] || ''}
-            onChange={(e) => {
-              const updatedTypes = [...ticketTypes];
-              updatedTypes[index] = e.target.value;
-              setTicketTypes(updatedTypes);
-            }}
-          >
-            <option value="">Select Ticket Type</option>
-            <option value="Adult">Adult</option>
-            <option value="Child">Child</option>
-            <option value="Senior">Senior</option>
-          </select>
+          <div className="ticket-dropdown">
+            <select
+              id={`ticket-type-${seat}`}
+              value={ticketTypes[index] || ''}
+              onChange={(e) => {
+                const updatedTypes = [...ticketTypes];
+                updatedTypes[index] = e.target.value;
+                setTicketTypes(updatedTypes);
+              }}
+            >
+              <option value="">Select Ticket Type</option>
+              <option value="Adult">Adult</option>
+              <option value="Child">Child</option>
+              <option value="Senior">Senior</option>
+            </select>
+            {ticketTypes[index] && (
+              <span className="ticket-price">
+                ${ticketPrices[ticketTypes[index]]}
+              </span>
+            )}
+          </div>
         </div>
       ))}
 

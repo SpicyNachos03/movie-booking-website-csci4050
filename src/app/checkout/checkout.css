@@ -70,7 +70,7 @@ button {
     width: 100%;
     padding: 15px;
     background-color: #62A388; /* sageGreen */
-    color: white;
+    color: #111827; /* dark text instead of white */
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -112,4 +112,35 @@ button:hover {
     input[type="text"], select {
         font-size: 14px; /* Adjust font size */
     }
+}
+/* Seat Details */
+.selected-seats span {
+    font-size: 16px; /* Size the font to match the design */
+    font-weight: 600; /* Make the seat text bold for emphasis */
+    color: #111827; /* Dark color for readability */
+    padding: 10px 0;
+    display: block; /* Ensure the seat text is on its own line */
+}
+
+/* Total Price */
+.selected-seats .total-price {
+    font-size: 20px; /* Slightly larger for emphasis */
+    font-weight: bold; /* Bold to highlight total price */
+    color: #374151; /* Dark gray to match the theme */
+    margin-top: 15px; /* Add margin for spacing */
+}
+
+/* Styling for Seat and Total Price container */
+.movie-details {
+    padding: 20px;
+    background-color: #ffffff; /* White background to separate from the dark theme */
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Additional tweaks for readability */
+.movie-details p {
+    font-size: 18px;
+    color: #374151;
+    margin: 10px 0;
 }
