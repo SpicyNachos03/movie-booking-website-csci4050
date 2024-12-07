@@ -1,22 +1,84 @@
 'use client'
 
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import { useCookies } from 'react-cookie';
 
 function updatePaymentCard() {
-
-    const [paymentCards, setPaymentCards] = useState([]);
+    const router = useRouter();
+    const [cookies, setCookie, removeCookie] = useCookies(['user']);
+    const [email, setEmail] = useState('');
+    const [cards, setCards] = useState([]);
     const [cardNumber, setCardNumber] = useState('');
     const [expiration, setExpiration] = useState('');
     const [cvv, setCvv] = useState('');
-    const [error, setError] = useState('');
 
-    const handleSubmit = () => {
+    // States for checking the errors
+    const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState(false);
 
+    useEffect(() => {
+        const userData = cookies.user.data; // Get user data from cookies
+        setCards(userData.cards);
+        setEmail(userData.email);
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const paymentCardData = {
+            email,
+            cardNumber,
+            expiration,
+            cvv,
+            lastFourDigits: cardNumber.slice(-4),
+        };
+        console.log("Payment Card Data:", paymentCardData); // Log data being sent
+
+        try {  
+            console.log("Do I get here?")
+            const response = await axios.post("http://localhost:8000/api/users/addCard", paymentCardData);
+
+            if (response.status === 201) {
+                setSubmitted(true)
+                setError(false);
+            } else {
+                setError(true);
+            }
+        } catch (error) {
+            console.log("Error Adding Payment Card:", error);
+            setError(true);
+        }
+    };
+    // Showing success message
+    const successMessage = () => {
+        return (
+            <div
+                className="success"
+                style={{
+                    display: submitted ? "" : "none",
+                }}
+            >
+                <h1>Payment Card has been successfully added!</h1>
+            </div>
+        );
+    };
+
+    // Showing error message if error is true
+    const errorMessage = () => {
+        return (
+            <div
+                className="error"
+                style={{
+                    display: error ? "" : "none",
+                }}
+            >
+                <h1>Please enter all the fields</h1>
+            </div>
+        );
     };
 
     return (
@@ -26,8 +88,8 @@ function updatePaymentCard() {
                 {/* Payment Cards List */}
                 <h1 className="text-4xl font-bold mb-6">Payment Cards</h1>
                 <div className="w-full max-w-md">
-                    {paymentCards.length > 0 ? (
-                        paymentCards.map((card, index) => (
+                    {cards.length > 0 ? (
+                        cards.map((card, index) => (
                             <div
                                 key={index}
                                 className="p-4 bg-gray-800 rounded-md mb-4 shadow-md"
@@ -44,7 +106,11 @@ function updatePaymentCard() {
 
                 {/* Add Payment Card */}
                 <h1 className="text-4xl font-bold mb-6">Add Payment Card</h1>
-                {error && <p className="text-red-500 mb-4">{error}</p>}
+                {/* Calling to the methods */}
+                <div className="messages">
+                    {errorMessage()}
+                    {successMessage()}
+                </div>
                 <form onSubmit={handleSubmit} className="w-full max-w-md">
                     {/* Input field for card number */}
                     <div className="mb-4">
@@ -55,6 +121,7 @@ function updatePaymentCard() {
                             type="text"
                             value={cardNumber}
                             onChange={(e) => setCardNumber(e.target.value)}
+                            placeholder="**** **** **** ****"
                             className="w-full p-2 bg-gray-700 rounded-md text-white"
                             required
                         />
@@ -84,6 +151,7 @@ function updatePaymentCard() {
                             type="text"
                             value={cvv}
                             onChange={(e) => setCvv(e.target.value)}
+                            placeholder="***"
                             className="w-full p-2 bg-gray-700 rounded-md text-white"
                             required
                         />
@@ -92,6 +160,7 @@ function updatePaymentCard() {
                     <button
                         type="submit"
                         className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 w-full"
+                        onClick={handleSubmit}
                     >
                         Add Card
                     </button>

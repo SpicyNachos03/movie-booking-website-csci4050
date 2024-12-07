@@ -1,5 +1,23 @@
 const mongoose = require('mongoose');
-const { paymentCardSchema } = require('./paymentCardModel');
+
+const paymentCardSchema = new mongoose.Schema({
+  cardNumber: {
+      type: String,
+      required: true,
+  },
+  expiration: {
+      type: String,
+      required: true,
+  },
+  cvv: {
+      type: String,
+      required: true,
+  },
+  lastFourDigits: {
+      type: String,
+      required: true,
+  }
+})
 
 const userSchema = new mongoose.Schema({
   firstName: { 

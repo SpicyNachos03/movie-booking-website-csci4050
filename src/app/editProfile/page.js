@@ -73,7 +73,7 @@ function EditProfile() {
     };
 
     const goToUpdatePaymentCard = () => {
-      router.push(`/editProfile/updatePaymentCard?email=${encodeURIComponent(user.email)}`);    
+      router.push('/editProfile/updatePaymentCard');    
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -81,7 +81,6 @@ function EditProfile() {
         try {
             // Send PUT request using user ID
             await axios.put(`http://localhost:8000/api/users/${user._id}`, user); // Use user._id
-            // await axios.put(`http://localhost:8000/api/users/updatePassword`, { oldPassword, newPassword }); //does this change the password even if there already is a password
             alert('Profile updated successfully');
             router.push('/profile');
         } catch (err) {
