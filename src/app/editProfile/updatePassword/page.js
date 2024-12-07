@@ -25,7 +25,7 @@ function updatePassword(){
             if (userData) {
                 try {
                     // Fetch user data from backend API
-                    const response = await axios.get(`http://localhost:8000/api/users/${userData.email}`);
+                    const response = await axios.get(`http://localhost:8000/api/users/${userData.data.email}`);
                     setUser(response.data); // Set user data in state
                 } catch (err) {
                     console.error(err);
