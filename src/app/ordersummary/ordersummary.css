@@ -1,3 +1,4 @@
+/* Order Summary */
 .order-summary {
     background-color: #f9fafb; /* Slightly lighter gray */
     padding: 25px;
@@ -64,74 +65,59 @@
     text-align: center;
     margin: 20px 0;
 }
+
+/* Action Buttons (Fixes for the buttons) */
 .action-buttons {
     display: flex;
-    justify-content: center;
-    gap: 20px; /* Space between buttons */
+    justify-content: space-between;
     margin-top: 30px;
 }
 
 .action-buttons button {
-    padding: 15px 30px; /* Bigger button size */
+    padding: 15px 30px; /* Standard button size */
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 18px; /* Prominent text */
-    font-weight: bold;
     cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 48%; /* Ensures both buttons fit next to each other */
 }
 
-.action-buttons button:first-child {
-    background-color: #f87171; /* Bright red */
-    color: #ffffff;
-}
-
-.action-buttons button:first-child:hover {
-    background-color: #dc2626; /* Darker red */
-    transform: scale(1.05);
-}
-
-.action-buttons button:last-child {
-    background-color: #34d399; /* Bright green */
-    color: #ffffff;
-}
-
-.action-buttons button:last-child:hover {
-    background-color: #059669; /* Darker green */
-    transform: scale(1.05);
-}
-.order-summary .action-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.action-buttons button {
-  padding: 15px 30px;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out;
-}
-
+/* Return Button */
 .return-button {
-  background-color: #dc3545; /* Bootstrap danger red */
-  color: white;
+    background-color: #dc3545; /* Bootstrap danger red */
+    color: white;
 }
 
 .return-button:hover {
-  background-color: #bd2130;
-  transform: scale(1.05);
+    background-color: #bd2130;
+    transform: scale(1.05);
 }
 
+/* Continue Button */
 .continue-button {
-  background-color: #62a388; /* Sage green */
-  color: white;
+    background-color: #62a388; /* Sage green */
+    color: white;
 }
 
 .continue-button:hover {
-  background-color: #4a8b6d;
-  transform: scale(1.05);
+    background-color: #4a8b6d;
+    transform: scale(1.05);
+}
+
+/* Adjust buttons for small screens */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column; /* Stack buttons vertically on smaller screens */
+    }
+
+    .action-buttons button {
+        width: 100%; /* Full width for each button */
+        margin-bottom: 15px; /* Add spacing between buttons */
+    }
+
+    .action-buttons button:last-child {
+        margin-bottom: 0; /* Remove bottom margin from last button */
+    }
 }

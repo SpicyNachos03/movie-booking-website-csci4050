@@ -62,7 +62,6 @@ const createMovie = async (req, res) => {
     const savedMovie = await movie.save();
     console.log('Saved movie:', savedMovie);
     res.status(201).json(savedMovie);
-    res.status(201).json(savedMovie);
   } catch (error) {
     console.error('Error creating movie:', error.message);
     res.status(400).json({ message: 'Error creating movie', error: error.message });

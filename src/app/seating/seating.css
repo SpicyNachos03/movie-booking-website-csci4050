@@ -278,3 +278,23 @@ p {
     pointer-events: none;
     color: #fff;
 }
+.seat.unavailable {
+    background-color: gray; /* Unavailable seat color */
+    pointer-events: none; /* Disable interaction */
+    opacity: 0.5;
+  }
+  .ticket-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .ticket-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #374151; /* Dark gray for price */
+    padding: 5px 10px;
+    background-color: #f0f4f8; /* Light gray background for price */
+    border-radius: 5px;
+  }
+  

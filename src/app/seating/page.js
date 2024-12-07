@@ -1,9 +1,8 @@
 'use client';
 
-'use client'
-
-import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './seating.css';
 
 const SeatingPage = () => {
@@ -16,40 +15,42 @@ const SeatingPage = () => {
   const [showtime, setShowtime] = useState('');
   const [movieTitle, setMovieTitle] = useState('Loading...'); // Default title
 
-  // Restore state from URL parameters
+  // Log extracted parameters to check if movieId is correctly extracted
   useEffect(() => {
     const seats = searchParams.get('selectedSeats');
     const tickets = searchParams.get('ticketTypes');
     const movie = searchParams.get('movieId');
     const time = searchParams.get('showtime');
 
+    console.log('Extracted movieId:', movie);  // Log movieId to debug
+
     if (seats) setSelectedSeats(JSON.parse(seats));
     if (tickets) setTicketTypes(JSON.parse(tickets));
     if (movie) setMovieId(movie);
     if (time) setShowtime(time);
+
+    // Debugging: log the current state of movieId
+    console.log('Current movieId state:', movieId);
   }, [searchParams]);
 
   // Fetch movie title using the movieId
   useEffect(() => {
     if (movieId) {
-      fetch(`/api/movies/${movieId}`) // Make an API request to fetch the movie title
+      const fullUrl = `http://localhost:8000/api/movies/${movieId}`;  // Full URL to the movie endpoint
+      console.log(`Fetching movie with ID: ${movieId} from ${fullUrl}`);
+      
+      axios.get(fullUrl)
         .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log('Fetched movie data:', data); // Debugging log
-          // Adjust this line if your API response is nested
-          setMovieTitle(data.title || 'Unknown Title');
+          console.log('Movie data:', response.data);
+          setMovieTitle(response.data.title || 'Unknown Title');
         })
         .catch((error) => {
-          console.error('Error fetching movie title:', error);
-          setMovieTitle('Unknown Title'); // Fallback if API call fails
+          console.error('Error fetching movie title:', error.response ? error.response.data : error.message);
+          setMovieTitle('Error fetching movie title');
         });
     }
   }, [movieId]);
+  
 
   const handleSeatSelect = (seat) => {
     setSelectedSeats((prevState) =>
@@ -74,6 +75,13 @@ const SeatingPage = () => {
   const rowLetters = Array.from({ length: 6 }, (_, i) =>
     String.fromCharCode(65 + i)
   ); // 65 is the ASCII code for 'A'
+
+  // Ticket prices
+  const ticketPrices = {
+    Adult: 10,
+    Child: 7,
+    Senior: 8,
+  };
 
   return (
     <div className="seating-page">
@@ -106,20 +114,27 @@ const SeatingPage = () => {
       {selectedSeats.map((seat, index) => (
         <div key={seat} className="ticket-type">
           <label htmlFor={`ticket-type-${seat}`}>Ticket Type for {seat}:</label>
-          <select
-            id={`ticket-type-${seat}`}
-            value={ticketTypes[index] || ''}
-            onChange={(e) => {
-              const updatedTypes = [...ticketTypes];
-              updatedTypes[index] = e.target.value;
-              setTicketTypes(updatedTypes);
-            }}
-          >
-            <option value="">Select Ticket Type</option>
-            <option value="Adult">Adult</option>
-            <option value="Child">Child</option>
-            <option value="Senior">Senior</option>
-          </select>
+          <div className="ticket-dropdown">
+            <select
+              id={`ticket-type-${seat}`}
+              value={ticketTypes[index] || ''}
+              onChange={(e) => {
+                const updatedTypes = [...ticketTypes];
+                updatedTypes[index] = e.target.value;
+                setTicketTypes(updatedTypes);
+              }}
+            >
+              <option value="">Select Ticket Type</option>
+              <option value="Adult">Adult</option>
+              <option value="Child">Child</option>
+              <option value="Senior">Senior</option>
+            </select>
+            {ticketTypes[index] && (
+              <span className="ticket-price">
+                ${ticketPrices[ticketTypes[index]]}
+              </span>
+            )}
+          </div>
         </div>
       ))}
 
