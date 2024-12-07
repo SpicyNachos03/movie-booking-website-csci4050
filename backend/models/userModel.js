@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { paymentCardSchema } = require('./paymentCardModel');
 
 const userSchema = new mongoose.Schema({
   firstName: { 
@@ -33,8 +34,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   cards: { 
-    type: [String], 
-    validate: [val => val.length <= 4, 'Max 4 cards allowed'] // Limit to 4 cards
+    type: [paymentCardSchema], 
   },
   status: { 
     type: String, 
