@@ -108,3 +108,11 @@ html, body {
 .red-button:hover {
   background-color: darkred; /* Darker shade on hover */
 }
+
+h1, h2 {
+  /* margin-top: 25px; */
+  margin-left: 2%;
+  margin-right: 2%;
+  font-size: 30px;
+  font-weight: bolder;
+}

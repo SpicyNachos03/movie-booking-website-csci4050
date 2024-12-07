@@ -61,6 +61,7 @@ function Login() {
     return (
         <div className="container34">
             <Header />
+            <main id = "authorized">
             <div className="loginBox">
                 <h1>Login</h1>
                 <form onSubmit={handleSubmit}>
@@ -99,6 +100,7 @@ function Login() {
                     </div>
                 </form>
             </div>
+            </main>
             <Footer />
         </div>
     );

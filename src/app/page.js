@@ -124,18 +124,18 @@ export default function Home() {
                       key={movie._id}
                       onClick={() => handleMovieClick(movie._id)} // Handle movie click
                       className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
-                      style={{ flex: '0 0 auto', width: '200px', height: 'auto' }}
+                      style={{ flex: '0 0 auto', width: '200px', height: '350px' }}
                     >
                       <Image
                         src={movie.posterUrl}
                         alt={movie.title}
-                        width={150}
-                        height={225}
-                        className="w-full h-auto"
+                        width={200}
+                        height={300}
+                        className="object-coer w-full h[300px]"
                       />
-                      <div className="p-2">
-                        <h3 className="text-lg font-semibold text-white">{movie.title}</h3>
-                        <p className="text-sageGreen text-sm mt-1">{movie.status}</p>
+                      <div className="p-2 h-[50px] flex flex-col justify-center">
+                        <h3 className="text-sm font-semibold text-white ">{movie.title}</h3>
+                        <p className="text-sageGreen text-xs mt-1">{movie.status}</p>
                       </div>
                     </div>
                   ))}
@@ -144,7 +144,7 @@ export default function Home() {
           </div>
         ))}
 
-        <div className="mt-8">
+        {/* <div className="mt-8">
           {user ? (
             <Link href="/book-ticket">
               <button className="bg-sageGreen text-white font-roboto px-8 py-3 rounded-lg hover:bg-tealBlue transition-transform duration-300 ease-in-out transform hover:scale-105 shadow-lg">
@@ -158,7 +158,7 @@ export default function Home() {
               </button>
             </Link>
           )}
-        </div>
+        </div> */}
       </main>
 
       {selectedMovieId && ( // Conditionally render MovieCard
