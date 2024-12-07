@@ -166,49 +166,6 @@ function EditProfile() {
                   />
                 </div>
 
-                {/* <hr></hr>
-                            <div className="updatePassword">
-                                <label><strong>Update Password</strong></label>
-                                <div>
-                                    <button onClick={goToChangePassword} className="ml-2 text-red-500">Update Password</button>
-                                </div>
-                            </div>
-
-                            <small className="text-gray-400">Leave blank to keep current password.</small> */}
-
-                {/* Input field for old password 
-                            <div className="mb-4">
-                                <label className="block text-lg" htmlFor="password"><strong>Original Password:</strong></label>
-                                <input
-                                    type="password"
-                                    name="oldPassword"
-                                    onChange={handlePasswordInputChange}
-                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
-                                />
-                            </div> */}
-
-                {/* Input field for new password 
-                            <div className="mb-4">
-                                <label className="block text-lg" htmlFor="password"><strong>New Password:</strong></label>
-                                <input
-                                    type="password"
-                                    name="newPassword"
-                                    onChange={handlePasswordInputChange}
-                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
-                                />
-                            </div> */}
-
-                {/* Input field for confirm password 
-                            <div className="mb-4">
-                                <label className="block text-lg" htmlFor="password"><strong>Confirm New Password:</strong></label>
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    onChange={handlePasswordInputChange}
-                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
-                                />
-                            </div> */}
-
                 <hr></hr>
 
                 {/* Payment cards */}
