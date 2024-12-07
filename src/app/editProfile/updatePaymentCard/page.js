@@ -10,27 +10,48 @@ import { useCookies } from 'react-cookie';
 function updatePaymentCard() {
     const router = useRouter();
     const [cookies, setCookie, removeCookie] = useCookies(['user']);
-    const [email, setEmail] = useState('');
     const [cards, setCards] = useState([]);
+    const [user, setUser] = useState(null);
     const [cardNumber, setCardNumber] = useState('');
     const [expiration, setExpiration] = useState('');
     const [cvv, setCvv] = useState('');
-
     // States for checking the errors
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        const userData = cookies.user.data; // Get user data from cookies
-        setCards(userData.cards);
-        setEmail(userData.email);
-    });
+        const fetchUserData = async () => {
+            const userData = cookies.user; // Get user data from cookies
+            console.log(userData);
+            if (userData) {
+                try {
+                    // Fetch user data from backend API
+                    const response = await axios.get(`http://localhost:8000/api/users/${userData.data.email}`);
+                    console.log(response);
+                    setUser(response.data); // Set user data in state
+                } catch (err) {
+                    console.error(err);
+                    setError("Failed to fetch user data."); // Set error if fetching fails
+                }
+            } else {
+                router.push('/login'); // Redirect to login if no user data found
+            }
+        };
+
+        fetchUserData();
+    }, [cookies.user, router]);
+
+    useEffect(() => {
+        if (user) {
+            setCards(user.cards); // Example: Update cards based on user data
+        }
+    }, [user]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const paymentCardData = {
-            email,
+            email: user.email,
             cardNumber,
             expiration,
             cvv,
