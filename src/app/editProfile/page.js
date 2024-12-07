@@ -72,26 +72,11 @@ function EditProfile() {
         router.push('/editProfile/updatePassword') //navigate to nested page
     };
 
-
+    const goToUpdatePaymentCard = () => {
+      router.push(`/editProfile/updatePaymentCard?email=${encodeURIComponent(user.email)}`);    
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // const { oldPassword, newPassword, confirmPassword } = formState;
-
-        //set up conditional to check if password is changed or not here
-        // check for old password with database
-        // check that newPassword equals confirmPassword
-        // would we have to check if oldPassword does not equal newPassword
-
-        // if (newPassword!== confirmPassword){
-        //     alert("New password and confirm password do not match")
-        //     return;
-        // }
-
-        // if (oldPassword === newPassword) {
-        //     alert("New password cannot be the same as the old password");
-        //     return;
-        // }
 
         try {
             // Send PUT request using user ID
@@ -166,53 +151,11 @@ function EditProfile() {
                   />
                 </div>
 
-                {/* <hr></hr>
-                            <div className="updatePassword">
-                                <label><strong>Update Password</strong></label>
-                                <div>
-                                    <button onClick={goToChangePassword} className="ml-2 text-red-500">Update Password</button>
-                                </div>
-                            </div>
-
-                            <small className="text-gray-400">Leave blank to keep current password.</small> */}
-
-                {/* Input field for old password 
-                            <div className="mb-4">
-                                <label className="block text-lg" htmlFor="password"><strong>Original Password:</strong></label>
-                                <input
-                                    type="password"
-                                    name="oldPassword"
-                                    onChange={handlePasswordInputChange}
-                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
-                                />
-                            </div> */}
-
-                {/* Input field for new password 
-                            <div className="mb-4">
-                                <label className="block text-lg" htmlFor="password"><strong>New Password:</strong></label>
-                                <input
-                                    type="password"
-                                    name="newPassword"
-                                    onChange={handlePasswordInputChange}
-                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
-                                />
-                            </div> */}
-
-                {/* Input field for confirm password 
-                            <div className="mb-4">
-                                <label className="block text-lg" htmlFor="password"><strong>Confirm New Password:</strong></label>
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    onChange={handlePasswordInputChange}
-                                    className="w-full p-2 bg-gray-700 rounded-md text-white"
-                                />
-                            </div> */}
-
                 <hr></hr>
 
                 {/* Payment cards */}
-                <div className="mb-4">
+
+                {/* <div className="mb-4">
                   <label className="block text-lg">
                     <strong>Payment Cards:</strong>
                   </label>
@@ -243,7 +186,7 @@ function EditProfile() {
                   >
                     Add Card
                   </button>
-                </div>
+                </div> */}
               </div>
               <button
                 type="submit"
@@ -253,9 +196,9 @@ function EditProfile() {
               </button>
             </form>
 
+            {/* Update Password */}
             <div>
-              <hr></hr>
-              <div className="updatePassword">
+              <div className="pt-5 block text-lg">
                 <label>
                   <strong>Update Password</strong>
                 </label>
@@ -273,6 +216,23 @@ function EditProfile() {
                 Leave blank to keep current password.
               </small>
             </div>
+
+            {/* Update Payment Card Information */}
+            <hr></hr>
+            <div className="mt-4 block text-lg">
+              <label>
+                <strong>Payment Cards</strong>
+              </label>
+              <div>
+                <button
+                  onClick={goToUpdatePaymentCard}
+                  className="ml-2 text-red-500"
+                >
+                  Update Payment Cards
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
         <Footer />
