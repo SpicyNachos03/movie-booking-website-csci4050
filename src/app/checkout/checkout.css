@@ -47,7 +47,7 @@ label {
 }
 
 /* Inputs */
-input[type="text"] {
+input[type="text"], select {
     width: 100%;
     padding: 12px 15px;
     margin-bottom: 15px;
@@ -59,7 +59,7 @@ input[type="text"] {
     box-sizing: border-box;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus, select:focus {
     outline: none;
     border-color: #62A388; /* sageGreen on focus */
     box-shadow: 0 0 5px rgba(98, 163, 136, 0.5); /* Slight glow effect */
@@ -109,7 +109,7 @@ button:hover {
         padding: 12px; /* Reduce padding for smaller screens */
     }
 
-    input[type="text"] {
+    input[type="text"], select {
         font-size: 14px; /* Adjust font size */
     }
 }

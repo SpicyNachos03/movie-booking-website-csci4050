@@ -278,3 +278,9 @@ p {
     pointer-events: none;
     color: #fff;
 }
+.seat.unavailable {
+    background-color: gray; /* Unavailable seat color */
+    pointer-events: none; /* Disable interaction */
+    opacity: 0.5;
+  }
+  

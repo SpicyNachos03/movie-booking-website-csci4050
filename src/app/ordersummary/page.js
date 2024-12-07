@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios'; // Import axios
 import './ordersummary.css';
 
 const OrderSummary = () => {
@@ -12,7 +13,7 @@ const OrderSummary = () => {
   const [ticketTypes, setTicketTypes] = useState([]);
   const [movieId, setMovieId] = useState('');
   const [showtime, setShowtime] = useState('');
-  const [movieTitle, setMovieTitle] = useState(''); // State for movie title
+  const [movieTitle, setMovieTitle] = useState('Loading...'); // Default title
 
   // Restore state from URL parameters
   useEffect(() => {
@@ -21,25 +22,32 @@ const OrderSummary = () => {
     const movie = searchParams.get('movieId');
     const time = searchParams.get('showtime');
 
-    console.log("Loaded Parameters:", { seats, tickets, movie, time });
-
     if (seats) setSelectedSeats(JSON.parse(seats));
     if (tickets) setTicketTypes(JSON.parse(tickets));
     if (movie) setMovieId(movie);
     if (time) setShowtime(time);
   }, [searchParams]);
 
-  // Fetch movie title using the movieId
+  // Fetch movie title using the movieId (with full URL)
   useEffect(() => {
     if (movieId) {
-      fetch(`/api/movies/${movieId}`) // Make an API request to fetch the movie title
-        .then((response) => response.json())
-        .then((data) => setMovieTitle(data.title)) // Set the movie title
-        .catch((error) => console.error('Error fetching movie title:', error));
+      const fullUrl = `http://localhost:8000/api/movies/${movieId}`;  // Full URL to the movie endpoint
+      console.log(`Fetching movie with ID: ${movieId} from ${fullUrl}`);
+
+      // Using axios to fetch movie title
+      axios.get(fullUrl)
+        .then((response) => {
+          setMovieTitle(response.data.title || 'Unknown Title');
+        })
+        .catch((error) => {
+          console.error('Error fetching movie title:', error);
+          setMovieTitle('Error fetching movie title');
+        });
     }
   }, [movieId]);
 
-  const handleReturnToSeating = () => {
+  // Updated function to handle returning to seating
+  const handleSeating = () => {
     if (!movieId || !showtime) {
       alert("Movie ID or showtime is missing. Cannot return to seating.");
       return;
@@ -92,6 +100,19 @@ const OrderSummary = () => {
     }
   }, 0);
 
+  const handleCheckout = () => {
+    // Send the user to the checkout page with necessary details
+    const queryParams = new URLSearchParams({
+      movieId,
+      showtime,
+      selectedSeats: JSON.stringify(selectedSeats),
+      ticketTypes: JSON.stringify(ticketTypes),
+    }).toString();
+
+    // Navigate to the checkout page
+    router.push(`/checkout?${queryParams}`);
+  };
+
   return (
     <div className="order-summary">
       <h1>Order Summary</h1>
@@ -115,10 +136,10 @@ const OrderSummary = () => {
       </p>
 
       <div className="action-buttons">
-        <button onClick={handleReturnToSeating} className="return-button">
+        <button onClick={handleSeating} className="return-button">
           Return to Seating
         </button>
-        <button onClick={handleContinueToPayment} className="continue-button">
+        <button onClick={handleCheckout} className="continue-button">
           Continue to Payment
         </button>
       </div>
