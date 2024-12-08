@@ -103,29 +103,37 @@ const SeatingPage = () => {
       <p>Showtime: {showtime || 'Not Selected'}</p>
 
       {/* Seat Selection */}
-      <div className="seating-chart">
-        {/* Debugging seat rendering */}
-        {seats.length === 0 ? (
-          <p>No seats available for this showtime.</p>
-        ) : (
-          seats.map((seat) => {
-            console.log(seat); // Debugging: Log each seat to check its data
-            return (
-              <div
-                key={seat.seatName} // Use seat seatName for unique key
-                className={`seat ${
-                  selectedSeats.includes(seat.seatName) ? 'selected' : ''
-                } ${!seat.seatAvailability ? 'unavailable' : ''}`}
-                onClick={() =>
-                  seat.seatAvailability && handleSeatSelect(seat.seatName)
-                }
-              >
-                {seat.seatName}
-              </div>
-            );
-          })
-        )}
+      {/* Seat Selection */}
+<div className="seating-chart">
+  {seats.length === 0 ? (
+    <p>No seats available for this showtime.</p>
+  ) : (
+    // Group seats into rows of 10
+    seats.reduce((rows, seat, index) => {
+      const rowIndex = Math.floor(index / 10);
+      if (!rows[rowIndex]) rows[rowIndex] = [];
+      rows[rowIndex].push(seat);
+      return rows;
+    }, []).map((row, rowIndex) => (
+      <div key={`row-${rowIndex}`} className="row">
+        {row.map((seat) => (
+          <div
+            key={seat.seatName}
+            className={`seat ${
+              selectedSeats.includes(seat.seatName) ? 'selected' : ''
+            } ${!seat.seatAvailability ? 'unavailable' : ''}`}
+            onClick={() =>
+              seat.seatAvailability && handleSeatSelect(seat.seatName)
+            }
+          >
+            {seat.seatName}
+          </div>
+        ))}
       </div>
+    ))
+  )}
+</div>
+
 
       {/* Ticket Types */}
       {selectedSeats.map((seat, index) => (
