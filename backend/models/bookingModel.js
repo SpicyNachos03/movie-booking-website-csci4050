@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { ShowSchema } = require('./showModel');
+const { showSchema } = require('./showModel');
 
 const ticketSchema = new mongoose.Schema({
     seatName: {
@@ -22,7 +22,7 @@ const bookingSchema = new mongoose.Schema({
 
     ticketArray: [ticketSchema],
 
-    showInformation: ShowSchema,
+    showInformation: showSchema,
 
     orderTotal: {
         type: Number,
