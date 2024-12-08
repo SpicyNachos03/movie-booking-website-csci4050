@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createShow, getShowById, getShows, updateSeatAvailability, getShowByMovieAndTime } = require('../controllers/showController');
+const { createShow, getShowById, getShows, updateSeatAvailability,getShowsByShowtime, getShowByMovieAndTime } = require('../controllers/showController');
 
 // Route to create a new show
 router.post('/', createShow);
@@ -13,6 +13,10 @@ router.get('/', getShows);
 
 // Route to update seat availability
 router.put('/update-seat', updateSeatAvailability);
+
+// Route to get shows by showtime
+router.get('/by-showtime', getShowsByShowtime);
+
 
 // Route to get a show by movieId and showtime
 router.get('/show/:movieId/:showtime', getShowByMovieAndTime);
