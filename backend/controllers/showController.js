@@ -2,24 +2,32 @@ const { Show } = require('../models/showModel');
 
 // Create a new show
 const createShow = async (req, res) => {
-    const { movieName, dateTime, roomName, seatArray } = req.body;
+    const { movieName, dateTime, roomName } = req.body;
 
     // Validate that required fields are provided
-    if (!movieName || !dateTime || !roomName || !Array.isArray(seatArray)) {
+    if (!movieName || !dateTime || !roomName) {
         return res.status(400).json({ message: 'Please provide all required fields (movieName, dateTime, roomName, seatArray)' });
     }
 
     // Initialize seat availability if not provided
-    const seats = seatArray.map(seat => ({
-        seatName: seat,       // Seat name, e.g., "A1", "B2"
-        seatAvailability: true,  // Initially, all seats are available
-    }));
+    const rows = ["A", "B", "C", "D", "E", "F"];
+    const columns = 10;
+    const seatArray = [];
+
+    rows.forEach((row) => {
+        for (let col = 1; col <= columns; col++) {
+            seatArray.push({
+                seatName: `${row}${col}`,
+                seatAvailability: true
+            });
+        }
+    });
 
     const show = new Show({
         movieName,
         dateTime,
         roomName,
-        seatArray: seats,
+        seatArray,
     });
 
     try {
