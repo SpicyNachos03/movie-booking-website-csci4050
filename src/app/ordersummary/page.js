@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 import './ordersummary.css';
 
 const OrderSummary = () => {
@@ -46,46 +46,22 @@ const OrderSummary = () => {
     }
   }, [movieId]);
 
-  // Updated function to handle returning to seating
   const handleSeating = () => {
     if (!movieId || !showtime) {
       alert("Movie ID or showtime is missing. Cannot return to seating.");
       return;
     }
-
+  
     const queryParams = new URLSearchParams({
       selectedSeats: JSON.stringify(selectedSeats),
       ticketTypes: JSON.stringify(ticketTypes),
     }).toString();
-
+  
+    // Ensure the URL is correct for the dynamic route
     router.push(`/seating/${movieId}/${showtime}?${queryParams}`);
   };
-
-  const handleContinueToPayment = () => {
-    if (selectedSeats.length === 0) {
-      alert("Please select at least one seat before continuing.");
-      return;
-    }
-
-    const queryParams = new URLSearchParams({
-      movieId,
-      showtime,
-      selectedSeats: JSON.stringify(selectedSeats),
-      ticketTypes: JSON.stringify(ticketTypes),
-    }).toString();
-
-    router.push(`/payment?${queryParams}`);
-  };
-
-  const handleDeleteTicket = (seatToDelete) => {
-    setSelectedSeats((prevSeats) =>
-      prevSeats.filter((seat) => seat !== seatToDelete)
-    );
-    setTicketTypes((prevTypes) => {
-      const index = selectedSeats.indexOf(seatToDelete);
-      return prevTypes.filter((_, i) => i !== index);
-    });
-  };
+  
+  
 
   const total = ticketTypes.reduce((sum, type) => {
     switch (type) {

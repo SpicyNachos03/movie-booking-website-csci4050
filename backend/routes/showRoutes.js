@@ -1,13 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { createShow, getShowById, getShows } = require('../controllers/showController');
+const { createShow, getShowById, getShows, updateSeatAvailability, getShowByMovieAndTime } = require('../controllers/showController');
 
-// Adds a Show to the Database
+// Route to create a new show
 router.post('/', createShow);
 
-// Gets the list of Shows from the Database
+// Route to get a show by its ID (showId)
+router.get('/show/:showId', getShowById);
+
+// Route to get all shows
 router.get('/', getShows);
-// Get Show by Id from the Database
-router.get('/:id', getShowById);
+
+// Route to update seat availability
+router.put('/update-seat', updateSeatAvailability);
+
+// Route to get a show by movieId and showtime
+router.get('/show/:movieId/:showtime', getShowByMovieAndTime);
 
 module.exports = router;
+
