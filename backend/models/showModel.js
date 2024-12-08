@@ -1,5 +1,17 @@
 const mongoose = require('mongoose');
 
+const seatSchema = new mongoose.Schema({
+    seatName: {
+        type: String,
+        required: true,
+    },
+    seatAvailability: {
+        type: Boolean,
+        default: true,
+        required: true,
+    }
+});
+
 const showSchema = new mongoose.Schema({
     movieName: {
         type: String,
@@ -13,6 +25,7 @@ const showSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    seatArray: [seatSchema]
 });
 
 const Show = mongoose.model('Show', showSchema);
