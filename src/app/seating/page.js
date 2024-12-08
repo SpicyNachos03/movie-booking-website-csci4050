@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer'
+import Footer from '@/components/Footer';
 import axios from 'axios';
 import './seating.css';
 
@@ -18,6 +18,7 @@ const SeatingPage = () => {
   const [movieTitle, setMovieTitle] = useState('Loading...');
   const [seats, setSeats] = useState([]);
   const [showId, setShowId] = useState('');
+  const [roomName, setRoomName] = useState('');  // State to store roomName
 
   // Extract parameters from search query
   useEffect(() => {
@@ -47,7 +48,7 @@ const SeatingPage = () => {
     }
   }, [movieId]);
 
-  // Fetch seat availability from the backend
+  // Fetch seat availability and show details from the backend
   useEffect(() => {
     const showIdParam = searchParams.get('showId');
     if (showIdParam) {
@@ -61,8 +62,9 @@ const SeatingPage = () => {
       axios.get(fullUrl)
         .then((response) => {
           console.log('Response data:', response.data);
-          if (response.data && response.data.seatArray) {
+          if (response.data) {
             setSeats(response.data.seatArray);  // Assuming seatArray is part of the response
+            setRoomName(response.data.roomName);  // Assuming roomName is part of the response
           }
         })
         .catch((error) => {
@@ -102,43 +104,37 @@ const SeatingPage = () => {
 
   return (
     <div>
-      <Header></Header>
+      <Header />
       <div className="seating-page">
         <h1>Select Seats for {movieTitle}</h1>
         <p>Showtime: {showtime || 'Not Selected'}</p>
+        <p><strong>Room:</strong> {roomName || 'Loading...'} </p> {/* Display room name */}
 
         {/* Seat Selection */}
-        {/* Seat Selection */}
-  <div className="seating-chart">
-    {seats.length === 0 ? (
-      <p>No seats available for this showtime.</p>
-    ) : (
-      // Group seats into rows of 10
-      seats.reduce((rows, seat, index) => {
-        const rowIndex = Math.floor(index / 10);
-        if (!rows[rowIndex]) rows[rowIndex] = [];
-        rows[rowIndex].push(seat);
-        return rows;
-      }, []).map((row, rowIndex) => (
-        <div key={`row-${rowIndex}`} className="row">
-          {row.map((seat) => (
-            <div
-              key={seat.seatName}
-              className={`seat ${
-                selectedSeats.includes(seat.seatName) ? 'selected' : ''
-              } ${!seat.seatAvailability ? 'unavailable' : ''}`}
-              onClick={() =>
-                seat.seatAvailability && handleSeatSelect(seat.seatName)
-              }
-            >
-              {seat.seatName}
-            </div>
-          ))}
+        <div className="seating-chart">
+          {seats.length === 0 ? (
+            <p>No seats available for this showtime.</p>
+          ) : (
+            seats.reduce((rows, seat, index) => {
+              const rowIndex = Math.floor(index / 10);
+              if (!rows[rowIndex]) rows[rowIndex] = [];
+              rows[rowIndex].push(seat);
+              return rows;
+            }, []).map((row, rowIndex) => (
+              <div key={`row-${rowIndex}`} className="row">
+                {row.map((seat) => (
+                  <div
+                    key={seat.seatName}
+                    className={`seat ${selectedSeats.includes(seat.seatName) ? 'selected' : ''} ${!seat.seatAvailability ? 'unavailable' : ''}`}
+                    onClick={() => seat.seatAvailability && handleSeatSelect(seat.seatName)}
+                  >
+                    {seat.seatName}
+                  </div>
+                ))}
+              </div>
+            ))
+          )}
         </div>
-      ))
-    )}
-  </div>
-
 
         {/* Ticket Types */}
         {selectedSeats.map((seat, index) => (
@@ -173,7 +169,7 @@ const SeatingPage = () => {
           Next
         </button>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };

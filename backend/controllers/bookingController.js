@@ -1,5 +1,6 @@
 const Booking = require('../models/bookingModel');
 const User = require('../models/userModel'); // Ensure the filename matches
+const { Show } = require('../models/showModel');
 
 
 // Create a booking
@@ -13,15 +14,33 @@ const createBooking = async (req, res) => {
       ticketType: ticketTypes[index]
     }));
 
-    const newBooking = ({
+    const newBooking = new Booking({
       userEmail,
       ticketArray: tickets,
       showInformation,
       orderTotal
     });
 
+    // Save the booking
     const savedBooking = await newBooking.save();
 
+    // Update the Show object to mark the booked seats as unavailable
+    const show = await Show.findById(showInformation); // Find the show by its ID
+    if (!show) {
+      return res.status(404).json({ message: 'Show not found' });
+    }
+
+    // Loop through the selectedSeats and update the seatAvailability in seatArray
+    selectedSeats.forEach((selectedSeat) => {
+      const seat = show.seatArray.find((seat) => seat.seatName === selectedSeat);
+      if (seat) {
+        seat.seatAvailability = false; // Mark the seat as unavailable
+      }
+    });
+
+    await show.save(); // Save the updated Show object
+
+    // Return the booking data
     res.status(201).json(savedBooking);
   } catch (error) {
     console.error('Error creating booking:', error);

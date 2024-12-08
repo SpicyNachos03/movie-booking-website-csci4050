@@ -15,6 +15,7 @@ const OrderSummary = () => {
   const [showId, setShowId] = useState('');
   const [showtime, setShowtime] = useState('');
   const [movieTitle, setMovieTitle] = useState('Loading...'); // Default title
+  const [roomName, setRoomName] = useState('Loading...');  // New state for roomName
 
   // Restore state from URL parameters
   useEffect(() => {
@@ -49,6 +50,21 @@ const OrderSummary = () => {
     }
   }, [movieId]);
 
+  // Fetch roomName using showId (with full URL)
+  useEffect(() => {
+    if (showId) {
+      const fullUrl = `http://localhost:8000/api/shows/show/${showId}`;
+      axios.get(fullUrl)
+        .then((response) => {
+          setRoomName(response.data.roomName || 'Unknown Room');
+        })
+        .catch((error) => {
+          console.error('Error fetching room name:', error);
+          setRoomName('Error fetching room name');
+        });
+    }
+  }, [showId]);
+
   const handleSeating = () => {
     if (!movieId || !showtime) {
       alert("Movie ID or showtime is missing. Cannot return to seating.");
@@ -66,9 +82,6 @@ const OrderSummary = () => {
   
     router.push(`/seating?${queryParams}`);
   };
-  
-  
-  
 
   const total = ticketTypes.reduce((sum, type) => {
     switch (type) {
@@ -102,6 +115,7 @@ const OrderSummary = () => {
       <h1>Order Summary</h1>
       <p>Movie: {movieTitle || 'Loading...'}</p> {/* Display movie title */}
       <p>Showtime: {showtime}</p>
+      <p><strong>Room:</strong> {roomName || 'Loading...'} </p> {/* Display room name */}
 
       <div className="selected-seats">
         <h3>Selected Seats:</h3>
