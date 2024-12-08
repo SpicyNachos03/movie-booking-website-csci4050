@@ -9,6 +9,7 @@ const promotionRoutes = require('./routes/promotionRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const showRoutes = require('./routes/showRoutes');
 const emailRoutes = require('./routes/emailRoutes'); // Import email routes
+const bookingRoutes = require('./routes/bookingRoutes'); // Import booking routes
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/promotions', promotionRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/shows', showRoutes);
 app.use('/api/emails', emailRoutes); // Email routes
+app.use('/api/bookings', bookingRoutes);  // Add booking routes here
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

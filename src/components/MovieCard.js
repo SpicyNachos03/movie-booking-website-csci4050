@@ -48,10 +48,6 @@ const MovieCard = ({ movieId, onClose }) => {
     return scheduledShows.filter((show) => show.movieName === movie.title);
   };
 
-  const handleShowtimeClick = (showtime) => {
-    router.push(`/seating?movieId=${movieId}&showtime=${encodeURIComponent(showtime)}`);
-  };
-
   const handlePlayTrailer = () => {
     setPlayTrailer(true);
   };
@@ -131,20 +127,6 @@ const MovieCard = ({ movieId, onClose }) => {
         <p>
           <strong>MPAA Rating:</strong> {movie.mpaaRating}
         </p>
-        <div>
-          <p>
-            <strong>Show Information:</strong>
-          </p>
-          {movie.showInformation.map((showtime, index) => (
-            <button
-              key={index}
-              onClick={() => handleShowtimeClick(showtime)}
-              className="showtime-btn"
-            >
-              {showtime}
-            </button>
-          ))}
-        </div>
 
         <div>
           <h3>Scheduled Shows for {movie.title}</h3>

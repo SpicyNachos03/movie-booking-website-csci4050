@@ -13,53 +13,72 @@ const SeatingPage = () => {
   const [ticketTypes, setTicketTypes] = useState([]);
   const [movieId, setMovieId] = useState('');
   const [showtime, setShowtime] = useState('');
-  const [movieTitle, setMovieTitle] = useState('Loading...'); // Default title
+  const [movieTitle, setMovieTitle] = useState('Loading...');
+  const [seats, setSeats] = useState([]);
+  const [showId, setShowId] = useState('');
 
-  // Log extracted parameters to check if movieId is correctly extracted
+  // Extract parameters from search query
   useEffect(() => {
-    const seats = searchParams.get('selectedSeats');
-    const tickets = searchParams.get('ticketTypes');
-    const movie = searchParams.get('movieId');
-    const time = searchParams.get('showtime');
+    const seatsParam = searchParams.get('selectedSeats');
+    const ticketsParam = searchParams.get('ticketTypes');
+    const movieParam = searchParams.get('movieId');
+    const timeParam = searchParams.get('showtime');
 
-    console.log('Extracted movieId:', movie);  // Log movieId to debug
-
-    if (seats) setSelectedSeats(JSON.parse(seats));
-    if (tickets) setTicketTypes(JSON.parse(tickets));
-    if (movie) setMovieId(movie);
-    if (time) setShowtime(time);
-
-    // Debugging: log the current state of movieId
-    console.log('Current movieId state:', movieId);
+    if (seatsParam) setSelectedSeats(JSON.parse(seatsParam));
+    if (ticketsParam) setTicketTypes(JSON.parse(ticketsParam));
+    if (movieParam) setMovieId(movieParam);
+    if (timeParam) setShowtime(timeParam);
   }, [searchParams]);
 
-  // Fetch movie title using the movieId
+  // Fetch movie title using movieId
   useEffect(() => {
     if (movieId) {
-      const fullUrl = `http://localhost:8000/api/movies/${movieId}`;  // Full URL to the movie endpoint
-      console.log(`Fetching movie with ID: ${movieId} from ${fullUrl}`);
-      
+      const fullUrl = `http://localhost:8000/api/movies/${movieId}`;
       axios.get(fullUrl)
         .then((response) => {
-          console.log('Movie data:', response.data);
           setMovieTitle(response.data.title || 'Unknown Title');
         })
         .catch((error) => {
-          console.error('Error fetching movie title:', error.response ? error.response.data : error.message);
+          console.error('Error fetching movie title:', error.response?.data || error.message || error);
           setMovieTitle('Error fetching movie title');
         });
     }
   }, [movieId]);
-  
 
-  const handleSeatSelect = (seat) => {
+  // Fetch seat availability from the backend
+  useEffect(() => {
+    const showIdParam = searchParams.get('showId');
+    if (showIdParam) {
+      setShowId(showIdParam);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (showId) {
+      const fullUrl = `http://localhost:8000/api/shows/show/${showId}`;
+      axios.get(fullUrl)
+        .then((response) => {
+          console.log('Response data:', response.data);
+          if (response.data && response.data.seatArray) {
+            setSeats(response.data.seatArray);  // Assuming seatArray is part of the response
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching seat data:', error.response?.data || error.message || error);
+        });
+    }
+  }, [showId]);
+
+  // Handle seat selection
+  const handleSeatSelect = (seatName) => {
     setSelectedSeats((prevState) =>
-      prevState.includes(seat)
-        ? prevState.filter((item) => item !== seat) // Deselect seat
-        : [...prevState, seat] // Select seat
+      prevState.includes(seatName)
+        ? prevState.filter((item) => item !== seatName)
+        : [...prevState, seatName]
     );
   };
 
+  // Handle next button click to navigate to order summary
   const handleNext = () => {
     const queryParams = new URLSearchParams({
       movieId,
@@ -71,12 +90,7 @@ const SeatingPage = () => {
     router.push(`/ordersummary?${queryParams}`);
   };
 
-  // Generate row letters (A-F) dynamically
-  const rowLetters = Array.from({ length: 6 }, (_, i) =>
-    String.fromCharCode(65 + i)
-  ); // 65 is the ASCII code for 'A'
-
-  // Ticket prices
+  // Ticket prices for each type
   const ticketPrices = {
     Adult: 10,
     Child: 7,
@@ -85,29 +99,32 @@ const SeatingPage = () => {
 
   return (
     <div className="seating-page">
-      <h1>Select Seats for {movieTitle}</h1> {/* Display movie title */}
+      <h1>Select Seats for {movieTitle}</h1>
       <p>Showtime: {showtime || 'Not Selected'}</p>
 
       {/* Seat Selection */}
       <div className="seating-chart">
-        {rowLetters.map((rowLetter) => (
-          <div className="row" key={rowLetter}>
-            {Array.from({ length: 10 }).map((_, seatIndex) => {
-              const seatId = `${rowLetter}${seatIndex + 1}`; // Format: A1, B2
-              return (
-                <div
-                  key={seatId}
-                  className={`seat ${
-                    selectedSeats.includes(seatId) ? 'selected' : ''
-                  }`}
-                  onClick={() => handleSeatSelect(seatId)}
-                >
-                  {seatId}
-                </div>
-              );
-            })}
-          </div>
-        ))}
+        {/* Debugging seat rendering */}
+        {seats.length === 0 ? (
+          <p>No seats available for this showtime.</p>
+        ) : (
+          seats.map((seat) => {
+            console.log(seat); // Debugging: Log each seat to check its data
+            return (
+              <div
+                key={seat.seatName} // Use seat seatName for unique key
+                className={`seat ${
+                  selectedSeats.includes(seat.seatName) ? 'selected' : ''
+                } ${!seat.seatAvailability ? 'unavailable' : ''}`}
+                onClick={() =>
+                  seat.seatAvailability && handleSeatSelect(seat.seatName)
+                }
+              >
+                {seat.seatName}
+              </div>
+            );
+          })
+        )}
       </div>
 
       {/* Ticket Types */}
@@ -138,6 +155,7 @@ const SeatingPage = () => {
         </div>
       ))}
 
+      {/* Next Button */}
       <button onClick={handleNext} disabled={!selectedSeats.length}>
         Next
       </button>
