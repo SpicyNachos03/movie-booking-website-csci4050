@@ -1,5 +1,8 @@
 /* Order Summary */
 .order-summary {
+    display: flex;
+    flex-direction: column;     
+    
     background-color: #f9fafb; /* Slightly lighter gray */
     padding: 25px;
     border-radius: 10px;
@@ -121,3 +124,20 @@
         margin-bottom: 0; /* Remove bottom margin from last button */
     }
 }
+header{
+    width: 100%;
+  }
+  
+  #authorized{
+    flex-grow: 1;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+  }
+  footer {
+    /* margin-top: auto;            */
+    background-color: #f1f1f1; 
+    padding: 20px;              
+    text-align: center;      
+    
+  }

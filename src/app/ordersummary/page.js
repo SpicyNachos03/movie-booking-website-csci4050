@@ -4,7 +4,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ordersummary.css';
-
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 const OrderSummary = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -111,7 +112,10 @@ const OrderSummary = () => {
   };
 
   return (
+    <div>
+      <Header/>
     <div className="order-summary">
+      
       <h1>Order Summary</h1>
       <p>Movie: {movieTitle || 'Loading...'}</p> {/* Display movie title */}
       <p>Showtime: {showtime}</p>
@@ -141,6 +145,8 @@ const OrderSummary = () => {
           Continue to Payment
         </button>
       </div>
+    </div>
+    <Footer/>
     </div>
   );
 };

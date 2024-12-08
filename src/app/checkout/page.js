@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Cookies from 'js-cookie'; // Import js-cookie
 import './checkout.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const CheckoutPage = () => {
   const searchParams = useSearchParams();
@@ -178,6 +180,8 @@ const CheckoutPage = () => {
   };
 
   return (
+    <div>
+      <Header/>
     <div className="checkout-container">
       <h1>Checkout</h1>
 
@@ -271,6 +275,8 @@ const CheckoutPage = () => {
           <p>Thank you for your purchase. Enjoy your movie!</p>
         </div>
       )}
+      </div>
+      <Footer/>
     </div>
   );
 };

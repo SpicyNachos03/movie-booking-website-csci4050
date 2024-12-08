@@ -25,7 +25,7 @@ body {
 }
 
 /* Headings */
-h1, h2, h3 {
+.checkout-container h1, h2, h3 {
     text-align: center;
     color: #055E68; /* tealBlue */
     margin-bottom: 20px;
@@ -38,7 +38,7 @@ h1, h2, h3 {
 }
 
 /* Labels */
-label {
+.checkout-container label {
     display: block;
     margin-top: 10px;
     margin-bottom: 5px;
@@ -47,7 +47,7 @@ label {
 }
 
 /* Inputs */
-input[type="text"], select {
+.checkout-container input[type="text"], select {
     width: 100%;
     padding: 12px 15px;
     margin-bottom: 15px;
@@ -59,14 +59,14 @@ input[type="text"], select {
     box-sizing: border-box;
 }
 
-input[type="text"]:focus, select:focus {
+.checkout-container input[type="text"]:focus, select:focus {
     outline: none;
     border-color: #62A388; /* sageGreen on focus */
     box-shadow: 0 0 5px rgba(98, 163, 136, 0.5); /* Slight glow effect */
 }
 
 /* Buttons */
-button {
+.checkout-container button {
     width: 100%;
     padding: 15px;
     background-color: #62A388; /* sageGreen */
@@ -78,7 +78,7 @@ button {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-button:hover {
+.checkout-container button:hover {
     background-color: #055E68; /* tealBlue */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add slight elevation */
 }
