@@ -111,20 +111,70 @@ const CheckoutPage = () => {
 
   }, [ticketTypes, discount]);
 
-  const handleSubmitPayment = (e) => {
+  const handleSubmitPayment = async (e) => {
     e.preventDefault();
     const card = selectedCardId ? savedCards.find((card) => card._id === selectedCardId) : null;
+    const userData = JSON.parse(Cookies.get('user')); // Get user data from cookies
 
-    const cardNumber = card ? card.cardNumber : e.target.cardNumber.value;
-    const expiry = card ? card.expirationDate : e.target.expiry.value;
-    const cvv = card ? '***' : e.target.cvv.value;
+    let cardNumber, expiry, cvv;
 
-    if (!cardNumber || !expiry || !cvv) {
-      alert('Please complete the payment details.');
-      return;
+    if (card) {
+      // Compare with saved card data
+      cardNumber = card.cardNumber;
+      expiry = card.expirationDate;
+      cvv = e.target.cvv.value; // Get CVV input from user
+
+      // Check if expiration date and CVV match
+      if (expiry !== card.expirationDate || cvv !== card.cvv) {
+        alert('Invalid expiration date or CVV.');
+        return;
+      }
+    } else {
+      // Validate manually entered card details
+      cardNumber = e.target.cardNumber.value;
+      expiry = e.target.expiry.value;
+      cvv = e.target.cvv.value;
+
+      // Validate card number, expiry date, and CVV
+      const cardNumberPattern = /^[0-9]{16}$/;
+      const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+      const cvvPattern = /^[0-9]{3}$/;
+
+      if (!cardNumber.match(cardNumberPattern)) {
+        alert('Please enter a valid 16-digit card number.');
+        return;
+      }
+
+      if (!expiry.match(expiryPattern)) {
+        alert('Please enter a valid expiry date (MM/YY).');
+        return;
+      }
+
+      if (!cvv.match(cvvPattern)) {
+        alert('Please enter a valid 3-digit CVV.');
+        return;
+      }
     }
 
-    setIsPaymentSuccess(true);
+    // Payment is valid; proceed with booking
+
+    // Prepare the booking information
+    const bookingData = {
+      userEmail: userData.data.email,
+      selectedSeats,
+      ticketTypes,
+      showInformation: searchParams.get('showId'),
+      orderTotal: finalTotal
+    };
+
+    // Save the booking information in the backend
+    try {
+      await axios.post('http://localhost:8000/api/bookings', bookingData);
+      setIsPaymentSuccess(true); // Show success message
+    } catch (error) {
+      console.error('Error submitting booking:', error);
+      alert('Error processing payment. Please try again.');
+    }
   };
 
   return (
@@ -184,6 +234,16 @@ const CheckoutPage = () => {
             <>
               <label htmlFor="card-number">Card Number</label>
               <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required />
+              <label htmlFor="expiry">Expiry Date</label>
+              <input type="text" id="expiry" placeholder="MM/YY" required />
+              <label htmlFor="cvv">CVV</label>
+              <input type="text" id="cvv" placeholder="123" required />
+            </>
+          )}
+
+          {/* Show expiry and CVV fields when a saved card is selected */}
+          {selectedCardId && (
+            <>
               <label htmlFor="expiry">Expiry Date</label>
               <input type="text" id="expiry" placeholder="MM/YY" required />
               <label htmlFor="cvv">CVV</label>
