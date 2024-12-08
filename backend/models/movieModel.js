@@ -50,10 +50,6 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  showInformation: {
-    type: [String],
-    required: false,
-  },
 });
 
 const Movie = mongoose.model('Movie', movieSchema);
