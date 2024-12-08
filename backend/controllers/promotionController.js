@@ -13,7 +13,16 @@ const getPromotions = async (req, res) => {
 };
 
 const getPromotionById = async (req, res) => {
-    console.log("To implement if needed");
+    try {
+        const { id } = req.params;
+        const promotion = await Promotion.findById(id);
+        if (!promotion) {
+            return res.status(404).json({ message: 'Promotion not found.' });
+        }
+        res.status(200).json(promotion);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching promotion', error: error.message });
+    }
 };
 
 const createPromotion = async (req, res) => {
