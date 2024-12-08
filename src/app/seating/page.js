@@ -83,6 +83,7 @@ const SeatingPage = () => {
   // Handle next button click to navigate to order summary
   const handleNext = () => {
     const queryParams = new URLSearchParams({
+      showId,
       movieId,
       showtime,
       selectedSeats: JSON.stringify(selectedSeats),

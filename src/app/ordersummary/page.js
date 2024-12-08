@@ -12,6 +12,7 @@ const OrderSummary = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [ticketTypes, setTicketTypes] = useState([]);
   const [movieId, setMovieId] = useState('');
+  const [showId, setShowId] = useState('');
   const [showtime, setShowtime] = useState('');
   const [movieTitle, setMovieTitle] = useState('Loading...'); // Default title
 
@@ -20,11 +21,13 @@ const OrderSummary = () => {
     const seats = searchParams.get('selectedSeats');
     const tickets = searchParams.get('ticketTypes');
     const movie = searchParams.get('movieId');
+    const show = searchParams.get('showId');
     const time = searchParams.get('showtime');
 
     if (seats) setSelectedSeats(JSON.parse(seats));
     if (tickets) setTicketTypes(JSON.parse(tickets));
     if (movie) setMovieId(movie);
+    if (show) setShowId(show);
     if (time) setShowtime(time);
   }, [searchParams]);
 
@@ -79,6 +82,7 @@ const OrderSummary = () => {
   const handleCheckout = () => {
     // Send the user to the checkout page with necessary details
     const queryParams = new URLSearchParams({
+      showId,
       movieId,
       showtime,
       selectedSeats: JSON.stringify(selectedSeats),
