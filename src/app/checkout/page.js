@@ -233,7 +233,7 @@ const CheckoutPage = () => {
           {!selectedCardId && (
             <>
               <label htmlFor="card-number">Card Number</label>
-              <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required />
+              <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" required />
               <label htmlFor="expiry">Expiry Date</label>
               <input type="text" id="expiry" placeholder="MM/YY" required />
               <label htmlFor="cvv">CVV</label>
