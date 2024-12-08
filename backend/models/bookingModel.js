@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { showSchema } = require('./showModel');
 
 const ticketSchema = new mongoose.Schema({
     seatName: {
@@ -15,17 +14,16 @@ const ticketSchema = new mongoose.Schema({
 });
 
 const bookingSchema = new mongoose.Schema({
-    bookingNumber: {
-        type: String,
-        required: true,
-    },
     userEmail: {
         type: String,
         required: true
     },
     ticketArray: [ticketSchema],
 
-    showInformation: showSchema,
+    showInformation: {
+        type: String, // Show Id
+        required: true
+    },
 
     orderTotal: {
         type: Number,
