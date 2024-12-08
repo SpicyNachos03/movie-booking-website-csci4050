@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const bookingController = require('../controllers/bookingController'); // Adjust path if needed
+const { createBooking, getBookings } = require('../controllers/bookingController'); // Adjust path if needed
 
 // Define routes
-router.post('/bookings', bookingController.createBooking);
-router.get('/bookings/:userId', bookingController.getBookings);
+
+// Makes a new Booking
+router.post('/', createBooking);
+
+// Grabs all Bookings
+router.get('/', getBookings);
 
 module.exports = router;

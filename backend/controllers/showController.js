@@ -1,4 +1,4 @@
-const Show = require('../models/showModel');
+const { Show } = require('../models/showModel');
 
 // Create a new show
 const createShow = async (req, res) => {

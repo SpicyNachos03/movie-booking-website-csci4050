@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import Cookies from 'js-cookie'; // Import js-cookie
 import './checkout.css';
 
 const CheckoutPage = () => {
@@ -29,7 +30,7 @@ const CheckoutPage = () => {
     const time = searchParams.get('showtime');
     const seats = searchParams.get('selectedSeats');
     const tickets = searchParams.get('ticketTypes');
-
+    const userData = JSON.parse(Cookies.get('user')); // Get user data from cookies
     if (seats) setSelectedSeats(JSON.parse(seats));
     if (tickets) setTicketTypes(JSON.parse(tickets));
     if (time) setShowtime(time);
@@ -44,9 +45,10 @@ const CheckoutPage = () => {
       .then((response) => setPromotions(response.data))
       .catch((error) => console.error('Error fetching promotions:', error));
 
-    axios.get('http://localhost:8000/api/paymentCards/saved')
-      .then((response) => setSavedCards(response.data))
+    axios.get(`http://localhost:8000/api/users/${userData.data.email}`)
+      .then((response) => setSavedCards(response.data.cards))
       .catch((error) => console.error('Error fetching saved payment cards:', error));
+
   }, [searchParams]);
 
   // Calculate the total price based on ticket types

@@ -1,23 +1,34 @@
 const mongoose = require('mongoose');
 
+const ticketSchema = new mongoose.Schema({
+    seatName: {
+        type: String,
+        required: true
+    },
+    ticketType: {
+        type: String,
+        enum: ['Adult', 'Child', 'Senior'],
+        default: 'Adult',
+        required: true
+    }
+});
+
 const bookingSchema = new mongoose.Schema({
-  bookingNumber: {
-    type: String,
-    required: true,
-  },
-  ticketNumbers: {
-    type: [String],
-    required: true,
-  },
-  movieId: {
-    type: mongoose.Schema.Types.ObjectId,  // Correctly define movieId as ObjectId
-    ref: 'movieModel',  // Reference the 'Movie' model
-    required: true,
-  },
-  showInformation: {
-    type: String,
-    required: true,
-  },
+    userEmail: {
+        type: String,
+        required: true
+    },
+    ticketArray: [ticketSchema],
+
+    showInformation: {
+        type: String, // Show Id
+        required: true
+    },
+
+    orderTotal: {
+        type: Number,
+        required: true
+    }
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

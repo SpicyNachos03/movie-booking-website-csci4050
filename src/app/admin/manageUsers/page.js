@@ -1,64 +1,74 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import RegForm from '@/components/RegForm';
-import { useRouter } from 'next/navigation';
-import { Button } from 'react-bootstrap';
-import {Link} from 'react-router-dom';
-import './manageUsers.css';
+import '../admin.css'
 
-//copy and paste this skeleton page if you want to create a new page
-//within Header.js copy the same <Link></Link> list item and rename is accordingly to access it through the header
-
-function ManageUsers(){
+function ManageUsers() {
     const router = useRouter();
+    const [users, setUsers] = useState([]);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/users');
+                setUsers(response.data);
+            } catch (err) {
+                console.error('Error fetching users:', err);
+                setError('Failed to fetch users. Please try again later.');
+            }
+        };
+
+        fetchUsers();
+    }, []);
 
     const handleCreateUser = () => {
         router.push('/admin/manageUsers/createUser');
-    }
+    };
 
-    return(
-        <div>
+    const handleReturnToAdmin = () => {
+        router.push('/admin');
+    };
+
+    return (
+        <div className="admin-container">
             <Header></Header>
-
-            <h1>This is the manage users page</h1>
-
-            <button onClick={handleCreateUser}>Add User</button>
-
-            {/*<RegForm></RegForm>*/}
-
-            <div class="card">
-                <p>User 1</p>
-                <p>ID: 1</p>
-                <p>Name: Deadpool</p>
-                <p>Email: deadpool@gmail.com</p>
-                <button>Edit</button>
-                <button>Delete</button>
+            <div className="main-content">
+                <div className="adminBox">
+                    <h1>Manage Users</h1>
+                    <p>View and manage all users in the system.</p>
+                    <div className="button-group">
+                        <a onClick={handleCreateUser} className="button">
+                            Add User
+                        </a>
+                        <a onClick={handleReturnToAdmin} className="button">
+                            Return to Admin Page
+                        </a>
+                    </div>
+                    {error && <p>{error}</p>}
+                    <div className="user-list">
+                        {users.length > 0 ? (
+                            users.map((user) => (
+                                <div key={user._id} className="user-card">
+                                    <div className="user-info">
+                                        <h2>{user.firstName} {user.lastName}</h2>
+                                        <p>Email: {user.email}</p>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No users found.</p>
+                        )}
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <p>User 2</p>
-                <p>ID: 2</p>
-                <p>Name: John</p>
-                <p>Email: john@yahoo.com</p>
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>
-            <div class="card">
-                <p>User 3</p>
-                <p>ID: 3</p>
-                <p>Name: Bob</p>
-                <p>Email: bob@gmail.com</p>
-                <button>Edit</button>
-                <button>Delete</button>
-            </div>
-            <button>Add User</button>
-
             <Footer></Footer>
         </div>
-    )
+    );
 }
 
 export default ManageUsers;
