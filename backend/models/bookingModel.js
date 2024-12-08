@@ -19,7 +19,10 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
+    userEmail: {
+        type: String,
+        required: true
+    },
     ticketArray: [ticketSchema],
 
     showInformation: showSchema,
