@@ -9,6 +9,7 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styles from '../../../signup/signup.css';
 import { useRouter } from 'next/navigation'; 
+import './scheduleMovie.css'
 
 function ScheduleMovie() {
     return(
