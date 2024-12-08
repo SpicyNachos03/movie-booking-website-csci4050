@@ -23,6 +23,7 @@ const CheckoutPage = () => {
   const [promotions, setPromotions] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
   const [selectedCardId, setSelectedCardId] = useState(null);
+  const [roomName, setRoomName] = useState(''); // New state for roomName
 
   // Fetch initial data
   useEffect(() => {
@@ -30,24 +31,35 @@ const CheckoutPage = () => {
     const time = searchParams.get('showtime');
     const seats = searchParams.get('selectedSeats');
     const tickets = searchParams.get('ticketTypes');
+    const showId = searchParams.get('showId'); // Get showId from searchParams
     const userData = JSON.parse(Cookies.get('user')); // Get user data from cookies
     if (seats) setSelectedSeats(JSON.parse(seats));
     if (tickets) setTicketTypes(JSON.parse(tickets));
     if (time) setShowtime(time);
 
+    // Fetch movie title
     if (movieId) {
       axios.get(`http://localhost:8000/api/movies/${movieId}`)
         .then((response) => setMovieTitle(response.data.title || 'Unknown Title'))
         .catch(() => setMovieTitle('Error fetching movie title'));
     }
 
+    // Fetch promotions
     axios.get('http://localhost:8000/api/promotions')
       .then((response) => setPromotions(response.data))
       .catch((error) => console.error('Error fetching promotions:', error));
 
+    // Fetch saved cards
     axios.get(`http://localhost:8000/api/users/${userData.data.email}`)
       .then((response) => setSavedCards(response.data.cards))
       .catch((error) => console.error('Error fetching saved payment cards:', error));
+
+    // Fetch room name using showId
+    if (showId) {
+      axios.get(`http://localhost:8000/api/shows/show/${showId}`)
+        .then((response) => setRoomName(response.data.roomName || 'Unknown Room'))
+        .catch((error) => console.error('Error fetching room name:', error));
+    }
 
   }, [searchParams]);
 
@@ -96,6 +108,7 @@ const CheckoutPage = () => {
     const total = calculateTotalPrice();
     setTotalPrice(total.toFixed(2));
     setFinalTotal((total - discount).toFixed(2));
+
   }, [ticketTypes, discount]);
 
   const handleSubmitPayment = (e) => {
@@ -121,6 +134,7 @@ const CheckoutPage = () => {
       <div className="movie-details">
         <h2>Movie: <span>{movieTitle || 'Loading...'}</span></h2>
         <p>Showtime: <span>{showtime || 'Not selected'}</span></p>
+        <p>Room: <span>{roomName || 'Loading...'}</span></p> {/* Display room name */}
         <p>Seats: <span>{selectedSeats.join(', ') || 'None selected'}</span></p>
         <p>Total Price: $<span>{totalPrice}</span></p>
         {promotionCode && (
@@ -137,25 +151,35 @@ const CheckoutPage = () => {
 
       {!isPaymentSuccess ? (
         <form className="payment-form" onSubmit={handleSubmitPayment}>
+
+          <h3>Apply Promotion</h3>
+          <input
+            type="text"
+            id="promotion-code"
+            placeholder="PROMO2024"
+            value={promotionCode}
+            onChange={(e) => setPromotionCode(e.target.value)}
+          />
+          <button type="button" onClick={handleApplyPromotion}>Apply Promotion</button>
+
           <h3>Payment Information</h3>
 
           <h4>Saved Payment Cards</h4>
-          {savedCards.map((card) => (
-            <div key={card._id} className="saved-card">
-              <input
-                type="radio"
-                id={`card-${card._id}`}
-                name="saved-card"
-                value={card._id}
-                checked={selectedCardId === card._id}
-                onChange={() => setSelectedCardId(card._id)}
-              />
-              <label htmlFor={`card-${card._id}`}>
+          <label htmlFor="saved-card-select">Select Saved Card</label>
+          <select
+            id="saved-card-select"
+            value={selectedCardId || ''}
+            onChange={(e) => setSelectedCardId(e.target.value)}
+          >
+            <option value="">-- Select a Card --</option>
+            {savedCards.map((card) => (
+              <option key={card._id} value={card._id}>
                 {card.nickname || `Card ending in ${card.cardNumber.slice(-4)}`}
-              </label>
-            </div>
-          ))}
+              </option>
+            ))}
+          </select>
 
+          {/* If no card is selected, show input fields for a new card */}
           {!selectedCardId && (
             <>
               <label htmlFor="card-number">Card Number</label>
@@ -168,16 +192,6 @@ const CheckoutPage = () => {
           )}
 
           <button type="submit">Confirm Payment</button>
-
-          <h3>Apply Promotion</h3>
-          <input
-            type="text"
-            id="promotion-code"
-            placeholder="PROMO2024"
-            value={promotionCode}
-            onChange={(e) => setPromotionCode(e.target.value)}
-          />
-          <button type="button" onClick={handleApplyPromotion}>Apply Promotion</button>
 
           <div className="save-payment">
             <label htmlFor="save-payment-info">
