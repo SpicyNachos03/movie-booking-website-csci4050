@@ -23,9 +23,7 @@
   transition: all 0.3s;
 }
 
-.search-container select:focus {
-  ring: 2px solid #63b3ed; /* focus:ring focus:ring-blue-500 */
-}
+
 
 .search-container input[type="text"] {
   flex-grow: 1;

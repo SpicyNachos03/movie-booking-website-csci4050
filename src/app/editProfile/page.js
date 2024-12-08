@@ -100,7 +100,7 @@ function EditProfile() {
     return (
       <div className="profile-container flex flex-col min-h-screen bg-gray-900 text-white">
         <Header />
-        <div className="profile-content flex-grow flex justify-center items-center">
+        <div className="profile-content flex-grow flex justify-center items-center m-5">
           <div className="profile-box max-w-lg w-full mx-4 p-6 bg-gray-800 rounded-lg shadow-xl">
             <h1 className="text-4xl font-bold text-center mb-6">
               Edit Profile
