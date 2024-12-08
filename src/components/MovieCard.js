@@ -136,7 +136,7 @@ const MovieCard = ({ movieId, onClose }) => {
                 key={index}
                 onClick={() =>
                   router.push(
-                    `/seating?movieId=${movieId}&showtime=${encodeURIComponent(
+                    `/seating?showId=${show._id}&movieId=${movieId}&showtime=${encodeURIComponent(
                       show.dateTime
                     )}&room=${encodeURIComponent(show.roomName)}`
                   )
