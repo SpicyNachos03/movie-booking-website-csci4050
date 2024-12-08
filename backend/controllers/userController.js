@@ -235,4 +235,33 @@ const addCard = async (req, res) => {
     res.status(500).json({ message: 'Error adding payment card', error });
   }
 };
-module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword, addCard};
+
+const deleteCard = async (req, res) => {
+  const { email, lastFourDigits } = req.body; // Card identifier
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Filter out the card to be deleted
+    const updatedCards = user.cards.filter(card => card.lastFourDigits !== lastFourDigits);
+
+    if (updatedCards.length === user.cards.length) {
+      return res.status(404).json({ message: 'Card not found' });
+    }
+
+    user.cards = updatedCards;
+    await user.save();
+
+    res.status(200).json({ message: 'Card deleted successfully', user });
+  } catch (error) {
+    console.error('Error deleting payment card:', error);
+    res.status(500).json({ message: 'Error deleting payment card', error });
+  }
+};
+
+module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword, addCard, deleteCard};
