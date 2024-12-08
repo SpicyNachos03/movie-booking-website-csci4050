@@ -2,6 +2,8 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer'
 import axios from 'axios';
 import './seating.css';
 
@@ -98,75 +100,79 @@ const SeatingPage = () => {
   };
 
   return (
-    <div className="seating-page">
-      <h1>Select Seats for {movieTitle}</h1>
-      <p>Showtime: {showtime || 'Not Selected'}</p>
+    <div>
+      <Header></Header>
+      <div className="seating-page">
+        <h1>Select Seats for {movieTitle}</h1>
+        <p>Showtime: {showtime || 'Not Selected'}</p>
 
-      {/* Seat Selection */}
-      {/* Seat Selection */}
-<div className="seating-chart">
-  {seats.length === 0 ? (
-    <p>No seats available for this showtime.</p>
-  ) : (
-    // Group seats into rows of 10
-    seats.reduce((rows, seat, index) => {
-      const rowIndex = Math.floor(index / 10);
-      if (!rows[rowIndex]) rows[rowIndex] = [];
-      rows[rowIndex].push(seat);
-      return rows;
-    }, []).map((row, rowIndex) => (
-      <div key={`row-${rowIndex}`} className="row">
-        {row.map((seat) => (
-          <div
-            key={seat.seatName}
-            className={`seat ${
-              selectedSeats.includes(seat.seatName) ? 'selected' : ''
-            } ${!seat.seatAvailability ? 'unavailable' : ''}`}
-            onClick={() =>
-              seat.seatAvailability && handleSeatSelect(seat.seatName)
-            }
-          >
-            {seat.seatName}
+        {/* Seat Selection */}
+        {/* Seat Selection */}
+  <div className="seating-chart">
+    {seats.length === 0 ? (
+      <p>No seats available for this showtime.</p>
+    ) : (
+      // Group seats into rows of 10
+      seats.reduce((rows, seat, index) => {
+        const rowIndex = Math.floor(index / 10);
+        if (!rows[rowIndex]) rows[rowIndex] = [];
+        rows[rowIndex].push(seat);
+        return rows;
+      }, []).map((row, rowIndex) => (
+        <div key={`row-${rowIndex}`} className="row">
+          {row.map((seat) => (
+            <div
+              key={seat.seatName}
+              className={`seat ${
+                selectedSeats.includes(seat.seatName) ? 'selected' : ''
+              } ${!seat.seatAvailability ? 'unavailable' : ''}`}
+              onClick={() =>
+                seat.seatAvailability && handleSeatSelect(seat.seatName)
+              }
+            >
+              {seat.seatName}
+            </div>
+          ))}
+        </div>
+      ))
+    )}
+  </div>
+
+
+        {/* Ticket Types */}
+        {selectedSeats.map((seat, index) => (
+          <div key={seat} className="ticket-type">
+            <label htmlFor={`ticket-type-${seat}`}>Ticket Type for {seat}:</label>
+            <div className="ticket-dropdown">
+              <select
+                id={`ticket-type-${seat}`}
+                value={ticketTypes[index] || ''}
+                onChange={(e) => {
+                  const updatedTypes = [...ticketTypes];
+                  updatedTypes[index] = e.target.value;
+                  setTicketTypes(updatedTypes);
+                }}
+              >
+                <option value="">Select Ticket Type</option>
+                <option value="Adult">Adult</option>
+                <option value="Child">Child</option>
+                <option value="Senior">Senior</option>
+              </select>
+              {ticketTypes[index] && (
+                <span className="ticket-price">
+                  ${ticketPrices[ticketTypes[index]]}
+                </span>
+              )}
+            </div>
           </div>
         ))}
+
+        {/* Next Button */}
+        <button onClick={handleNext} disabled={!selectedSeats.length}>
+          Next
+        </button>
       </div>
-    ))
-  )}
-</div>
-
-
-      {/* Ticket Types */}
-      {selectedSeats.map((seat, index) => (
-        <div key={seat} className="ticket-type">
-          <label htmlFor={`ticket-type-${seat}`}>Ticket Type for {seat}:</label>
-          <div className="ticket-dropdown">
-            <select
-              id={`ticket-type-${seat}`}
-              value={ticketTypes[index] || ''}
-              onChange={(e) => {
-                const updatedTypes = [...ticketTypes];
-                updatedTypes[index] = e.target.value;
-                setTicketTypes(updatedTypes);
-              }}
-            >
-              <option value="">Select Ticket Type</option>
-              <option value="Adult">Adult</option>
-              <option value="Child">Child</option>
-              <option value="Senior">Senior</option>
-            </select>
-            {ticketTypes[index] && (
-              <span className="ticket-price">
-                ${ticketPrices[ticketTypes[index]]}
-              </span>
-            )}
-          </div>
-        </div>
-      ))}
-
-      {/* Next Button */}
-      <button onClick={handleNext} disabled={!selectedSeats.length}>
-        Next
-      </button>
+      <Footer></Footer>
     </div>
   );
 };
