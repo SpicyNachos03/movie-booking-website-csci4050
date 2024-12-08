@@ -35,6 +35,17 @@ function ManagePromotions() {
         router.push('/admin');
     };
 
+    const handleSendEmail = async (promotionId) => {
+        try {
+            const promotion = await axios.get(`http://localhost:8000/api/promotions/${promotionId}`);
+            await axios.post('http://localhost:8000/api/emails/sendPromotionEmails', promotion.data);
+            alert(`Promotion email sent successfully for promotion ID: ${promotionId}`);
+        } catch (error) {
+            console.error('Error sending promotion email:', error);
+            alert('Failed to send promotion email. Please try again.');
+        }
+    };
+
     return (
         <div className="admin-container">
             <Header />
@@ -59,6 +70,12 @@ function ManagePromotions() {
                                         <h2>{promotion.promotionName}</h2>
                                         <p>Discount Rate: {promotion.promotionRate}%</p>
                                     </div>
+                                    <button
+                                        className="button"
+                                        onClick={() => handleSendEmail(promotion._id)}
+                                    >
+                                        Send Promotion Email
+                                    </button>
                                 </div>
                             ))
                         ) : (
