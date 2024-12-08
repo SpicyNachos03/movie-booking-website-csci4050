@@ -71,13 +71,16 @@ const OrderSummary = () => {
       return;
     }
   
+    // Pass relevant state as query parameters
     const queryParams = new URLSearchParams({
+      movieId,
+      showtime,
+      showId,
       selectedSeats: JSON.stringify(selectedSeats),
       ticketTypes: JSON.stringify(ticketTypes),
     }).toString();
   
-    // Ensure the URL is correct for the dynamic route
-    router.push(`/seating/${movieId}/${showtime}?${queryParams}`);
+    router.push(`/seating?${queryParams}`);
   };
 
   const total = ticketTypes.reduce((sum, type) => {
