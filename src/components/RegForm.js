@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import './RegForm.css'
 
 export default function Form() {
     //States for registration
@@ -161,58 +162,58 @@ export default function Form() {
         <form className="formBox">
           {/* Labels and inputs for form data */}
           <div className="inputWrapper">
-          <label className="label">First Name</label>
-          <input
-            onChange={handleFirstName}
-            className="input"
-            value={firstName}
-            type="text"
-            placeholder="First Name"
-          />
+            <label className="label">First Name</label>
+            <input
+              onChange={handleFirstName}
+              className="input"
+              value={firstName}
+              type="text"
+              placeholder="First Name"
+            />
           </div>
           
           <div className="inputWrapper">
-          <label className="label">Last Name</label>
-          <input
-            onChange={handleLastName}
-            className="input"
-            value={lastName}
-            type="text"
-            placeholder="Last Name"
-          />
+            <label className="label">Last Name</label>
+            <input
+              onChange={handleLastName}
+              className="input"
+              value={lastName}
+              type="text"
+              placeholder="Last Name"
+            />
           </div>
           
           <div className="inputWrapper">
-          <label className="label">Email</label>
-          <input
-            onChange={handleEmail}
-            className="input"
-            value={email}
-            type="email"
-            placeholder="Email"
-          />
+            <label className="label">Email</label>
+            <input
+              onChange={handleEmail}
+              className="input"
+              value={email}
+              type="email"
+              placeholder="Email"
+            />
           </div>
           
           <div className="inputWrapper">
-          <label className="label">Phone Number</label>
-          <input
-            onChange={handlePhoneNumber}
-            className="input"
-            value={phoneNumber}
-            type="phone"
-            placeholder="###-###-####"
-          />
+            <label className="label">Phone Number</label>
+            <input
+              onChange={handlePhoneNumber}
+              className="input"
+              value={phoneNumber}
+              type="phone"
+              placeholder="###-###-####"
+            />
           </div>
 
           <div className="inputWrapper">
-          <label className="label">Address</label>
-          <input
-            onChange={handleAddress}
-            className="input"
-            value={address}
-            type="address"
-            placeholder="123 Main St."
-          />
+            <label className="label">Address</label>
+            <input
+              onChange={handleAddress}
+              className="input"
+              value={address}
+              type="address"
+              placeholder="123 Main St."
+            />
           </div>
           
           <div className="inputWrapper">
@@ -230,14 +231,14 @@ export default function Form() {
           </div>
           
           <div className="inputWrapper">
-          <label className="label">Confirm Password</label>
-          <input
-            onChange={handleConfirmPassword}
-            className="input"
-            value={confirmPassword}
-            type="password"
-            placeholder="Confirm Password"
-          />
+            <label className="label">Confirm Password</label>
+            <input
+              onChange={handleConfirmPassword}
+              className="input"
+              value={confirmPassword}
+              type="password"
+              placeholder="Confirm Password"
+            />
           </div>
 
           {/* Promotions Checkbox */}

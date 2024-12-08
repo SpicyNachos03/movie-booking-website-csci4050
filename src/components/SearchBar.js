@@ -7,7 +7,7 @@ import MovieCard from './MovieCard';
 export default function SearchBar() {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
-  const [searchType, setSearchType] = useState(''); 
+  const [searchType, setSearchType] = useState('title'); 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState(null); // Track selected movie
@@ -75,6 +75,7 @@ export default function SearchBar() {
         >
           <option value="title">Title</option>
           <option value="category">Category</option>
+          {/* <option value="showtime">Showtimes</option> */}
         </select>
 
         {/* Input field for search query */}

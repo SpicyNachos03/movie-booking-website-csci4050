@@ -7,7 +7,8 @@ const {
   updateUser,
   getUserById,
   updatePassword,
-  forgotPassword
+  forgotPassword,
+  addCard
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -23,6 +24,8 @@ router.post('/login', userLogin);
 // Route to update a password when you forget
 router.put('/forgotPassword', forgotPassword);
 
+// Route to add Payment Card to User
+router.post('/addCard', addCard)
 // Route to get all users
 router.get('/', getUsers);
 

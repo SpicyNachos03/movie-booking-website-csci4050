@@ -2,13 +2,16 @@ body, html {
   height: 100%;
   margin: 0;
 }
+
 .container34{
   display: flex;
   flex-direction: column;     
   min-height: 100vh;
-  justify-self: center;
+  
   align-items: center;
+  align-content: space-between;
 }
+
 .loginBox {
   display: flex;
   flex-direction: column;
@@ -21,15 +24,10 @@ body, html {
   border-radius: 25px;
   margin: 75px auto 75px auto; 
 }
-h1, h2 {
-  margin-top: 25px;
-  margin-left: 5%;
-  margin-right: 5%;
-  font-size: 30px;
-  font-weight: bolder;
-}
 
-button {
+
+
+.container34 button {
   -webkit-transition-duration: 0.1s; /* Safari */
   transition-duration: 0.1s;
   background-color: #F4595B;
@@ -46,7 +44,7 @@ button {
 }
 
 
-button:hover {
+.container34 button:hover {
   background-color: #FF7375;
   border: none;
   border-radius: 8px;
@@ -62,7 +60,7 @@ button:hover {
 }
 
 
-button:active {
+.container34 button:active {
   background-color: #C24648;
   border: none;
   border-radius: 8px;
@@ -77,24 +75,17 @@ button:active {
   letter-spacing: 2px;
 }
   
-#authorized{
-  flex-grow: 1;
-  display: flex;
-  justify-self: center;
-  align-items: center;
-}
-
   
-input {
+.container34 input {
   display: block;
   margin: 10px auto;
   padding: 5px 5px;
   font-size: 20px;
   border-radius: 5px;
-  
+  width: 300px;
 }
   
-button, input[type="submit"] {
+.container34 button, input[type="submit"] {
   margin: 20px;
   padding: 10px auto;
   border-radius: 10px;
@@ -106,17 +97,18 @@ button, input[type="submit"] {
   display: flex;
   flex-direction: row;
   align-items: center; 
-  gap: 10px; 
+  /* gap: 2px;  */
+  width: 300px;
 }
-#checkBox {
+/* #checkBox {
   margin: 0; 
-}
-.rmmrMe p {
+} */
+/* .rmmrMe p {
   margin: 0; 
   padding: 0;
-}
+} */
 .rmmrMe a {
-  margin-left: auto; 
+  margin-left: 45%; 
   text-decoration: none; 
   
 }
@@ -164,10 +156,17 @@ a:hover {
 header{
   width: 100%;
 }
+
+#authorized{
+  flex-grow: 1;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+}
 footer {
-  margin-top: auto;           
+  /* margin-top: auto;            */
   background-color: #f1f1f1; 
   padding: 20px;              
   text-align: center;      
-
+  
 }

@@ -1,0 +1,118 @@
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 75px auto 75px auto;                   
+    background-color: rgb(107, 112, 116);
+    color: black;
+
+    padding: 30px;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 25px;
+}
+
+
+
+
+
+.formBox {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+
+}
+
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+
+}
+
+.formBox label {
+    font-size: 20px;
+    width: 35%;                
+    text-align: left;         
+    color: #060606; 
+    padding-right: 10px;
+
+}
+
+.inputWrapper input {
+    flex: 1;                   
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 18px;     
+
+}
+
+.formBox button {
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+    background-color: #F4595B;
+    border-radius: 8px;
+    border-bottom: 4px solid #C24648;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-family: 'Oxygen', sans-serif;
+    letter-spacing: 2px;
+  }
+
+.formBox button:hover {
+    background-color: #FF7375;
+    border: none;
+    border-radius: 8px;
+    border-bottom: 4px solid #C24648;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-family: 'Oxygen', sans-serif;
+    letter-spacing: 2px;
+  }
+  
+  
+  .formBox button:active {
+    background-color: #C24648;
+    border: none;
+    border-radius: 8px;
+    border-bottom: 4px solid #C24648;
+    color: #CCC;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-family: 'Oxygen', sans-serif;
+    letter-spacing: 2px;
+  }
+    
+    
+  .formBox input {
+    display: block;
+    margin: 10px auto;
+    padding: 5px 5px;
+    font-size: 20px;
+    border-radius: 5px;
+    width: 300px;
+  }
+    
+  .formBox button, input[type="submit"] {
+    margin: 20px;
+    padding: 10px auto;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+  }

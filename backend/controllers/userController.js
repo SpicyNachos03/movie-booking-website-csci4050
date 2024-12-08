@@ -1,5 +1,4 @@
 const User = require('../models/userModel');
-const bcrypt = require('bcryptjs');
 const { sendConfirmationEmail, sendProfileWasChangedEmail } = require('./emailController');
 const { encrypt, decrypt } = require('./encryptController')
 require('dotenv').config({ path: '../.env' });
@@ -211,4 +210,29 @@ const forgotPassword = async (req, res) => {
   }
 };
   
-  module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword};
+const addCard = async (req, res) => {
+
+  const { email, cardNumber, expiration, cvv, lastFourDigits } = req.body;
+
+  try {
+
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    // Add a new payment card
+    if (user.cards.length > 4) {
+      return res.status(404).json({ message: 'You cannot have more than 4 cards. '});
+    } // if
+
+    user.cards.push({ cardNumber, expiration, cvv, lastFourDigits });
+
+    await user.save();
+
+    res.status(201).json({ message: 'Payment card added', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding payment card', error });
+  }
+};
+module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword, addCard};
