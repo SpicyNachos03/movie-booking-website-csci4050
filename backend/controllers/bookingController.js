@@ -5,31 +5,24 @@ const User = require('../models/userModel'); // Ensure the filename matches
 // Create a booking
 const createBooking = async (req, res) => {
   try {
-    const { userId, movieId, showtime, seats } = req.body; // Assuming you're sending these in the body
+    const { userEmail, selectedSeats, ticketTypes, showInformation, orderTotal } = req.body;
 
-    // Find the user by their ID
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    // Mapping selectedSeats and ticketTypes to generate a Ticket array
+    const tickets = selectedSeats.map((seatName, index) => ({
+      seatName,
+      ticketType: ticketTypes[index]
+    }));
 
-    // Create a new booking
-    const newBooking = new Booking({
-      user: userId,
-      movieId,
-      showtime,
-      seats,
+    const newBooking = ({
+      userEmail,
+      ticketArray: tickets,
+      showInformation,
+      orderTotal
     });
 
-    // Save the booking to the database
-    await newBooking.save();
+    const savedBooking = await newBooking.save();
 
-    // Add the booking to the user's bookings array
-    user.bookings.push(newBooking);
-    await user.save();
-
-    // Return the created booking
-    res.status(201).json(newBooking);
+    res.status(201).json(savedBooking);
   } catch (error) {
     console.error('Error creating booking:', error);
     res.status(500).json({ message: 'Server error' });
