@@ -72,7 +72,13 @@ function updatePaymentCard() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
+        // Client-side validation for 16-digit card number
+        if (cardNumber.length !== 16 || !/^\d{16}$/.test(cardNumber)) {
+            setError("Card number must be exactly 16 digits");
+            return;
+        }
+    
         const paymentCardData = {
             email: user.email,
             cardNumber,
@@ -80,23 +86,28 @@ function updatePaymentCard() {
             cvv,
             lastFourDigits: cardNumber.slice(-4),
         };
-        console.log("Payment Card Data:", paymentCardData); // Log data being sent
-
-        try {  
-            console.log("Do I get here?")
+    
+        try {
             const response = await axios.post("http://localhost:8000/api/users/addCard", paymentCardData);
-
+    
             if (response.status === 201) {
-                setSubmitted(true)
+                setSubmitted(true);
                 setError(false);
-            } else {
-                setError(true);
+                setCards([...cards, { ...paymentCardData, cardNumber: `**** **** **** ${paymentCardData.lastFourDigits}` }]);
+                setCardNumber('');
+                setExpiration('');
+                setCvv('');
             }
         } catch (error) {
-            console.log("Error Adding Payment Card:", error);
-            setError(true);
+            // Handle backend validation errors
+            if (error.response && error.response.data.message) {
+                setError(error.response.data.message);
+            } else {
+                setError("An error occurred while adding the card.");
+            }
         }
     };
+    
     // Showing success message
     const successMessage = () => {
         return (
@@ -162,9 +173,9 @@ function updatePaymentCard() {
           <h1 className="text-4xl font-bold mb-6">Add Payment Card</h1>
           {/* Calling to the methods */}
           <div className="messages">
-            {errorMessage()}
-            {successMessage()}
-          </div>
+  {error && <div className="text-red-500">{error}</div>}
+  {submitted && <div className="text-green-500">Payment Card has been successfully added!</div>}
+</div>
           <form onSubmit={handleSubmit} className="w-full max-w-md">
             {/* Input field for card number */}
             <div className="mb-4">
