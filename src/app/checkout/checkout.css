@@ -47,7 +47,7 @@ body {
 }
 
 /* Inputs */
-.checkout-container input[type="text"], select {
+.checkout-container input[type="text"], .checkout-container select {
     width: 100%;
     padding: 12px 15px;
     margin-bottom: 15px;
@@ -59,7 +59,7 @@ body {
     box-sizing: border-box;
 }
 
-.checkout-container input[type="text"]:focus, select:focus {
+.checkout-container input[type="text"]:focus, .checkout-container select:focus {
     outline: none;
     border-color: #62A388; /* sageGreen on focus */
     box-shadow: 0 0 5px rgba(98, 163, 136, 0.5); /* Slight glow effect */
@@ -105,11 +105,11 @@ body {
         margin: 20px auto;
     }
 
-    button {
+    .checkout-container button {
         padding: 12px; /* Reduce padding for smaller screens */
     }
 
-    input[type="text"], select {
+    .checkout-container input[type="text"], select {
         font-size: 14px; /* Adjust font size */
     }
 }
