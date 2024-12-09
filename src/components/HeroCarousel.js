@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 
@@ -11,6 +13,7 @@ const HeroCarousel = () => {
       alt: 'Coco',
       title: 'Coco',
       description: 'A young boy named Miguel who journeys to the Land of the Dead',
+      trailerLink: 'https://www.youtube.com/watch?v=Ga6RYejo6Hk',
     },
     {
       id: 2,
@@ -18,6 +21,7 @@ const HeroCarousel = () => {
       alt: 'Captain America',
       title: 'Captain America: New Brave World',
       description: 'Sam Wilson finds himself at the center of an international incident',
+      trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     {
       id: 3,
@@ -25,6 +29,7 @@ const HeroCarousel = () => {
       alt: 'Wicked (2024)',
       title: 'Wicked',
       description: 'A vivid reimagining of the classic The Wizard of Oz.',
+      trailerLink: 'https://www.youtube.com/watch?v=O5yfgk6DsrQ',
     },
   ];
 
@@ -47,7 +52,7 @@ const HeroCarousel = () => {
         }}
       >
         {slides.map((slide) => (
-          <div key={slide.id} className="hero-slide" style={{ minWidth: '100%', height: 'px', position: 'relative' }}>
+          <div key={slide.id} className="hero-slide" style={{ minWidth: '100%', position: 'relative' }}>
             <Image
               src={slide.src}
               alt={slide.alt}
@@ -56,15 +61,22 @@ const HeroCarousel = () => {
               quality={100}
               priority
               onError={(e) => {
-                e.target.onerror = null; // Prevents infinite loop
-                e.target.src = '/fallback-image.jpg'; // Ensure this path is correct
+                e.target.onerror = null;
+                e.target.src = '/fallback-image.jpg';
               }}
             />
             <div className="carousel-overlay">
               <h1>{slide.title}</h1>
               <p>{slide.description}</p>
-              {/* Added red button */}
-              <button className="carousel-button red-button">Watch Now</button>
+              <a
+                href={slide.trailerLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="carousel-button red-button"
+                style={{ marginTop: '10px', display: 'inline-block' }} // Add spacing above the button
+              >
+                Watch Now
+              </a>
             </div>
           </div>
         ))}
