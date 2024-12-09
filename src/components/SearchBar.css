@@ -1,0 +1,125 @@
+/* General layout and structure */
+.search-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem; /* 24px */
+}
+
+.search-container form {
+  display: flex;
+  width: 100%;
+  max-width: 64rem; /* 1024px */
+}
+
+.search-container select {
+  padding: 0.75rem; /* 12px */
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem 0 0 0.5rem; /* rounded-l-lg */
+  background-color: #ffffff;
+  color: #000000;
+  outline: none;
+  transition: all 0.3s;
+}
+
+
+
+.search-container input[type="text"] {
+  flex-grow: 1;
+  padding: 0.75rem; /* 12px */
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #000000;
+  outline: none;
+  transition: all 0.3s;
+}
+
+
+
+.search-container button {
+  padding: 0.75rem; /* 12px */
+  background-color: #4299e1; /* bg-blue-500 */
+  color: #ffffff;
+  border-radius: 0 0.5rem 0.5rem 0; /* rounded-r-lg */
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-container button:hover {
+  background-color: #3182ce; /* hover:bg-blue-600 */
+}
+
+.search-container .error-message {
+  color: #e53e3e; /* text-red-500 */
+  margin-top: 1rem; /* 16px */
+}
+
+.search-container .movie-results {
+  margin-top: 1rem; /* 16px */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+
+.movie-card {
+  background-color: #2d3748; /* bg-gray-800 */
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition: transform 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movie-card:hover {
+  transform: scale(1.05); /* hover:scale-105 */
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto;
+}
+
+.movie-card .no-image {
+  width: 100%;
+  height: auto;
+  background-color: #edf2f7; /* bg-gray-400 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+}
+
+.movie-card h3 {
+  font-size: 1.25rem; /* text-xl */
+  margin-top: 0.5rem; /* 8px */
+}
+
+.movie-card p {
+  color: #e2e8f0; /* text-gray-600 */
+}
+
+.movie-card .movie-category {
+  font-size: 1rem; /* text-sm */
+}
+
+.movie-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* bg-black bg-opacity-50 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.movie-card-container {
+  width: 200px;
+  height: auto;
+  flex: 0 0 auto;
+}

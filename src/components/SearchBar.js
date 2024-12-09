@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Image from "next/image";
 import MovieCard from './MovieCard';
 import axios from 'axios'; // Assuming you're using axios for API calls
+import './SearchBar.css';
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');
@@ -113,76 +114,71 @@ export default function SearchBar() {
     ? 'Search by showtime (ex: 2025-01-05T06:30)'  // Placeholder for showtimes
     : `Search by ${searchType}...`; // For title/category
 
-  return (
-    <div className="w-full flex flex-col items-center mb-6">
-      <form onSubmit={handleSearch} className="flex w-full max-w-4xl">
-        {/* Dropdown menu for selecting search type */}
-        <select
-          value={searchType}
-          onChange={handleSearchTypeChange}
-          className="p-3 border border-gray-300 rounded-l-lg bg-white text-black focus:outline-none focus:ring focus:ring-blue-500"
-        >
-          <option value="title">Title</option>
-          <option value="category">Category</option>
-          <option value="showtime">Showtimes</option>
-        </select>
-
-        {/* Input field for search query */}
-        <input
-          type="text"
-          value={query}
-          onChange={handleChange}
-          placeholder={placeholderText}
-          className="flex-grow p-3 border-t border-b border-gray-300 text-black focus:outline-none focus:ring focus:ring-blue-500"
-        />
-
-        {/* Search button */}
-        <button
-          type="submit"
-          className="p-3 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 transition-colors"
-        >
-          {loading ? 'Searching...' : 'Search'}
-        </button>
-      </form>
-
-      {/* Error message */}
-      {error && <div className="text-red-500 mt-4">{error}</div>}
-
-      {/* Movie results */}
-      {movies.length > 0 && (
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {movies.map((movie) => (
-            <div
-              key={movie._id || movie.title}
-              onClick={() => handleMovieClick(movie._id)}
-              className="bg-gray-800 rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105 cursor-pointer"
-              style={{ flex: '0 0 auto', width: '200px', height: 'auto' }}
-            >
-              {/* Check if posterUrl is valid before rendering the image */}
-              {movie.posterUrl ? (
-                <Image
-                  src={movie.posterUrl}
-                  alt={movie.title}
-                  width={150}
-                  height={225}
-                  className="w-full h-auto"
-                />
-              ) : (
-                <div className="w-full h-auto bg-gray-400 flex justify-center items-center text-white">
-                  No Image Available
-                </div>
-              )}
-              <h3 className="text-xl mt-2">{movie.title}</h3>
-              <p className="text-gray-600">{movie.category}</p>
-            </div>
-          ))}
-        </div>
-      )}
-      {selectedMovieId && ( // Conditionally render MovieCard
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <MovieCard movieId={selectedMovieId} onClose={closeMovieCard} />
-        </div>
-      )}
-    </div>
-  );
-}
+    return (
+      <div className="search-container">
+        <form onSubmit={handleSearch}>
+          {/* Dropdown menu for selecting search type */}
+          <select
+            value={searchType}
+            onChange={handleSearchTypeChange}
+          >
+            <option value="title">Title</option>
+            <option value="category">Category</option>
+            <option value="showtime">Showtimes</option>
+          </select>
+  
+          {/* Input field for search query */}
+          <input
+            type="text"
+            value={query}
+            onChange={handleChange}
+            placeholder={placeholderText}
+          />
+  
+          {/* Search button */}
+          <button type="submit">
+            {loading ? 'Searching...' : 'Search'}
+          </button>
+        </form>
+  
+        {/* Error message */}
+        {error && <div className="error-message">{error}</div>}
+  
+        {/* Movie results */}
+        {movies.length > 0 && (
+          <div className="movie-results">
+            {movies.map((movie) => (
+              <div
+                key={movie._id || movie.title}
+                onClick={() => handleMovieClick(movie._id)}
+                className="movie-card"
+              >
+                {/* Check if posterUrl is valid before rendering the image */}
+                {movie.posterUrl ? (
+                  <Image
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    width={150}
+                    height={225}
+                  />
+                ) : (
+                  <div className="no-image">
+                    No Image Available
+                  </div>
+                )}
+                <h3>{movie.title}</h3>
+                <p className="movie-category">{movie.category}</p>
+              </div>
+            ))}
+          </div>
+        )}
+  
+        {selectedMovieId && (
+          <div className="movie-overlay">
+            <MovieCard movieId={selectedMovieId} onClose={closeMovieCard} />
+          </div>
+        )}
+      </div>
+    );
+  }
+  

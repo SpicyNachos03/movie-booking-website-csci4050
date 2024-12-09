@@ -8,6 +8,9 @@ const { createBooking, getBookings } = require('../controllers/bookingController
 router.post('/', createBooking);
 
 // Grabs all Bookings
-router.get('/', getBookings);
+router.get('/:userEmail', getBookings);
+
+
+
 
 module.exports = router;
