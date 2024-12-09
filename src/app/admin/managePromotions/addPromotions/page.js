@@ -42,7 +42,7 @@ function addPromotions() {
                 setSubmitted(true)
                 setError(false);
                  // Trigger email notifications
-                await axios.post("http://localhost:8000/api/emails/sendPromotionEmails", promotion);
+                await axios.post("http://localhost:8000/api/emails/sendPromotionEmails");
                 console.log("Promotion emails sent successfully.");
             } else {
                 setError(true);

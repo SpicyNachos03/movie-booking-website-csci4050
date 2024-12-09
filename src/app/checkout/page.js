@@ -1,16 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation'; // Import useRouter
 import axios from 'axios';
-import Cookies from 'js-cookie'; // Import js-cookie
+import Cookies from 'js-cookie';
 import './checkout.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const CheckoutPage = () => {
   const searchParams = useSearchParams();
-
+  const router = useRouter(); // Initialize useRouter
   const [promotionCode, setPromotionCode] = useState('');
   const [basePrice, setBasePrice] = useState(10.00);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -25,7 +25,7 @@ const CheckoutPage = () => {
   const [promotions, setPromotions] = useState([]);
   const [savedCards, setSavedCards] = useState([]);
   const [selectedCardId, setSelectedCardId] = useState(null);
-  const [roomName, setRoomName] = useState(''); // New state for roomName
+  const [roomName, setRoomName] = useState('');
 
   // Fetch initial data
   useEffect(() => {
@@ -33,8 +33,8 @@ const CheckoutPage = () => {
     const time = searchParams.get('showtime');
     const seats = searchParams.get('selectedSeats');
     const tickets = searchParams.get('ticketTypes');
-    const showId = searchParams.get('showId'); // Get showId from searchParams
-    const userData = JSON.parse(Cookies.get('user')); // Get user data from cookies
+    const showId = searchParams.get('showId');
+    const userData = JSON.parse(Cookies.get('user'));
     if (seats) setSelectedSeats(JSON.parse(seats));
     if (tickets) setTicketTypes(JSON.parse(tickets));
     if (time) setShowtime(time);
@@ -62,7 +62,6 @@ const CheckoutPage = () => {
         .then((response) => setRoomName(response.data.roomName || 'Unknown Room'))
         .catch((error) => console.error('Error fetching room name:', error));
     }
-
   }, [searchParams]);
 
   // Calculate the total price based on ticket types
@@ -110,80 +109,72 @@ const CheckoutPage = () => {
     const total = calculateTotalPrice();
     setTotalPrice(total.toFixed(2));
     setFinalTotal((total - discount).toFixed(2));
-
   }, [ticketTypes, discount]);
 
   const handleSubmitPayment = async (e) => {
     e.preventDefault();
     const card = selectedCardId ? savedCards.find((card) => card._id === selectedCardId) : null;
-    const userData = JSON.parse(Cookies.get('user')); // Get user data from cookies
-
+    const userData = JSON.parse(Cookies.get('user'));
+  
     let cardNumber, expiry, cvv;
-
+  
     if (card) {
-      // Compare with saved card data
       cardNumber = card.cardNumber;
       expiry = card.expirationDate;
-      cvv = e.target.cvv.value; // Get CVV input from user
-
-      // Check if expiration date and CVV match
+      cvv = e.target.cvv.value;
+  
       if (expiry !== card.expirationDate || cvv !== card.cvv) {
         alert('Invalid expiration date or CVV.');
         return;
       }
     } else {
-      // Validate manually entered card details
       cardNumber = e.target.cardNumber.value;
       expiry = e.target.expiry.value;
       cvv = e.target.cvv.value;
-
-      // Validate card number, expiry date, and CVV
+  
       const cardNumberPattern = /^[0-9]{16}$/;
       const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
       const cvvPattern = /^[0-9]{3}$/;
-
+  
       if (!cardNumber.match(cardNumberPattern)) {
         alert('Please enter a valid 16-digit card number.');
         return;
       }
-
+  
       if (!expiry.match(expiryPattern)) {
         alert('Please enter a valid expiry date (MM/YY).');
         return;
       }
-
+  
       if (!cvv.match(cvvPattern)) {
         alert('Please enter a valid 3-digit CVV.');
         return;
       }
     }
-
+  
     // Payment is valid; proceed with booking
-
-    // Prepare the booking information
     const bookingData = {
       userEmail: userData.data.email,
       selectedSeats,
       ticketTypes,
       showInformation: searchParams.get('showId'),
-      orderTotal: finalTotal
+      orderTotal: finalTotal,
     };
-
-    // Save the booking information in the backend
+  
     try {
-      // Save booking
-      const bookingResponse = await axios.post('http://localhost:8000/api/bookings', bookingData);
-      const createdBooking = bookingResponse.data;
+      // Save booking information in the backend
+      const response = await axios.post('http://localhost:8000/api/bookings', bookingData);
   
-      // Trigger email notification
-      await axios.post('http://localhost:8000/api/emails/sendBookingEmails', createdBooking);
-  
-      setIsPaymentSuccess(true); // Show success message
+      // On success, redirect to confirmation with necessary data in query params
+      setIsPaymentSuccess(true);
+      const bookingId = response.data.bookingId; // Assuming bookingId is returned
+      router.push(`/checkout/confirmation?bookingId=${bookingId}&movieTitle=${movieTitle}&showtime=${showtime}&selectedSeats=${JSON.stringify(selectedSeats)}&totalPrice=${finalTotal}&userEmail=${userData.data.email}`);
     } catch (error) {
-      console.error('Error submitting booking or sending email:', error);
+      console.error('Error submitting booking:', error);
       alert('Error processing payment. Please try again.');
     }
   };
+  
 
   return (
     <div>
@@ -194,7 +185,7 @@ const CheckoutPage = () => {
       <div className="movie-details">
         <h2>Movie: <span>{movieTitle || 'Loading...'}</span></h2>
         <p>Showtime: <span>{showtime || 'Not selected'}</span></p>
-        <p>Room: <span>{roomName || 'Loading...'}</span></p> {/* Display room name */}
+        <p>Room: <span>{roomName || 'Loading...'}</span></p>
         <p>Seats: <span>{selectedSeats.join(', ') || 'None selected'}</span></p>
         <p>Total Price: $<span>{totalPrice}</span></p>
         {promotionCode && (
@@ -211,7 +202,6 @@ const CheckoutPage = () => {
 
       {!isPaymentSuccess ? (
         <form className="payment-form" onSubmit={handleSubmitPayment}>
-
           <h3>Apply Promotion</h3>
           <input
             type="text"
@@ -239,7 +229,7 @@ const CheckoutPage = () => {
             ))}
           </select>
 
-          {/* If no card is selected, show input fields for a new card */}
+          {/* Input fields for new card */}
           {!selectedCardId && (
             <>
               <label htmlFor="card-number">Card Number</label>
@@ -251,7 +241,7 @@ const CheckoutPage = () => {
             </>
           )}
 
-          {/* Show expiry and CVV fields when a saved card is selected */}
+          {/* Show expiry and CVV for saved cards */}
           {selectedCardId && (
             <>
               <label htmlFor="expiry">Expiry Date</label>
@@ -278,7 +268,7 @@ const CheckoutPage = () => {
       ) : (
         <div id="success-message">
           <h2>Payment Successful!</h2>
-          <p>Thank you for your purchase. Enjoy your movie!</p>
+          <p>Redirecting to confirmation page...</p>
         </div>
       )}
       </div>
