@@ -234,7 +234,7 @@ const CheckoutPage = () => {
             <option value="">-- Select a Card --</option>
             {savedCards.map((card) => (
               <option key={card._id} value={card._id}>
-                {card.nickname || `Card ending in ${card.cardNumber.slice(-4)}`}
+                {card.nickname || `Card ending in ${card.lastFourDigits}`}
               </option>
             ))}
           </select>
