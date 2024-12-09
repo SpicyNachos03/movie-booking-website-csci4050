@@ -6,9 +6,8 @@ const promotionDB = require('../models/promotionModel.js');
 const bookingDB = require('../models/bookingModel.js');
 const showDB = require('../models/showModel.js').Show;
 
-async function sendPromotionNotificationEmail() {
+async function sendPromotionNotificationEmail(promotion) {
   try {
-    // Query the database to find users who have subscribed to promotions
     const subscribedUsers = await userDB.find({ promotions: true });
 
     if (subscribedUsers.length === 0) {
@@ -16,20 +15,14 @@ async function sendPromotionNotificationEmail() {
       return;
     }
 
-    // Fetch the latest promotion
-    const latestPromotion = await promotionDB.findOne().sort({ _id: -1 }); // Sort by ID to get the latest entry
-    if (!latestPromotion) {
-        console.log('No promotions found in the database.');
-        return;
-    }
-    const { promotionName, promotionRate } = latestPromotion;
+    const { promotionName, promotionRate } = promotion;
 
     for (const user of subscribedUsers) {
       try {
         let emailInfo = await emailTransporter.sendMail({
           from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-          to: user.email, // Access the email field from the User model
-          subject: 'Notification of promotion',
+          to: user.email,
+          subject: `Special Promotion: ${promotionName}`,
           text: `Dear ${user.firstName},\n\nWe are excited to announce a new promotion just for you!\n\nPromotion: ${promotionName}\nDiscount: ${promotionRate}% off\n\nLog in to your profile now to take advantage of this amazing deal.\n\nBest regards,\nMovie Booking Team`,
         });
 
@@ -38,8 +31,11 @@ async function sendPromotionNotificationEmail() {
         console.error(`Error sending email to ${user.email}:`, error);
       }
     }
+
+    return { status: 'success', sent: subscribedUsers.length };
   } catch (error) {
     console.error('Error querying the user database:', error);
+    throw error;
   }
 }
 
