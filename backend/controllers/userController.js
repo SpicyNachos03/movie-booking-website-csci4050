@@ -230,9 +230,9 @@ const addCard = async (req, res) => {
     if (cardExists) {
       return res.status(400).json({ message: 'Card already exists' });
     }
-
+    const encryptedCard = encrypt(cardNumber, key);
     // Add the card
-    user.cards.push({ cardNumber, expiration, cvv, lastFourDigits });
+    user.cards.push({ cardNumber: encryptedCard, expiration, cvv, lastFourDigits });
     await user.save();
 
     res.status(201).json({ message: 'Payment card added successfully', user });
