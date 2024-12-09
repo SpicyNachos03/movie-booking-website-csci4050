@@ -66,7 +66,7 @@ function UserBookingsPage() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className="page-container">
       <Header />
       <div className="user-bookings">
         <h1>User's Bookings</h1>

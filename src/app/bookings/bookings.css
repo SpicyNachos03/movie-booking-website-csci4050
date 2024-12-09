@@ -1,15 +1,22 @@
+/* Apply flexbox to the main container */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the body takes the full viewport height */
+  margin: 0;
+}
 
-.user-bookings h1 {
-  text-align: left;
-  margin-top: 20px;
-  color: #f1efef;
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
 }
 
 .user-bookings {
+  flex: 1; /* Allow this section to grow and take available space */
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
@@ -56,35 +63,20 @@
   color: #555;
 }
 
-/* Header and Footer Styling */
-header, footer {
+/* Footer Styling */
+footer {
   background-color: #333;
   color: white;
   text-align: center;
   padding: 10px 0;
+  margin-top: auto; /* Push footer to the bottom */
 }
 
-header a, footer a {
+footer a {
   color: #1e90ff;
   text-decoration: none;
 }
 
-header a:hover, footer a:hover {
+footer a:hover {
   text-decoration: underline;
-}
-
-/* Loading and Error Messages */
-.booking-item p {
-  text-align: center;
-  color: #666;
-}
-
-.booking-item p.error {
-  color: #d9534f;
-  font-weight: bold;
-}
-
-.booking-item p.loading {
-  color: #0275d8;
-  font-weight: bold;
 }
