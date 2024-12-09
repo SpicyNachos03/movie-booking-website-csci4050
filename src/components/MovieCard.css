@@ -29,6 +29,30 @@
   outline: 2px solid #4e8c6e; /* Add focus outline for accessibility */
 }
 
+
+.scheduled-show-btn.disabled-btn {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.scheduled-show-btn:hover:not(.disabled-btn) {
+  background-color: #4d8b72;
+}
+
+.login-btn {
+  background-color: #62a388;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.login-btn:hover {
+  background-color: #218838;
+}
+
 /* Modal Layout Updates */
 .movie-card-modal {
   position: fixed;
