@@ -58,8 +58,12 @@ function Profile() {
                         <p className="text-lg mb-2"><strong>Phone Number:</strong> {user.phoneNumber}</p>
                         <p className="text-lg mb-2"><strong>Billing Address:</strong> {user.billingAddress || 'N/A'}</p>
                         <p className="text-lg mb-2"><strong>Promotions:</strong> {user.promotions ? 'Subscribed' : 'Not Subscribed'}</p>
-                        <p className="text-lg mb-2"><strong>Cards:</strong> {user.cards.length > 0 ? user.cards.join(', ') : 'No cards added'}</p>
-                    </div>
+                        <p className="text-lg mb-2">
+                            <strong>Cards:</strong>
+                            {user.cards.length > 0
+                                ? user.cards.map(card => `**** **** **** ${card.lastFourDigits}`).join(', ')
+                                : 'No cards added'}
+                        </p>                </div>
                     <button onClick={handleEditProfile} className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded-md transition-all duration-300 w-full mt-6">
                         Edit Profile
                     </button>
