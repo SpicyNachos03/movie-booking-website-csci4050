@@ -51,7 +51,7 @@ export default function Header() {
               <>
                 {/* Bookings */}
                 <li>
-                  <Link href="/seating" className="text-white hover:text-lightCyan">
+                  <Link href="/bookings" className="text-white hover:text-lightCyan">
                     Bookings
                   </Link>
                 </li>

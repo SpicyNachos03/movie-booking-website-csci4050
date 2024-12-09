@@ -21,7 +21,8 @@ const bookingSchema = new mongoose.Schema({
     ticketArray: [ticketSchema],
 
     showInformation: {
-        type: String, // Show Id
+        type: mongoose.Schema.Types.ObjectId, // Reference to the Show model
+        ref: 'Show',
         required: true
     },
 
