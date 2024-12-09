@@ -113,67 +113,66 @@ const CheckoutPage = () => {
     e.preventDefault();
     const card = selectedCardId ? savedCards.find((card) => card._id === selectedCardId) : null;
     const userData = JSON.parse(Cookies.get('user'));
-
+  
     let cardNumber, expiry, cvv;
-
+  
     if (card) {
-      // Compare with saved card data
       cardNumber = card.cardNumber;
       expiry = card.expirationDate;
       cvv = e.target.cvv.value;
-
-      // Check if expiration date and CVV match
+  
       if (expiry !== card.expirationDate || cvv !== card.cvv) {
         alert('Invalid expiration date or CVV.');
         return;
       }
     } else {
-      // Validate manually entered card details
       cardNumber = e.target.cardNumber.value;
       expiry = e.target.expiry.value;
       cvv = e.target.cvv.value;
-
-      // Validate card number, expiry date, and CVV
+  
       const cardNumberPattern = /^[0-9]{16}$/;
       const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
       const cvvPattern = /^[0-9]{3}$/;
-
+  
       if (!cardNumber.match(cardNumberPattern)) {
         alert('Please enter a valid 16-digit card number.');
         return;
       }
-
+  
       if (!expiry.match(expiryPattern)) {
         alert('Please enter a valid expiry date (MM/YY).');
         return;
       }
-
+  
       if (!cvv.match(cvvPattern)) {
         alert('Please enter a valid 3-digit CVV.');
         return;
       }
     }
-
+  
     // Payment is valid; proceed with booking
-
     const bookingData = {
       userEmail: userData.data.email,
       selectedSeats,
       ticketTypes,
       showInformation: searchParams.get('showId'),
-      orderTotal: finalTotal
+      orderTotal: finalTotal,
     };
-
-    // Save the booking information in the backend
+  
     try {
-      await axios.post('http://localhost:8000/api/bookings', bookingData);
-      setIsPaymentSuccess(true); // Show success message and redirect to confirmation
-      router.push('/checkout/confirmation'); // Redirect to confirmation page
+      // Save booking information in the backend
+      const response = await axios.post('http://localhost:8000/api/bookings', bookingData);
+  
+      // On success, redirect to confirmation with necessary data in query params
+      setIsPaymentSuccess(true);
+      const bookingId = response.data.bookingId; // Assuming bookingId is returned
+      router.push(`/checkout/confirmation?bookingId=${bookingId}&movieTitle=${movieTitle}&showtime=${showtime}&selectedSeats=${JSON.stringify(selectedSeats)}&totalPrice=${finalTotal}&userEmail=${userData.data.email}`);
     } catch (error) {
       console.error('Error submitting booking:', error);
       alert('Error processing payment. Please try again.');
     }
   };
+  
 
   return (
     <div className="checkout-container">
