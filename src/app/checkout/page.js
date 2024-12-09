@@ -169,16 +169,10 @@ const CheckoutPage = () => {
 
     // Save the booking information in the backend
     try {
-      // Save booking
-      const bookingResponse = await axios.post('http://localhost:8000/api/bookings', bookingData);
-      const createdBooking = bookingResponse.data;
-  
-      // Trigger email notification
-      await axios.post('http://localhost:8000/api/emails/sendBookingEmails', createdBooking);
-  
+      await axios.post('http://localhost:8000/api/bookings', bookingData);
       setIsPaymentSuccess(true); // Show success message
     } catch (error) {
-      console.error('Error submitting booking or sending email:', error);
+      console.error('Error submitting booking:', error);
       alert('Error processing payment. Please try again.');
     }
   };
