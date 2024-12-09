@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie'; // To manage cookies
 import './MovieCard.css';
 import { useRouter } from 'next/navigation';
 
@@ -9,8 +12,12 @@ const MovieCard = ({ movieId, onClose }) => {
   const [playTrailer, setPlayTrailer] = useState(false); // State to toggle trailer playback
   const router = useRouter(); // Use Next.js router for navigation
   const [scheduledShows, setScheduledShows] = useState([]); // Existing shows for duplicate checks
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // User authentication status
 
   useEffect(() => {
+    const userCookie = Cookies.get('user');
+    setIsAuthenticated(!!userCookie); // Check if user cookie exists
+
     fetchScheduledShows();
 
     if (!movieId) {
@@ -50,6 +57,10 @@ const MovieCard = ({ movieId, onClose }) => {
 
   const handlePlayTrailer = () => {
     setPlayTrailer(true);
+  };
+
+  const handleLoginRedirect = () => {
+    router.push('/login'); // Redirect to login page
   };
 
   if (loading) {
@@ -135,19 +146,29 @@ const MovieCard = ({ movieId, onClose }) => {
               <button
                 key={index}
                 onClick={() =>
-                  router.push(
-                    `/seating?showId=${show._id}&movieId=${movieId}&showtime=${encodeURIComponent(
-                      show.dateTime
-                    )}&room=${encodeURIComponent(show.roomName)}`
-                  )
+                  isAuthenticated
+                    ? router.push(
+                        `/seating?showId=${show._id}&movieId=${movieId}&showtime=${encodeURIComponent(
+                          show.dateTime
+                        )}&room=${encodeURIComponent(show.roomName)}`
+                      )
+                    : handleLoginRedirect()
                 }
-                className="scheduled-show-btn"
+                className={`scheduled-show-btn ${
+                  isAuthenticated ? '' : 'disabled-btn'
+                }`}
+                disabled={!isAuthenticated}
               >
                 {`${show.dateTime} | Room: ${show.roomName}`}
               </button>
             ))
           ) : (
             <p>No shows scheduled for this movie.</p>
+          )}
+          {!isAuthenticated && (
+            <button className="login-btn" onClick={handleLoginRedirect}>
+              Login to Book Show
+            </button>
           )}
         </div>
       </div>
@@ -156,3 +177,4 @@ const MovieCard = ({ movieId, onClose }) => {
 };
 
 export default MovieCard;
+

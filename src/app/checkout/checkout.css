@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-body {
+.checkout-container body {
     font-family: Arial, sans-serif;
     background-color: #343434; /* lightCyan */
     color: #111827; /* gray-900 */
@@ -25,7 +25,7 @@ body {
 }
 
 /* Headings */
-.checkout-container h1, h2, h3 {
+.checkout-container h1, .checkout-container h2, .checkout-container h3 {
     text-align: center;
     color: #055E68; /* tealBlue */
     margin-bottom: 20px;
