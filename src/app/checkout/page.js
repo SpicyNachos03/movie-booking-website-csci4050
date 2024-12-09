@@ -281,6 +281,12 @@ const CheckoutPage = () => {
           <p>Thank you for your purchase. Enjoy your movie!</p>
         </div>
       )}
+      <button 
+      className="return-home-btn" 
+      onClick={() => window.location.href = '/'} // Redirect to the homepage
+    >
+      Return to Homepage
+    </button>
       </div>
       <Footer/>
     </div>

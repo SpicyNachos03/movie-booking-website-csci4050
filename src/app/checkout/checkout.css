@@ -157,4 +157,25 @@
 .discount-text {
     color: red;
   }
-  
+
+/* Return to Homepage Button */
+.return-home-btn {
+    display: inline-block; /* Make it inline for centering */
+    background-color: #62A388; /* sageGreen */
+    color: #ffffff; /* White text for contrast */
+    padding: 12px 20px; /* Add padding for a larger button */
+    font-size: 16px; /* Match font size with other buttons */
+    font-weight: bold; /* Make the text stand out */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners for a modern look */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    text-align: center; /* Center-align the text */
+    margin-top: 20px; /* Add space above the button */
+    text-decoration: none; /* Remove underline for link-like buttons */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.return-home-btn:hover {
+    background-color: #055E68; /* tealBlue for hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slight shadow for depth */
+}
