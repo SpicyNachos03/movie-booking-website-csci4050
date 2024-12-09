@@ -6,6 +6,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import './bookings.css'
 
 function UserBookingsPage() {
   const [bookings, setBookings] = useState([]);
@@ -29,7 +30,7 @@ function UserBookingsPage() {
         }
 
         const bookingsResponse = await axios.get(`http://localhost:8000/api/bookings/${userData.data.email}`);
-        console.log('Bookings Response:', bookingsResponse.data);
+        
         setBookings(bookingsResponse.data.bookings || []);
 
       } catch (err) {
@@ -49,8 +50,9 @@ function UserBookingsPage() {
   return (
     <div> 
         <Header/>
+        <h1>User Bookings</h1>
     <div className="user-bookings">
-      <h1>User Bookings</h1>
+      
       {bookings.length === 0 ? (
         <p>No bookings found for this user.</p>
       ) : (
@@ -59,7 +61,15 @@ function UserBookingsPage() {
             {bookings.map((booking) => (
               <li key={booking._id}>
                 <h3>Booking {booking._id}</h3>
-               
+                <p>Show: {booking.showInformation?.title || 'Show information unavailable'}</p>
+                <p>Total: ${booking.orderTotal}</p>
+                <ul>
+                  {booking.ticketArray.map((ticket, index) => (
+                    <li key={index}>
+                      Seat: {ticket.seatName}, Type: {ticket.ticketType}
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
