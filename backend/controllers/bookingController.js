@@ -51,17 +51,17 @@ const createBooking = async (req, res) => {
 // Get all bookings for a specific user
 const getBookings = async (req, res) => {
   try {
-    const { userId } = req.params; // Assuming userId is passed in the URL
+    const { userEmail } = req.params; // Extract userEmail from request parameters
 
-    // Find the user by their ID and populate their bookings
-    const user = await User.findById(userId).populate('bookings');
+    // Find bookings directly associated with the user's email
+    const bookings = await Booking.find({ userEmail });
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    if (!bookings || bookings.length === 0) {
+      return res.status(200).json({ bookings: [] }); // Return an empty array with 200 status
     }
 
-    // Return the user's bookings
-    res.status(200).json({ bookings: user.bookings });
+    // Return the bookings
+    res.status(200).json({ bookings });
   } catch (error) {
     console.error('Error fetching bookings:', error);
     res.status(500).json({ message: 'Server error' });

@@ -35,8 +35,10 @@ function ManageUsers() {
     };
 
     return (
+        <div> 
+            <Header/>
         <div className="admin-container">
-            <Header></Header>
+            
             <div className="main-content">
                 <div className="adminBox">
                     <h1>Manage Users</h1>
@@ -66,7 +68,9 @@ function ManageUsers() {
                     </div>
                 </div>
             </div>
-            <Footer></Footer>
+            
+            </div>
+            <Footer/>
         </div>
     );
 }
