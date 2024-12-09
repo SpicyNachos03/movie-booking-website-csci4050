@@ -1,115 +1,90 @@
-/* General Page Layout */
+
+.user-bookings h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: #f1efef;
+}
+
 .user-bookings {
-    font-family: Arial, sans-serif;
-    margin: 0 auto;
-    padding: 20px;
-    max-width: 1000px;
-    min-height: calc(100vh - 100px); /* Ensure content takes full height minus footer space */
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Header and Footer Styling */
-  .user-bookings h1 {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Error and Loading message styles */
-  .user-bookings p {
-    font-size: 1.2em;
-    text-align: center;
-    margin-top: 30px;
-    color: #333;
-  }
-  
-  .user-bookings p.error {
-    color: red;
-  }
-  
-  .user-bookings p.loading {
-    color: #777;
-    font-style: italic;
-  }
-  
-  /* Bookings container styling */
-  .bookings-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    flex-grow: 1; /* Allow bookings to take available space */
-  }
-  
-  .bookings-container ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .bookings-container li {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .bookings-container li:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Booking header (Booking ID) styling */
-  .bookings-container li h3 {
-    font-size: 1.6em;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  /* Show details and ticket details */
-  .bookings-container li p {
-    font-size: 1.1em;
-    margin: 5px 0;
-    color: #555;
-  }
-  
-  .bookings-container li ul {
-    padding-left: 20px;
-    list-style-type: square;
-  }
-  
-  .bookings-container li ul li {
-    font-size: 1em;
-    margin-bottom: 5px;
-    color: #444;
-  }
-  
-  /* Mobile responsiveness */
-  @media (max-width: 768px) {
-    .user-bookings {
-      padding: 10px;
-    }
-  
-    .bookings-container li {
-      padding: 15px;
-    }
-  
-    .bookings-container li h3 {
-      font-size: 1.4em;
-    }
-  
-    .bookings-container li p {
-      font-size: 1em;
-    }
-  }
-  
-  /* Footer Styling */
-  footer {
-    margin-top: auto; /* Push footer to the bottom */
-    padding: 20px;
-    text-align: center;
-    background-color: #333;
-    color: white;
-  }
-  
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Bookings Container */
+.bookings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.booking-item {
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 15px;
+}
+
+.booking-item h3 {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.booking-item p {
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+/* Tickets List */
+.booking-item ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.booking-item ul li {
+  padding: 5px 10px;
+  background-color: #e8e8e8;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #555;
+}
+
+/* Header and Footer Styling */
+header, footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+header a, footer a {
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+header a:hover, footer a:hover {
+  text-decoration: underline;
+}
+
+/* Loading and Error Messages */
+p {
+  text-align: center;
+  color: #666;
+}
+
+p.error {
+  color: #d9534f;
+  font-weight: bold;
+}
+
+p.loading {
+  color: #0275d8;
+  font-weight: bold;
+}
