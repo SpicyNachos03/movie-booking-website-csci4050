@@ -21,7 +21,7 @@ const HeroCarousel = () => {
       alt: 'Captain America',
       title: 'Captain America: New Brave World',
       description: 'Sam Wilson finds himself at the center of an international incident',
-      trailerLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      trailerLink: 'https://www.youtube.com/watch?v=1pHDWnXmK7Y&t=1s',
     },
     {
       id: 3,
@@ -29,7 +29,7 @@ const HeroCarousel = () => {
       alt: 'Wicked (2024)',
       title: 'Wicked',
       description: 'A vivid reimagining of the classic The Wizard of Oz.',
-      trailerLink: 'https://www.youtube.com/watch?v=O5yfgk6DsrQ',
+      trailerLink: 'https://www.youtube.com/watch?v=6COmYeLsz4c&t=1s',
     },
   ];
 
