@@ -1,24 +1,39 @@
-/* Apply flexbox to the main container */
+/* Ensure the body spans the entire viewport height */
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensure the body takes the full viewport height */
+  min-height: 100vh;
   margin: 0;
+  background-color: #1a202c; /* Dark gray background */
+  color: #ffffff; /* White text */
 }
 
+/* Full-page container with flex layout */
 .page-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh; /* Full viewport height */
 }
 
+/* User Bookings Section */
 .user-bookings {
-  flex: 1; /* Allow this section to grow and take available space */
+  flex: 1; /* Allow this section to grow and fill available space */
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #2d3748; /* Darker gray for the box */
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); /* Enhanced shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-bookings h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 2rem;
+  color: #38b2ac; /* Teal color for the header */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Subtle text shadow */
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 /* Bookings Container */
@@ -29,54 +44,78 @@ body {
   margin-top: 20px;
 }
 
+/* Individual Booking Item */
 .booking-item {
-  background-color: #f1f1f1;
+  background-color: #4a5568; /* Darker gray for items */
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-item:hover {
+  transform: translateY(-5px); /* Slight lift effect on hover */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
 }
 
 .booking-item h3 {
+  font-size: 1.25rem;
+  color: #e2e8f0; /* Light gray for text */
   margin-bottom: 10px;
-  color: #555;
 }
 
 .booking-item p {
+  font-size: 1rem;
+  color: #cbd5e0; /* Subtle light gray */
   margin: 5px 0;
-  line-height: 1.5;
 }
 
 /* Tickets List */
 .booking-item ul {
   list-style-type: none;
   padding: 0;
-  margin: 10px 0 0 0;
+  margin: 10px 0 0;
 }
 
 .booking-item ul li {
   padding: 5px 10px;
-  background-color: #e8e8e8;
+  background-color: #2d3748; /* Darker gray for tickets */
   margin-bottom: 5px;
   border-radius: 4px;
   font-size: 0.9em;
-  color: #555;
+  color: #e2e8f0;
 }
 
 /* Footer Styling */
 footer {
-  background-color: #333;
-  color: white;
+  background-color: #2d3748;
+  color: #e2e8f0;
   text-align: center;
-  padding: 10px 0;
+  padding: 15px 0;
   margin-top: auto; /* Push footer to the bottom */
 }
 
 footer a {
-  color: #1e90ff;
+  color: #38b2ac; /* Teal color for links */
   text-decoration: none;
+  font-weight: bold;
 }
 
 footer a:hover {
   text-decoration: underline;
+}
+
+/* Subtle hover effect for links in footer */
+footer a:hover {
+  color: #81e6d9; /* Light teal on hover */
+}
+
+/* Center error/loading messages */
+.booking-item p {
+  text-align: center;
+  color: #e53e3e; /* Red for errors */
+}
+
+.booking-item p.loading {
+  color: #48bb78; /* Green for loading */
 }
