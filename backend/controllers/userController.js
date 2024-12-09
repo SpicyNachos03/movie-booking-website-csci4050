@@ -211,28 +211,64 @@ const forgotPassword = async (req, res) => {
 };
   
 const addCard = async (req, res) => {
-
   const { email, cardNumber, expiration, cvv, lastFourDigits } = req.body;
 
   try {
-
     const user = await User.findOne({ email: email.trim().toLowerCase() });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    // Add a new payment card
-    if (user.cards.length > 4) {
-      return res.status(404).json({ message: 'You cannot have more than 4 cards. '});
-    } // if
 
+    // Validate card number length
+    if (cardNumber.length !== 16 || !/^\d{16}$/.test(cardNumber)) {
+      return res.status(400).json({ message: 'Card number must be exactly 16 digits' });
+    }
+
+    // Check for duplicate cards
+    const cardExists = user.cards.some(card => card.lastFourDigits === lastFourDigits);
+    if (cardExists) {
+      return res.status(400).json({ message: 'Card already exists' });
+    }
+
+    // Add the card
     user.cards.push({ cardNumber, expiration, cvv, lastFourDigits });
-
     await user.save();
 
-    res.status(201).json({ message: 'Payment card added', user });
+    res.status(201).json({ message: 'Payment card added successfully', user });
   } catch (error) {
+    console.error('Error adding payment card:', error);
     res.status(500).json({ message: 'Error adding payment card', error });
   }
 };
-module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword, addCard};
+
+
+const deleteCard = async (req, res) => {
+  const { email, lastFourDigits } = req.body; // Card identifier
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Filter out the card to be deleted
+    const updatedCards = user.cards.filter(card => card.lastFourDigits !== lastFourDigits);
+
+    if (updatedCards.length === user.cards.length) {
+      return res.status(404).json({ message: 'Card not found' });
+    }
+
+    user.cards = updatedCards;
+    await user.save();
+
+    res.status(200).json({ message: 'Card deleted successfully', user });
+  } catch (error) {
+    console.error('Error deleting payment card:', error);
+    res.status(500).json({ message: 'Error deleting payment card', error });
+  }
+};
+
+module.exports = {getUsers, userLogin, getUserByEmail, getUserById, createUser, updateUser, updatePassword, forgotPassword, addCard, deleteCard};

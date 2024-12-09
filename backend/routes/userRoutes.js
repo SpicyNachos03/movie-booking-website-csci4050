@@ -8,7 +8,8 @@ const {
   getUserById,
   updatePassword,
   forgotPassword,
-  addCard
+  addCard,
+  deleteCard
 } = require('../controllers/userController');
 
 const router = express.Router();
@@ -52,6 +53,6 @@ router.get('/profile', getUserByEmail);
 // Route to update a password when you change password
 router.put('/:email/updatePassword', updatePassword);
 
-
+router.post('/deleteCard', deleteCard); // Use POST or DELETE
 
 module.exports = router;

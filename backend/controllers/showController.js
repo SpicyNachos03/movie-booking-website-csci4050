@@ -2,24 +2,32 @@ const { Show } = require('../models/showModel');
 
 // Create a new show
 const createShow = async (req, res) => {
-    const { movieName, dateTime, roomName, seatArray } = req.body;
+    const { movieName, dateTime, roomName } = req.body;
 
     // Validate that required fields are provided
-    if (!movieName || !dateTime || !roomName || !Array.isArray(seatArray)) {
+    if (!movieName || !dateTime || !roomName) {
         return res.status(400).json({ message: 'Please provide all required fields (movieName, dateTime, roomName, seatArray)' });
     }
 
     // Initialize seat availability if not provided
-    const seats = seatArray.map(seat => ({
-        seatName: seat,       // Seat name, e.g., "A1", "B2"
-        seatAvailability: true,  // Initially, all seats are available
-    }));
+    const rows = ["A", "B", "C", "D", "E", "F"];
+    const columns = 10;
+    const seatArray = [];
+
+    rows.forEach((row) => {
+        for (let col = 1; col <= columns; col++) {
+            seatArray.push({
+                seatName: `${row}${col}`,
+                seatAvailability: true
+            });
+        }
+    });
 
     const show = new Show({
         movieName,
         dateTime,
         roomName,
-        seatArray: seats,
+        seatArray,
     });
 
     try {
@@ -112,4 +120,36 @@ const getShowByMovieAndTime = async (req, res) => {
     }
 };
 
-module.exports = { createShow, getShowById, getShows, updateSeatAvailability, getShowByMovieAndTime };
+const getShowsByShowtime = async (req, res) => {
+    const { showtime } = req.query;
+
+    // Validate that showtime is provided
+    if (!showtime) {
+        return res.status(400).json({ message: 'Showtime is required as a query parameter' });
+    }
+
+    try {
+        // Parse the showtime input to a Date object
+        const parsedShowtime = new Date(showtime);
+
+        if (isNaN(parsedShowtime.getTime())) {
+            return res.status(400).json({ message: 'Invalid showtime format. Use ISO 8601 format (YYYY-MM-DDTHH:mm:ssZ).' });
+        }
+
+        // Query shows based on the parsed datetime
+        const shows = await Show.find({
+            dateTime: parsedShowtime,
+        });
+
+        if (shows.length === 0) {
+            return res.status(404).json({ message: 'No shows found for the given showtime' });
+        }
+
+        res.status(200).json({ success: true, data: shows });
+    } catch (error) {
+        console.error('Error fetching shows by showtime:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+module.exports = { createShow, getShowById, getShows, updateSeatAvailability, getShowByMovieAndTime, getShowsByShowtime };
