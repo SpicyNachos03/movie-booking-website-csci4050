@@ -1,0 +1,147 @@
+/* General Styling */
+.schedule-movie-container {
+    font-family: Arial, sans-serif;
+    background-color: #1a202c; /* Dark gray background */
+    color: #ffffff; /* White text */
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  
+  .schedule-movie-header {
+    text-align: center;
+    margin-top: 20px;
+    color: #38b2ac; /* Teal color */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Subtle text shadow */
+  }
+  
+  .schedule-movie-subheader {
+    color: #ffffff; /* White text */
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  /* Form Styling */
+  .schedule-movie-form {
+    background-color: #2d3748; /* Darker gray for the form */
+    border-radius: 12px; /* Rounded corners */
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); /* Enhanced shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .schedule-movie-form:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.8); /* Stronger shadow on hover */
+  }
+  
+  .schedule-movie-label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff; /* White text for labels */
+  }
+  
+  .schedule-movie-input,
+  .schedule-movie-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    background-color: #4a5568; /* Darker gray for input fields */
+    color: #ffffff; /* White text */
+    border: none; /* Remove border */
+    border-radius: 6px; /* Rounded corners */
+  }
+  
+  .schedule-movie-input:focus,
+  .schedule-movie-select:focus {
+    outline: none; /* Remove outline */
+    border: 2px solid #38b2ac; /* Teal border on focus */
+  }
+  
+  /* Submit Button */
+  .schedule-movie-submit-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #38b2ac; /* Teal color */
+    color: #ffffff; /* White text */
+    border: none; /* Remove border */
+    border-radius: 6px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .schedule-movie-submit-btn:hover {
+    background-color: #81e6d9; /* Lighter teal on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+  }
+  
+  /* Scheduled Shows List */
+  .schedule-movie-shows-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 500px;
+    background-color: #2d3748; /* Darker gray for the list */
+    border-radius: 12px; /* Rounded corners */
+    padding: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); /* Enhanced shadow for depth */
+  }
+  
+  .schedule-movie-shows-item {
+    padding: 10px;
+    border-bottom: 1px solid #4a5568; /* Slightly lighter gray for divider */
+    font-size: 14px;
+    color: #ffffff; /* White text */
+  }
+  
+  .schedule-movie-shows-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Accessibility and Focus */
+  .schedule-movie-input:focus,
+  .schedule-movie-select:focus {
+    border-color: #38b2ac; /* Teal color on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(56, 178, 172, 0.5); /* Subtle teal glow */
+  }
+  
+  .schedule-movie-submit-btn:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(56, 178, 172, 0.5); /* Subtle teal glow */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .schedule-movie-form {
+      padding: 15px;
+    }
+  
+    .schedule-movie-input,
+    .schedule-movie-select {
+      font-size: 12px;
+      padding: 8px;
+    }
+  
+    .schedule-movie-submit-btn {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .schedule-movie-shows-list {
+      padding: 8px;
+    }
+  
+    .schedule-movie-shows-item {
+      font-size: 12px;
+      padding: 8px;
+    }
+  }
+  
