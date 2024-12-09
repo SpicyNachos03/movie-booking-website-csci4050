@@ -52,15 +52,18 @@
   margin-top: 1rem; /* 16px */
 }
 
+
 /* Movie results grid layout */
 .search-container .movie-results {
   margin-top: 1rem; /* 16px */
   width: 100%;
   max-width: 64rem; /* 1024px */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+  grid-template-columns: repeat(3, 1fr); /* Always 3 columns */
   gap: 1rem; /* Space between items */
   padding: 0.5rem; /* Padding around grid */
+  justify-items: stretch; /* Make items fill their grid area */
+  align-items: stretch; /* Ensure consistent height */
 }
 
 /* Individual movie card */
@@ -74,21 +77,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%; /* Fill grid cell */
+  height: 300px; /* Fixed height */
 }
 
 .movie-card:hover {
-  transform: scale(1.05); /* hover:scale-105 */
+  transform: scale(1.05); /* Slight scale on hover */
 }
 
 .movie-card img {
   width: 100%;
-  height: auto;
+  height: 200px; /* Fixed height for images */
+  object-fit: cover; /* Ensure the image fills the area */
   border-bottom: 1px solid #e2e8f0;
 }
 
 .movie-card .no-image {
   width: 100%;
-  height: 300px;
+  height: 200px; /* Match fixed image height */
   background-color: #edf2f7; /* bg-gray-400 */
   display: flex;
   justify-content: center;
