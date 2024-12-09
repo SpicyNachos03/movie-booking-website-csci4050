@@ -214,6 +214,7 @@ const addCard = async (req, res) => {
   const { email, cardNumber, expiration, cvv, lastFourDigits } = req.body;
 
   try {
+    // Find the user by email
     const user = await User.findOne({ email: email.trim().toLowerCase() });
 
     if (!user) {
@@ -225,12 +226,20 @@ const addCard = async (req, res) => {
       return res.status(400).json({ message: 'Card number must be exactly 16 digits' });
     }
 
+    // Check if user already has the maximum number of cards
+    if (user.cards.length >= 4) {
+      return res.status(400).json({ message: 'You can only have a maximum of four payment cards' });
+    }
+
     // Check for duplicate cards
     const cardExists = user.cards.some(card => card.lastFourDigits === lastFourDigits);
     if (cardExists) {
       return res.status(400).json({ message: 'Card already exists' });
     }
+
+    // Encrypt the card number
     const encryptedCard = await encrypt(cardNumber, key);
+
     // Add the card
     user.cards.push({ cardNumber: encryptedCard, expiration, cvv, lastFourDigits });
     await user.save();
@@ -241,6 +250,7 @@ const addCard = async (req, res) => {
     res.status(500).json({ message: 'Error adding payment card', error });
   }
 };
+
 
 
 const deleteCard = async (req, res) => {
