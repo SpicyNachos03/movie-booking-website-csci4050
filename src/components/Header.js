@@ -105,9 +105,9 @@ export default function Header() {
                     Login
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link href="/skeleton">Skeleton</Link>
-                </li>
+                </li> */}
               </>
             )}
           </ul>

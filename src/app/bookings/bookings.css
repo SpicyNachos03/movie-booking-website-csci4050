@@ -1,6 +1,6 @@
 
 .user-bookings h1 {
-  text-align: center;
+  text-align: left;
   margin-top: 20px;
   color: #f1efef;
 }
@@ -74,17 +74,17 @@ header a:hover, footer a:hover {
 }
 
 /* Loading and Error Messages */
-p {
+.booking-item p {
   text-align: center;
   color: #666;
 }
 
-p.error {
+.booking-item p.error {
   color: #d9534f;
   font-weight: bold;
 }
 
-p.loading {
+.booking-item p.loading {
   color: #0275d8;
   font-weight: bold;
 }
