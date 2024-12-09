@@ -3,11 +3,11 @@ const movieDB = require('../models/movieModel.js');
 //const userDB = require('../models/userModel.js');
 const userDB = require('../models/userModel.js');
 const promotionDB = require('../models/promotionModel.js');
+const bookingDB = require('../models/bookingModel.js');
+const showDB = require('../models/showModel.js').Show;
 
-
-async function sendPromotionNotificationEmail() {
+async function sendPromotionNotificationEmail(promotion) {
   try {
-    // Query the database to find users who have subscribed to promotions
     const subscribedUsers = await userDB.find({ promotions: true });
 
     if (subscribedUsers.length === 0) {
@@ -15,20 +15,14 @@ async function sendPromotionNotificationEmail() {
       return;
     }
 
-    // Fetch the latest promotion
-    const latestPromotion = await promotionDB.findOne().sort({ _id: -1 }); // Sort by ID to get the latest entry
-    if (!latestPromotion) {
-        console.log('No promotions found in the database.');
-        return;
-    }
-    const { promotionName, promotionRate } = latestPromotion;
+    const { promotionName, promotionRate } = promotion;
 
     for (const user of subscribedUsers) {
       try {
         let emailInfo = await emailTransporter.sendMail({
           from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-          to: user.email, // Access the email field from the User model
-          subject: 'Notification of promotion',
+          to: user.email,
+          subject: `Special Promotion: ${promotionName}`,
           text: `Dear ${user.firstName},\n\nWe are excited to announce a new promotion just for you!\n\nPromotion: ${promotionName}\nDiscount: ${promotionRate}% off\n\nLog in to your profile now to take advantage of this amazing deal.\n\nBest regards,\nMovie Booking Team`,
         });
 
@@ -37,46 +31,56 @@ async function sendPromotionNotificationEmail() {
         console.error(`Error sending email to ${user.email}:`, error);
       }
     }
+
+    return { status: 'success', sent: subscribedUsers.length };
   } catch (error) {
     console.error('Error querying the user database:', error);
+    throw error;
   }
 }
 
-
-async function sendPromotionNotificationVecEmail(userEmailVec) {
-  for (const userEmail of userEmailVec) {
-    try {
-      // Double-check if the user is subscribed to promotions
-      const user = await userDB.findOne({ email: userEmail });
-
-      if (!user) {
-        console.log(`User with email ${userEmail} not found.`);
-        continue; // Skip if user doesn't exist
-      }
-
-      if (!user.promotions) {
-        console.log(`User with email ${userEmail} is not subscribed to promotions.`);
-        continue; // Skip if the user is not subscribed to promotions
-      }
-
-      // Send email if the user is subscribed to promotions
-      let emailInfo = await emailTransporter.sendMail({
-        from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-        to: userEmail,
-        subject: 'Notification of promotion',
-        text: `Dear ${user.firstName},\n\nLog in to your profile to check out new promotions available to you now!\n\nBest regards,\nMovie Booking Team`,
-      });
-
-      console.log(`Email sent to ${userEmail}:`, emailInfo.messageId);
-    } catch (error) {
-      console.error(`Error processing email for ${userEmail}:`, error);
+async function sendBookingNotificationEmail(booking) {
+  try {
+    //get show information
+    const showDetails = await showDB.findById(booking.showInformation);
+    if (!showDetails) {
+      console.error('Show details not found for booking:', booking.showInformation);
+      return;
     }
+    //get ticket information
+    const ticketDetails = booking.ticketArray
+      .map(ticket => `${ticket.ticketType} Ticket - Seat: ${ticket.seatName}`)
+      .join('\n');
+
+    const emailText = `
+      Dear Customer,
+
+      Thank you for booking with us! Here are your booking details:
+
+      Movie: ${showDetails.movieName}
+      Showtime: ${showDetails.dateTime}
+      Room: ${showDetails.roomName}
+      Tickets:
+      ${ticketDetails}
+
+      Total Cost: $${booking.orderTotal}
+
+      Enjoy your movie!
+
+      Best regards,
+      Movie Booking Team`;
+
+    let emailInfo = await emailTransporter.sendMail({
+      from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
+      to: booking.userEmail,
+      subject: 'Your Booking Confirmation',
+      text: emailText,
+    });
+
+    console.log(`Email sent to ${booking.userEmail}:`, emailInfo.messageId);
+  } catch (error) {
+    console.error(`Error sending email to ${booking.userEmail}:`, error);
   }
-}
-
-
-function lastFourDigits(cardNumber) {
-  return cardNumber.slice(-4);
 }
 
 
@@ -90,22 +94,6 @@ let emailTransporter = nodemailer.createTransport({
     pass: 'rppi guzd ofre szov',
   },
 });
-
-async function sendTestEmail() {
-  try {
-    let emailInfo = await emailTransporter.sendMail({
-      from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
-      //to: 'moviebooking03@gmail.com',
-      to: 'muddymudblood@gmail.com',
-      subject: 'Hello',
-      text: 'Hello',
-    });
-
-    console.log('Email sent:', emailInfo.messageId);
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
-}
 
 
 async function sendConfirmationEmail(userEmail) {
@@ -180,6 +168,27 @@ async function sendOrderConfirmEmail(req, res, next) {
 
 //sendTestEmail();
 
+function lastFourDigits(cardNumber) {
+  return cardNumber.slice(-4);
+}
+
+async function sendTestEmail() {
+  try {
+    let emailInfo = await emailTransporter.sendMail({
+      from: '"Movie Booking" <moviebookingcsci4050a7@gmail.com>',
+      //to: 'moviebooking03@gmail.com',
+      to: 'muddymudblood@gmail.com',
+      subject: 'Hello',
+      text: 'Hello',
+    });
+
+    console.log('Email sent:', emailInfo.messageId);
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+}
+
+
 module.exports = {
   sendVerificationEmail,
   sendResetPasswordEmail,
@@ -187,5 +196,5 @@ module.exports = {
   sendProfileWasChangedEmail,
   sendConfirmationEmail,
   sendPromotionNotificationEmail,
-  sendPromotionNotificationVecEmail,
+  sendBookingNotificationEmail,
 };
